@@ -1,12 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {BottomTab} from './BottomTab';
-import {
-  NavigationContainer,
-  useTheme,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 //import {useColorScheme} from 'react-native';
 //import EcomContext from '../contextApi/DataProvider';
 import {AuthNavigator} from './AuthNavigator';
@@ -37,7 +32,7 @@ export const Root = () => {
         gestureEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
       }}>
-      {!UserAuthentic ? (
+      {UserAuthentic ? (
         <Stack.Screen name="App" component={BottomTab} />
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
@@ -45,13 +40,6 @@ export const Root = () => {
     </Stack.Navigator>
   );
 };
-
-// export const RootNavigator = () => (
-//   const scheme = useColorScheme();
-//   <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-//     <Root />
-//   </NavigationContainer>
-// );
 
 export const RootNavigator = () => {
   return (
