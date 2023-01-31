@@ -70,7 +70,7 @@ export const Home4 = props => {
       </View>
       <View style={styles.lognDiv}>
         <BlueButton
-          text="Check In"
+          text="Fetch"
           onPress={() => Alert.alert('Under Development')}
         />
       </View>

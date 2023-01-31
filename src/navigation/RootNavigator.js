@@ -32,7 +32,7 @@ export const Root = () => {
         gestureEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
       }}>
-      {UserAuthentic ? (
+      {!UserAuthentic ? (
         <Stack.Screen name="App" component={BottomTab} />
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
