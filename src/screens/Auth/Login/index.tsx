@@ -13,6 +13,7 @@ import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
 
 import EcomContext from '../../../contextApi/DataProvider';
+import Header from '../../../ui/Header';
 
 export const Login = props => {
   const username = `Username/Email`;
@@ -53,12 +54,12 @@ export const Login = props => {
               keyboardType="visible-password"
             />
           </View>
-        </View>
-        <View style={styles.lognDiv}>
-          <BlueButton
-            text="Login"
-            onPress={() => setUserAuthentic(!UserAuthentic)}
-          />
+          <View style={styles.lognDiv}>
+            <BlueButton
+              text="Login"
+              onPress={() => setUserAuthentic(!UserAuthentic)}
+            />
+          </View>
         </View>
       </View>
     </>
@@ -103,9 +104,8 @@ const styles = StyleSheet.create({
     borderColor: colors.new_black,
   },
   lognDiv: {
-    marginTop: rfSpacing['3xl'],
+    marginTop: RFPercentage(7),
     height: rfSpacing['7xl'],
     alignItems: 'center',
-    justifyContent: 'center',
   },
 });
