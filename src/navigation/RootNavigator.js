@@ -3,21 +3,23 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {BottomTab} from './BottomTab';
 import {NavigationContainer} from '@react-navigation/native';
 //import {useColorScheme} from 'react-native';
-//import EcomContext from '../contextApi/DataProvider';
+import EcomContext from '../contextApi/DataProvider';
 import {AuthNavigator} from './AuthNavigator';
 import {CardStyleInterpolators} from '@react-navigation/stack';
+
+
 
 const Stack = createStackNavigator();
 export const Root = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const {UserAuthentic, etUserAuthentic} = useState(true);
-
+  const {UserAuthentic} = useContext(EcomContext);
+/* 
   useEffect(() => {
     setTimeout(() => {
       //   Alert.alert("root app ,",term);
       setIsLoading(false);
     }, 2000);
-  }, []);
+  }, []); */
 
   /*   if (isLoading) {
     return <Splash />;
