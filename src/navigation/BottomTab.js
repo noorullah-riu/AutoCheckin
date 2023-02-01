@@ -14,9 +14,9 @@ export const BottomTab = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Home2" component={Home} />
-      <Stack.Screen name="Home3" component={Home} />
-      <Stack.Screen name="Home4" component={Home} />
+      <Stack.Screen name="Checkin" component={Home} />
+      <Stack.Screen name="CheckOut" component={Home} />
+      <Stack.Screen name="History" component={Home} />
     </Stack.Navigator>
   );
 };
