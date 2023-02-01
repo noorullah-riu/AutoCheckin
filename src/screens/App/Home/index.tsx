@@ -3,20 +3,20 @@ import {Text, View, StyleSheet, Pressable, Alert} from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
+import Header from '../../../ui/Header';
 
 export const Home = props => {
   const username = `Username`;
   return (
     <>
       <View style={{backgroundColor: '#fff', flex: 1}}>
-        <Pressable onPress={() => alert('navigate')}>
-          <Text style={styles.textStyling}>Home</Text>
-        </Pressable>
+        <Header title={'Login'} />
         <View style={styles.containerStyling}>
           <View
             style={{
-              marginTop: rfSpacing['4xl'],
-              marginHorizontal: rfSpacing['5xl'],
+              flex: 3,
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
             <View style={styles.h60}>
               <Text style={styles.singinTxt}>Welcome</Text>
@@ -25,11 +25,13 @@ export const Home = props => {
               <Text style={styles.singinTxt2}>{username}</Text>
             </View>
           </View>
-          <View style={styles.lognDiv}>
-            <BlueButton
-              text="Logout"
-              onPress={() => Alert.alert('Under Development')}
-            />
+          <View style={{flex: 1, paddingTop: rfSpacing['4xl']}}>
+            <View style={styles.lognDiv}>
+              <BlueButton
+                text="Logout"
+                onPress={() => Alert.alert('Under Development')}
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -40,8 +42,6 @@ export const Home = props => {
 const styles = StyleSheet.create({
   containerStyling: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   textStyling: {
     marginTop: rfSpacing['4xl'],

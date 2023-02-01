@@ -13,22 +13,22 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import DatePicker from '../../../componenets/DatePicker';
+import Header from '../../../ui/Header';
 
 export const Home4 = props => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   return (
     <View style={styles.containerStyling}>
-      <Pressable onPress={() => Alert.alert('navigate')}>
-        <Text style={styles.textStyling}>History</Text>
-      </Pressable>
+      <Header title={'History'} />
       <View
         style={{
           marginTop: rfSpacing.m,
           flexDirection: 'row',
+          justifyContent: 'center',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['7xl'],
+          borderWidth: 2,
+          borderColor: colors.new_black,
         }}>
         <View style={styles.h60}>
           <Text style={styles.singinTxt}>Date</Text>
@@ -44,15 +44,7 @@ export const Home4 = props => {
             />
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          marginTop: rfSpacing.m,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['6xl'],
-        }}>
+
         <View style={styles.h61}>
           <Text style={styles.singinTxt}>To</Text>
         </View>
@@ -90,9 +82,9 @@ const styles = StyleSheet.create({
   },
   h60: {
     height: rfSpacing['6xl'],
+    paddingHorizontal: rfSpacing['4xl'],
   },
   h61: {
-    marginLeft: rfSpacing.m,
     height: rfSpacing['6xl'],
   },
   singinTxt: {
@@ -106,12 +98,15 @@ const styles = StyleSheet.create({
   date: {
     flexDirection: 'row',
     marginVertical: rfSpacing.m,
-    marginLeft: rfSpacing['6xl'],
+    borderWidth: 2,
+    borderColor: colors.new_black,
+    width: rfSpacing['1.4H'],
   },
   date2: {
     flexDirection: 'row',
     marginVertical: rfSpacing.m,
-    marginLeft: rfSpacing['7xl'],
+
+    width: rfSpacing['1.4H'],
   },
   lognDiv: {
     marginTop: rfSpacing['5xl'],

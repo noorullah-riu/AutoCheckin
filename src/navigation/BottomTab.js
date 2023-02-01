@@ -14,8 +14,6 @@ export const BottomTab = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#006a66',
-        tabBarInactiveTintColor: '#aaa                    ',
       }}>
       <Stack.Screen
         options={{
