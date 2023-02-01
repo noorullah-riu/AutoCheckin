@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Text,
   View,
@@ -8,14 +8,17 @@ import {
   Alert,
 } from 'react-native';
 import colors from '../../../theme/colors';
-
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
+
+import EcomContext from '../../../contextApi/DataProvider';
 
 export const Login = props => {
   const username = `Username/Email`;
   const Password = `Password`;
   const singinTxt = 'Sign In';
+  const {UserAuthentic, setUserAuthentic} = useContext(EcomContext);
+
   return (
     <>
       <View style={styles.containerStyling}>
@@ -61,7 +64,7 @@ export const Login = props => {
         <View style={styles.lognDiv}>
           <BlueButton
             text="Login"
-            onPress={() => Alert.alert('Under Development')}
+            onPress={() => setUserAuthentic(!UserAuthentic)}
           />
         </View>
       </View>
