@@ -7,10 +7,12 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../theme/colors';
 
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
+import Header from '../../../ui/Header';
 
 export const Login = props => {
   const username = `Username/Email`;
@@ -18,16 +20,14 @@ export const Login = props => {
   const singinTxt = 'Sign In';
   return (
     <>
-      <View style={styles.containerStyling}>
-        <Pressable onPress={() => alert('navigate')}>
-          <Text style={styles.textStyling}> login Page</Text>
-        </Pressable>
-        <View
-          style={{
-            marginLeft: rfSpacing.m,
-            marginTop: rfSpacing['7xl'],
-            flexDirection: 'row',
-          }}>
+      <View
+        style={{
+          flex: 1,
+
+          backgroundColor: '#fff',
+        }}>
+        <Header title={'Login'} />
+        <View style={styles.containerStyling}>
           <View style={styles.h60}>
             <Text style={styles.singinTxt}>{username}</Text>
           </View>
@@ -39,13 +39,7 @@ export const Login = props => {
               keyboardType="email-address"
             />
           </View>
-        </View>
-        <View
-          style={{
-            marginLeft: rfSpacing.m,
-            marginTop: rfSpacing['4xl'],
-            flexDirection: 'row',
-          }}>
+
           <View style={styles.h60}>
             <Text style={styles.singinTxt}>{Password}</Text>
           </View>
@@ -57,12 +51,13 @@ export const Login = props => {
               keyboardType="visible-password"
             />
           </View>
-        </View>
-        <View style={styles.lognDiv}>
-          <BlueButton
-            text="Login"
-            onPress={() => Alert.alert('Under Development')}
-          />
+
+          <View style={styles.lognDiv}>
+            <BlueButton
+              text="Login"
+              onPress={() => Alert.alert('Under Development')}
+            />
+          </View>
         </View>
       </View>
     </>
@@ -71,8 +66,9 @@ export const Login = props => {
 
 const styles = StyleSheet.create({
   containerStyling: {
-    backgroundColor: '#fff',
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textStyling: {
     marginTop: 20,
@@ -80,6 +76,8 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   h60: {
+    marginLeft: RFPercentage(7),
+    alignSelf: 'flex-start',
     height: rfSpacing['6xl'],
   },
   singinTxt: {
@@ -99,7 +97,9 @@ const styles = StyleSheet.create({
   inputEmail: {
     height: rfSpacing['6xl'],
     marginLeft: rfSpacing.m,
-    width: rfSpacing['2H'],
+    width: RFPercentage(40),
+    borderWidth: 1,
+    borderColor: colors.new_black,
   },
   lognDiv: {
     marginTop: rfSpacing['3xl'],

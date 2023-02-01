@@ -13,6 +13,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
+import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export const Home3 = props => {
   const [genderOpen, setGenderOpen] = useState(false);
@@ -43,95 +44,93 @@ export const Home3 = props => {
   return (
     <View style={styles.containerStyling}>
       <Header title={'Check Out'} />
-      <View style={{flex: 3}}>
-        <View
-          style={{
-            marginTop: rfSpacing['4xl'],
-            marginHorizontal: rfSpacing['5xl'],
-          }}>
-          <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Project</Text>
-          </View>
-        </View>
-        <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
-          <Controller
-            name="Country"
-            defaultValue="null"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <DropDownPicker
-                style={styles.dropdown}
-                open={companyOpen}
-                value={companyValue}
-                items={company}
-                setOpen={setCompanyOpen}
-                setValue={setCompanyValue}
-                setItems={setComapny}
-                placeholder="Select Project"
-                placeholderStyle={styles.placeholderStyles}
-                loading={loading}
-                dropDownContainerStyle={{
-                  maxHeight: 500,
-                }}
-                activityIndicatorColor="#5188E3"
-                searchable={true}
-                searchPlaceholder="Search your Project here..."
-                onOpen={onCompanyOpen}
-                onChangeValue={onChange}
-              />
-            )}
-          />
-        </View>
-        <View
-          style={{
-            marginTop: rfSpacing.m,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: rfSpacing['5xl'],
-          }}>
-          <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Field1</Text>
-          </View>
-          <View style={styles.h60}>
-            <Text style={styles.singinTxt2}>Field2</Text>
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: rfSpacing['4xl'],
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: rfSpacing['5xl'],
-          }}>
-          <View style={styles.inputEmail}>
-            <TextInput style={styles.inputStyle} keyboardType="default" />
-          </View>
-          <View style={styles.inputEmail}>
-            <TextInput style={styles.inputStyle} keyboardType="default" />
-          </View>
-        </View>
-        <View
-          style={{
-            marginTop: rfSpacing['4xl'],
-            marginHorizontal: rfSpacing['5xl'],
-          }}>
-          <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Field3</Text>
-          </View>
-          <View style={styles.inputEmail}>
-            <TextInput style={styles.inputStyle2} keyboardType="default" />
-          </View>
+
+      <View
+        style={{
+          marginTop: rfSpacing['4xl'],
+          marginHorizontal: rfSpacing['5xl'],
+        }}>
+        <View style={styles.h60}>
+          <Text style={styles.singinTxt}>Project</Text>
         </View>
       </View>
-      <View style={{flex: 1, paddingTop: rfSpacing['4xl'], zIndex: -1000}}>
-        <View style={styles.lognDiv}>
-          <BlueButton
-            text="Check Out"
-            onPress={() => Alert.alert('Under Development')}
-          />
+      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
+        <Controller
+          name="Country"
+          defaultValue="null"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <DropDownPicker
+              style={styles.dropdown}
+              open={companyOpen}
+              value={companyValue}
+              items={company}
+              setOpen={setCompanyOpen}
+              setValue={setCompanyValue}
+              setItems={setComapny}
+              placeholder="Select Project"
+              placeholderStyle={styles.placeholderStyles}
+              loading={loading}
+              dropDownContainerStyle={{
+                maxHeight: 500,
+              }}
+              activityIndicatorColor="#5188E3"
+              searchable={true}
+              searchPlaceholder="Search your Project here..."
+              onOpen={onCompanyOpen}
+              onChangeValue={onChange}
+            />
+          )}
+        />
+      </View>
+      <View
+        style={{
+          marginTop: rfSpacing.m,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: rfSpacing['5xl'],
+        }}>
+        <View style={styles.h60}>
+          <Text style={styles.singinTxt}>Field1</Text>
         </View>
+        <View style={styles.h60}>
+          <Text style={styles.singinTxt2}>Field2</Text>
+        </View>
+      </View>
+      <View
+        style={{
+          marginTop: rfSpacing['4xl'],
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: rfSpacing['5xl'],
+        }}>
+        <View style={styles.inputEmail}>
+          <TextInput style={styles.inputStyle} keyboardType="default" />
+        </View>
+        <View style={styles.inputEmail}>
+          <TextInput style={styles.inputStyle} keyboardType="default" />
+        </View>
+      </View>
+      <View
+        style={{
+          marginTop: rfSpacing['4xl'],
+          marginHorizontal: rfSpacing['5xl'],
+        }}>
+        <View style={styles.h60}>
+          <Text style={styles.singinTxt}>Field3</Text>
+        </View>
+        <View style={styles.inputEmail}>
+          <TextInput style={styles.inputStyle2} keyboardType="default" />
+        </View>
+      </View>
+
+      <View style={styles.lognDiv}>
+        <BlueButton
+          text="Check Out"
+          onPress={() => Alert.alert('Under Development')}
+        />
       </View>
     </View>
   );
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
     borderWidth: rfSpacing['3xxs'],
   },
   lognDiv: {
-    marginTop: rfSpacing['3xl'],
+    marginTop: RFPercentage(15),
     height: rfSpacing['7xl'],
     alignItems: 'center',
     justifyContent: 'center',

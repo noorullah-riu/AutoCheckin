@@ -10,7 +10,7 @@ export const Home = props => {
   return (
     <>
       <View style={{backgroundColor: '#fff', flex: 1}}>
-        <Header title={'Login'} />
+        <Header title={'Home'} />
         <View style={styles.containerStyling}>
           <View
             style={{

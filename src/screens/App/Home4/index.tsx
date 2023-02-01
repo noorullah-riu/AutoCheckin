@@ -6,30 +6,23 @@ import {
   Pressable,
   Alert,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {useForm, Controller} from 'react-hook-form';
+
 import BlueButton from '../../../ui/BlueButton';
 import DatePicker from '../../../componenets/DatePicker';
 import Header from '../../../ui/Header';
-
+import FlatCard from './FlatCard';
+const windowwidth = Dimensions.get('window').width;
 export const Home4 = props => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   return (
     <View style={styles.containerStyling}>
       <Header title={'History'} />
-      <View
-        style={{
-          marginTop: rfSpacing.m,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderWidth: 2,
-          borderColor: colors.new_black,
-        }}>
+      <View style={styles.dateDIv}>
         <View style={styles.h60}>
           <Text style={styles.singinTxt}>Date</Text>
         </View>
@@ -62,10 +55,12 @@ export const Home4 = props => {
       </View>
       <View style={styles.lognDiv}>
         <BlueButton
-          text="Fetch"
+          text="Get History"
           onPress={() => Alert.alert('Under Development')}
         />
       </View>
+
+      <FlatCard />
     </View>
   );
 };
@@ -75,6 +70,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
   },
+  dateDIv: {
+    marginTop: rfSpacing.m,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textStyling: {
     marginTop: rfSpacing['4xl'],
     textAlign: 'center',
@@ -82,10 +82,11 @@ const styles = StyleSheet.create({
   },
   h60: {
     height: rfSpacing['6xl'],
-    paddingHorizontal: rfSpacing['4xl'],
+    paddingLeft: rfSpacing.xxl,
   },
   h61: {
     height: rfSpacing['6xl'],
+    marginHorizontal: rfSpacing.l,
   },
   singinTxt: {
     textAlignVertical: 'center',
@@ -93,20 +94,17 @@ const styles = StyleSheet.create({
     color: colors.Boulder,
     fontSize: rfSpacing.xl,
     fontWeight: '600',
-    paddingLeft: rfSpacing.m,
   },
   date: {
     flexDirection: 'row',
     marginVertical: rfSpacing.m,
-    borderWidth: 2,
-    borderColor: colors.new_black,
-    width: rfSpacing['1.4H'],
+    marginLeft: rfSpacing.l,
+    width: rfSpacing['1.2H'],
   },
   date2: {
     flexDirection: 'row',
-    marginVertical: rfSpacing.m,
-
-    width: rfSpacing['1.4H'],
+    marginVertical: rfSpacing.l,
+    width: rfSpacing['1.2H'],
   },
   lognDiv: {
     marginTop: rfSpacing['5xl'],

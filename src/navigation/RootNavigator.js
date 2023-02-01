@@ -7,13 +7,11 @@ import EcomContext from '../contextApi/DataProvider';
 import {AuthNavigator} from './AuthNavigator';
 import {CardStyleInterpolators} from '@react-navigation/stack';
 
-
-
 const Stack = createStackNavigator();
 export const Root = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {UserAuthentic} = useContext(EcomContext);
-/* 
+  /* 
   useEffect(() => {
     setTimeout(() => {
       //   Alert.alert("root app ,",term);

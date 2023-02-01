@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   dateDiv: {
     height: rfSpacing['7xl'],
-    width: '70%',
+    width: '100%',
     borderWidth: 1,
     borderRadius: rfSpacing.m,
     backgroundColor: colors.white,
