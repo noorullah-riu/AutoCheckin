@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image} from 'react-native';
+
+import {Image, View} from 'react-native';
 import {Home} from '../screens/App/Home';
 import {Home2} from '../screens/App/Home2';
 import {Home3} from '../screens/App/Home3';
@@ -14,6 +15,9 @@ export const BottomTab = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+      }}
+      tabBarOptions={{
+        keyboardHidesTabBar: true,
       }}>
       <Stack.Screen
         options={{

@@ -1,5 +1,12 @@
 import React, {useCallback, useState} from 'react';
-import {Text, View, StyleSheet, Alert, TextInput} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  TextInput,
+  KeyboardAvoidingView,
+} from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -7,7 +14,8 @@ import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ScrollView} from 'react-native-gesture-handler';
 export const Home2 = props => {
   const [genderOpen, setGenderOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
@@ -33,7 +41,8 @@ export const Home2 = props => {
     console.log(data, 'data');
   };
   return (
-    <View style={styles.containerStyling}>
+    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#FFF'}}>
+      {/* <View style={styles.containerStyling}> */}
       <Header title={'Check In'} />
 
       <View
@@ -123,7 +132,8 @@ export const Home2 = props => {
           onPress={() => Alert.alert('Under Development')}
         />
       </View>
-    </View>
+      {/* </View> */}
+    </KeyboardAwareScrollView>
   );
 };
 
