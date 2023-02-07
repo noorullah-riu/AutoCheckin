@@ -6,12 +6,14 @@ import {
   Pressable,
   TextInput,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
 //import ax
+const windowwidth = Dimensions.get('window').width;
 import EcomContext from '../../../contextApi/DataProvider';
 import Header from '../../../ui/Header';
 import axios from 'axios';
@@ -60,6 +62,7 @@ export const Login = props => {
           <View style={styles.h60}>
             <Text style={styles.singinTxt}>{username}</Text>
           </View>
+
           <View style={styles.inputEmail}>
             <TextInput
               style={styles.inputStyle}
@@ -80,6 +83,7 @@ export const Login = props => {
               keyboardType="visible-password"
             />
           </View>
+
           <View style={styles.lognDiv}>
             <BlueButton
               text="Login"
@@ -119,13 +123,10 @@ const styles = StyleSheet.create({
   inputStyle: {
     color: colors.activity_Date,
     fontSize: rfSpacing.xl,
-    borderBottomColor: colors.font_grey,
-    borderBottomWidth: rfSpacing['3xxs'],
   },
   inputEmail: {
     height: rfSpacing['6xl'],
-    marginLeft: rfSpacing.m,
-    width: RFPercentage(40),
+    width: rfSpacing['3H'],
     borderWidth: 1,
     borderColor: colors.new_black,
   },

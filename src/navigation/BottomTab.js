@@ -3,8 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {Image, View} from 'react-native';
 import {Home} from '../screens/App/Home';
-import {Home2} from '../screens/App/Home2';
-import {Home3} from '../screens/App/Home3';
+import {Home2} from '../screens/App/Checkin';
+import {Home3} from '../screens/App/Checkout';
 import {Home4} from '../screens/App/Home4';
 import rfSpacing from '../theme/rfSpacing';
 
