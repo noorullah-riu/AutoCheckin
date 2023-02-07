@@ -11,16 +11,42 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
-
+//import ax
 import EcomContext from '../../../contextApi/DataProvider';
 import Header from '../../../ui/Header';
-
+import axios from 'axios';
 export const Login = props => {
   const username = `Username/Email`;
   const Password = `Password`;
   const singinTxt = 'Sign In';
   const {UserAuthentic, setUserAuthentic} = useContext(EcomContext);
 
+
+/*   axios.get('/GeeksforGeeks', {
+    params: {
+        articleID: articleID
+    }
+})
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    .then(function () {
+        // always executed
+    }); */
+
+    axios.post('/GeeksforGeeks', {
+      articleID: 'articleID',
+      title: 'Axios in React Native'
+  })
+      .then(function (response) {
+          console.log(response);
+      })
+      .catch(function (error) {
+          console.log(error);
+      });
   return (
     <>
       <View
