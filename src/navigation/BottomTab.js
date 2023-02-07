@@ -15,8 +15,6 @@ export const BottomTab = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-      }}
-      tabBarOptions={{
         keyboardHidesTabBar: true,
       }}>
       <Stack.Screen
