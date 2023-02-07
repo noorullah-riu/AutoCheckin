@@ -3,9 +3,9 @@ import {
   Text,
   View,
   StyleSheet,
+  Pressable,
   Alert,
   TextInput,
-  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
@@ -14,18 +14,38 @@ import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {ScrollView} from 'react-native-gesture-handler';
-export const Home2 = props => {
+
+export const Home3 = props => {
   const [genderOpen, setGenderOpen] = useState(false);
+  const [genderValue, setGenderValue] = useState(null);
+
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
   const [company, setComapny] = useState([
     {label: 'Project', value: 'Project'},
     {label: 'Project1', value: 'Project1'},
     {label: 'Project2', value: 'Project2'},
-    {label: 'Project3', value: 'Pr3ject1'},
+    {label: 'Project3', value: 'Project3'},
     {label: 'Project4', value: 'Project4'},
     {label: 'Project5', value: 'Project5'},
+    {label: 'Project11', value: 'Project11'},
+    {label: 'Project111', value: 'Project111'},
+    {label: 'Project211', value: 'Project211'},
+    {label: 'Project311', value: 'Project311'},
+    {label: 'Project411', value: 'Project411'},
+    {label: 'Project511', value: 'Project511'},
+    {label: 'Proct', value: 'Proct'},
+    {label: 'Proct1', value: 'Proct1'},
+    {label: 'Proct2', value: 'Proct2'},
+    {label: 'Proct3', value: 'Proct1'},
+    {label: 'Proct4', value: 'Proct4'},
+    {label: 'Proct5', value: 'Prot5'},
+    {label: 'Proct', value: 'Proct'},
+    {label: 'Proc', value: 'Proct'},
+    {label: 'Pr', value: 'Proct'},
+    {label: 'Pro3', value: 'Proct'},
+    {label: 'Prt4', value: 'Proct'},
+    {label: 'Pct5', value: 'Prot'},
   ]);
   const [loading, setLoading] = useState(false);
   const onGenderOpen = useCallback(() => {
@@ -40,10 +60,8 @@ export const Home2 = props => {
     console.log(data, 'data');
   };
   return (
-    <>
-      {/* <View style={styles.containerStyling}> */}
-      <Header title={'Check In'} />
-
+    <View style={styles.containerStyling}>
+      <Header title={'Check Out'} />
       <View
         style={{
           marginTop: rfSpacing['4xl'],
@@ -53,7 +71,7 @@ export const Home2 = props => {
           <Text style={styles.singinTxt}>Project</Text>
         </View>
       </View>
-      <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
+      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
         <Controller
           name="Country"
           defaultValue="null"
@@ -67,12 +85,17 @@ export const Home2 = props => {
               setOpen={setCompanyOpen}
               setValue={setCompanyValue}
               setItems={setComapny}
+              listMode="MODAL"
+              scrollViewProps={{
+                nestedScrollEnabled: true,
+              }}
               placeholder="Select Project"
               placeholderStyle={styles.placeholderStyles}
               loading={loading}
               dropDownContainerStyle={{
-                maxHeight: 500,
+                maxHeight: 200,
               }}
+              zIndex={-1000}
               activityIndicatorColor="#5188E3"
               searchable={true}
               searchPlaceholder="Search your Project here..."
@@ -127,12 +150,11 @@ export const Home2 = props => {
 
       <View style={styles.lognDiv}>
         <BlueButton
-          text="Check In"
+          text="Check Out"
           onPress={() => Alert.alert('Under Development')}
         />
       </View>
-      {/* </View> */}
-    </>
+    </View>
   );
 };
 
@@ -169,12 +191,17 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    PadingTop: rfSpacing['3xl'],
+    // PadingTop: rfSpacing['3xl'],
+    // paddingLeft: rfSpacing['4xl'],
+    // borderColor: 'grey',
+    // borderWidth: 1,
+    // borderRadius: 0,
+    marginTop: rfSpacing['3xl'],
     paddingLeft: rfSpacing['4xl'],
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 0,
-    minHeight: rfSpacing['7xl'],
+    minHeight: 50,
   },
   inputEmail: {
     height: rfSpacing['6xl'],

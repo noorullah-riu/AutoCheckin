@@ -3,9 +3,9 @@ import {
   Text,
   View,
   StyleSheet,
-  Pressable,
   Alert,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
@@ -14,11 +14,9 @@ import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-
-export const Home3 = props => {
+import {ScrollView} from 'react-native-gesture-handler';
+export const Home2 = props => {
   const [genderOpen, setGenderOpen] = useState(false);
-  const [genderValue, setGenderValue] = useState(null);
-
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
   const [company, setComapny] = useState([
@@ -42,8 +40,9 @@ export const Home3 = props => {
     console.log(data, 'data');
   };
   return (
-    <View style={styles.containerStyling}>
-      <Header title={'Check Out'} />
+    <>
+      {/* <View style={styles.containerStyling}> */}
+      <Header title={'Check In'} />
 
       <View
         style={{
@@ -54,7 +53,7 @@ export const Home3 = props => {
           <Text style={styles.singinTxt}>Project</Text>
         </View>
       </View>
-      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
+      <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
         <Controller
           name="Country"
           defaultValue="null"
@@ -68,6 +67,8 @@ export const Home3 = props => {
               setOpen={setCompanyOpen}
               setValue={setCompanyValue}
               setItems={setComapny}
+              listMode="MODAL"
+              scrollViewProps={{nestedScrollEnabled: true}}
               placeholder="Select Project"
               placeholderStyle={styles.placeholderStyles}
               loading={loading}
@@ -128,11 +129,12 @@ export const Home3 = props => {
 
       <View style={styles.lognDiv}>
         <BlueButton
-          text="Check Out"
+          text="Check In"
           onPress={() => Alert.alert('Under Development')}
         />
       </View>
-    </View>
+      {/* </View> */}
+    </>
   );
 };
 
