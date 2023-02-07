@@ -14,7 +14,6 @@ import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ScrollView} from 'react-native-gesture-handler';
 export const Home2 = props => {
   const [genderOpen, setGenderOpen] = useState(false);
@@ -41,7 +40,7 @@ export const Home2 = props => {
     console.log(data, 'data');
   };
   return (
-    <KeyboardAwareScrollView style={{flex: 1, backgroundColor: '#FFF'}}>
+    <>
       {/* <View style={styles.containerStyling}> */}
       <Header title={'Check In'} />
 
@@ -133,7 +132,7 @@ export const Home2 = props => {
         />
       </View>
       {/* </View> */}
-    </KeyboardAwareScrollView>
+    </>
   );
 };
 
