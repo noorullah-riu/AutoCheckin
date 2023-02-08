@@ -5,7 +5,7 @@ import {color} from 'react-native-reanimated';
 import colors from '../theme/colors';
 import rfSpacing from '../theme/rfSpacing';
 
-const BlueButton = ({text, onPress}) => {
+const WhiteButton = ({text, onPress}) => {
   return (
     <Pressable onPress={onPress} style={styles.buttonBgStyle}>
       <Text style={styles.buttonTextStyle}>{text}</Text>
@@ -15,7 +15,7 @@ const BlueButton = ({text, onPress}) => {
 
 const styles = StyleSheet.create({
   buttonBgStyle: {
-    backgroundColor: '#296faa',
+    backgroundColor: colors.white,
     width: rfSpacing['2H'],
     flex: 1,
     justifyContent: 'center',
@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
   buttonTextStyle: {
     fontSize: rfSpacing['3xl'],
     fontWeight: '900',
-    color: colors.white,
+    color: '#296faa',
   },
 });
 
-export default BlueButton;
+export default WhiteButton;

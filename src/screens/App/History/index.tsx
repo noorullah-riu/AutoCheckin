@@ -1,4 +1,4 @@
-import React, {useCallback,useContext, useState,useEffect} from 'react';
+import React, {useCallback, useContext, useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -19,13 +19,12 @@ const windowwidth = Dimensions.get('window').width;
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
 
-export const Home4 = props => {
+export const History = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
-  useContext(EcomContext);
+    useContext(EcomContext);
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
-
 
   const funGetHistory = () => {
     if (Data == null) {
@@ -33,16 +32,16 @@ export const Home4 = props => {
     } else {
       axios
         .post('VMI/GetHistory', {
-          employeeid:"1",
-          extEmpNo:"1234",
-          fromdate:"10-01-2023",
-          todate:"15-01-2023",
-          project:""
+          employeeid: '1',
+          extEmpNo: '1234',
+          fromdate: '10-01-2023',
+          todate: '15-01-2023',
+          project: '',
         })
         .then(function (response) {
           console.log(response);
-       //   setData(response);
-        //  setUserAuthentic(!UserAuthentic);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
@@ -52,7 +51,7 @@ export const Home4 = props => {
 
   useEffect(() => {
     funGetHistory();
-  }, []); 
+  }, []);
 
   return (
     <View style={styles.containerStyling}>

@@ -1,4 +1,4 @@
-import React, {useCallback,useContext, useState,useEffect} from 'react';
+import React, {useCallback, useContext, useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -13,14 +13,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
+import {removeUser} from '../../../storage/index';
+import ShowToast from '../../../ui/Toast';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
-export const Home2 = props => {
+export const CheckIn = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
-  useContext(EcomContext);
-  
+    useContext(EcomContext);
+
   const [genderOpen, setGenderOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
@@ -44,28 +46,34 @@ export const Home2 = props => {
   const onSubmit = data => {
     console.log(data, 'data');
   };
+  const logOut = async () => {
+    const resp = await removeUser();
+    if (resp) {
+      setUserAuthentic(!UserAuthentic);
+      ShowToast('success', `See You Soon`);
+    }
+  };
 
-  
   const funPostCheckin = () => {
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
       axios
         .post('VMI/AddTimeSheet', {
-          employeeid:"1",
-          extEmpNo:"100001",
-          date:"12-01-2023",
-          type:"OUT",
-          time:"16:30",
-          project:"1025-AD-DAM",
-          langtitue:"senthil",
-          geolocation:"senthil1",
-          lattidue:"senthil"
+          employeeid: '1',
+          extEmpNo: '100001',
+          date: '12-01-2023',
+          type: 'OUT',
+          time: '16:30',
+          project: '1025-AD-DAM',
+          langtitue: 'senthil',
+          geolocation: 'senthil1',
+          lattidue: 'senthil',
         })
         .then(function (response) {
           console.log(response);
-       //   setData(response);
-        //  setUserAuthentic(!UserAuthentic);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
@@ -79,14 +87,14 @@ export const Home2 = props => {
     } else {
       axios
         .post('VMI/GetProjectDetails', {
-          employeeid:"1",
-          extEmpNo:"11407",
-          date:"10.01.2023"
+          employeeid: '1',
+          extEmpNo: '11407',
+          date: '10.01.2023',
         })
         .then(function (response) {
           console.log(response);
-       //   setData(response);
-        //  setUserAuthentic(!UserAuthentic);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
@@ -96,101 +104,60 @@ export const Home2 = props => {
 
   useEffect(() => {
     funGetCheckin();
-  }, []); 
+  }, []);
 
   return (
     <>
-      <Header title={'Check In'} />
-      <View
-        style={{
-          marginTop: rfSpacing['4xl'],
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Project</Text>
+      <View style={{backgroundColor: '#FFF', flex: 1}}>
+        <Header title={'Check In'} />
+        <View
+          style={{
+            marginTop: rfSpacing['4xl'],
+            marginHorizontal: rfSpacing['5xl'],
+          }}>
+          <View style={styles.h60}>
+            <Text style={styles.singinTxt}>Project</Text>
+          </View>
         </View>
-      </View>
-      <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
-        <Controller
-          name="Country"
-          defaultValue="null"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <DropDownPicker
-              style={styles.dropdown}
-              open={companyOpen}
-              value={companyValue}
-              items={company}
-              setOpen={setCompanyOpen}
-              setValue={setCompanyValue}
-              setItems={setComapny}
-              listMode="MODAL"
-              scrollViewProps={{nestedScrollEnabled: true}}
-              placeholder="Select Project"
-              placeholderStyle={styles.placeholderStyles}
-              loading={loading}
-              dropDownContainerStyle={{
-                maxHeight: 500,
-              }}
-              activityIndicatorColor="#5188E3"
-              searchable={true}
-              searchPlaceholder="Search your Project here..."
-              onOpen={onCompanyOpen}
-              onChangeValue={onChange}
-            />
-          )}
-        />
-      </View>
-   {/*    <View
-        style={{
-          marginTop: rfSpacing.m,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Field1</Text>
-        </View>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt2}>Field2</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          marginTop: rfSpacing['4xl'],
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle} keyboardType="default" />
-        </View>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle} keyboardType="default" />
-        </View>
-      </View>
-      <View
-        style={{
-          marginTop: rfSpacing['4xl'],
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Field3</Text>
-        </View>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle2} keyboardType="default" />
-        </View>
-      </View> */}
+        <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
+          <Controller
+            name="Country"
+            defaultValue="null"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <DropDownPicker
+                style={styles.dropdown}
+                open={companyOpen}
+                value={companyValue}
+                items={company}
+                setOpen={setCompanyOpen}
+                setValue={setCompanyValue}
+                setItems={setComapny}
+                listMode="MODAL"
+                scrollViewProps={{nestedScrollEnabled: true}}
+                placeholder="Select Project"
+                placeholderStyle={styles.placeholderStyles}
+                loading={loading}
+                dropDownContainerStyle={{
+                  maxHeight: 500,
+                }}
+                activityIndicatorColor="#5188E3"
+                searchable={true}
+                searchPlaceholder="Search your Project here..."
+                onOpen={onCompanyOpen}
+                onChangeValue={onChange}
+              />
+            )}
+          />
 
-      <View style={styles.lognDiv}>
-        <BlueButton
-          text="Check In"
-          onPress={() => Alert.alert('Under Development')}
-        />
+          <View style={styles.lognDiv}>
+            <BlueButton
+              text="Check In"
+              onPress={() => Alert.alert('Under Development')}
+            />
+          </View>
+        </View>
       </View>
-      {/* </View> */}
     </>
   );
 };

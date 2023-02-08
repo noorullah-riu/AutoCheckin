@@ -5,7 +5,7 @@ import colors from '../theme/colors';
 import rfSpacing from '../theme/rfSpacing';
 const dat = ['Bilal'];
 const windowwidth = Dimensions.get('window').width;
-const Header = ({title}: any) => {
+const LoginHeader = ({title}: any) => {
   return (
     <View style={styles.imgageBack}>
       <View style={styles.titleDiv}>
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   imgageBack: {
     height: rfSpacing['10xl'],
     width: windowwidth,
-    backgroundColor: '#296faa',
+    backgroundColor: colors.white,
     borderBottomEndRadius: rfSpacing['6xl'],
     borderBottomStartRadius: rfSpacing['6xl'],
   },
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
   },
   titleTxt: {
     height: rfSpacing['6xl'],
-    color: colors.white,
+    color: '#296faa',
     fontWeight: '700',
     fontSize: rfSpacing['xxl'],
     paddingTop: rfSpacing.xs,
   },
 });
-export default Header;
+export default LoginHeader;
