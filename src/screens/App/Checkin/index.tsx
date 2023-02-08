@@ -46,13 +46,6 @@ export const CheckIn = props => {
   const onSubmit = data => {
     console.log(data, 'data');
   };
-  const logOut = async () => {
-    const resp = await removeUser();
-    if (resp) {
-      setUserAuthentic(!UserAuthentic);
-      ShowToast('success', `See You Soon`);
-    }
-  };
 
   const funPostCheckin = () => {
     if (companyValue == null) {
