@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback,useContext, useState,useEffect} from 'react';
 import {
   Text,
   View,
@@ -16,9 +16,44 @@ import DatePicker from '../../../componenets/DatePicker';
 import Header from '../../../ui/Header';
 import FlatCard from './FlatCard';
 const windowwidth = Dimensions.get('window').width;
+import axios from 'axios';
+import EcomContext from '../../../contextApi/DataProvider';
+
 export const Home4 = props => {
+  const {UserAuthentic, setUserAuthentic, Data, setData} =
+  useContext(EcomContext);
+
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(new Date());
+
+
+  const funGetHistory = () => {
+    if (Data == null) {
+      Alert.alert('Inputs Are Must');
+    } else {
+      axios
+        .post('VMI/GetHistory', {
+          employeeid:"1",
+          extEmpNo:"1234",
+          fromdate:"10-01-2023",
+          todate:"15-01-2023",
+          project:""
+        })
+        .then(function (response) {
+          console.log(response);
+       //   setData(response);
+        //  setUserAuthentic(!UserAuthentic);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    funGetHistory();
+  }, []); 
+
   return (
     <View style={styles.containerStyling}>
       <Header title={'History'} />

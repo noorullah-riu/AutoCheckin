@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback,useContext, useState,useEffect} from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,12 @@ import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {ScrollView} from 'react-native-gesture-handler';
+import axios from 'axios';
+import EcomContext from '../../../contextApi/DataProvider';
 export const Home2 = props => {
+  const {UserAuthentic, setUserAuthentic, Data, setData} =
+  useContext(EcomContext);
+  
   const [genderOpen, setGenderOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
@@ -39,11 +44,63 @@ export const Home2 = props => {
   const onSubmit = data => {
     console.log(data, 'data');
   };
+
+  
+  const funPostCheckin = () => {
+    if (companyValue == null) {
+      Alert.alert('Inputs Are Must');
+    } else {
+      axios
+        .post('VMI/AddTimeSheet', {
+          employeeid:"1",
+          extEmpNo:"100001",
+          date:"12-01-2023",
+          type:"OUT",
+          time:"16:30",
+          project:"1025-AD-DAM",
+          langtitue:"senthil",
+          geolocation:"senthil1",
+          lattidue:"senthil"
+        })
+        .then(function (response) {
+          console.log(response);
+       //   setData(response);
+        //  setUserAuthentic(!UserAuthentic);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  const funGetCheckin = () => {
+    if (Data == null) {
+      Alert.alert('Inputs Are Must');
+    } else {
+      axios
+        .post('VMI/GetProjectDetails', {
+          employeeid:"1",
+          extEmpNo:"11407",
+          date:"10.01.2023"
+        })
+        .then(function (response) {
+          console.log(response);
+       //   setData(response);
+        //  setUserAuthentic(!UserAuthentic);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    funGetCheckin();
+  }, []); 
+
   return (
     <>
-      {/* <View style={styles.containerStyling}> */}
       <Header title={'Check In'} />
-
       <View
         style={{
           marginTop: rfSpacing['4xl'],
@@ -84,7 +141,7 @@ export const Home2 = props => {
           )}
         />
       </View>
-      <View
+   {/*    <View
         style={{
           marginTop: rfSpacing.m,
           flexDirection: 'row',
@@ -125,7 +182,7 @@ export const Home2 = props => {
         <View style={styles.inputEmail}>
           <TextInput style={styles.inputStyle2} keyboardType="default" />
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.lognDiv}>
         <BlueButton

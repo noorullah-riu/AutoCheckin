@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -21,10 +21,13 @@ export const Login = props => {
   const username = `Username/Email`;
   const Password = `Password`;
   const singinTxt = 'Sign In';
-  const {UserAuthentic, setUserAuthentic} = useContext(EcomContext);
+  const {UserAuthentic, setUserAuthentic, Data, setData} =
+    useContext(EcomContext);
 
+  const [EmailIn, setEmailIn] = useState('');
+  const [PasswordIn, setPasswordIn] = useState('');
 
-/*   axios.get('/GeeksforGeeks', {
+  /*   axios.get('/GeeksforGeeks', {
     params: {
         articleID: articleID
     }
@@ -39,16 +42,25 @@ export const Login = props => {
         // always executed
     }); */
 
-    axios.post('/GeeksforGeeks', {
-      articleID: 'articleID',
-      title: 'Axios in React Native push'
-  })
-      .then(function (response) {
+  const funPostLogin = () => {
+    if (EmailIn || PasswordIn == '') {
+      Alert.alert('Inputs Are Must');
+    } else {
+      axios
+        .post('VMI/ValidateLogin', {
+          articleID: 'articleID',
+          title: 'Axios in React Native push',
+        })
+        .then(function (response) {
           console.log(response);
-      })
-      .catch(function (error) {
+          setData(response);
+          setUserAuthentic(!UserAuthentic);
+        })
+        .catch(function (error) {
           console.log(error);
-      });
+        });
+    }
+  };
   return (
     <>
       <View
@@ -69,6 +81,8 @@ export const Login = props => {
               placeholderTextColor={colors.new_black}
               placeholder="User Name/Email"
               keyboardType="email-address"
+              value={EmailIn}
+              onChangeText={EmailIn => setEmailIn(EmailIn)}
             />
           </View>
 
@@ -81,14 +95,13 @@ export const Login = props => {
               placeholderTextColor={colors.new_black}
               placeholder="Password"
               keyboardType="visible-password"
+              value={PasswordIn}
+              onChangeText={PasswordIn => setPasswordIn(PasswordIn)}
             />
           </View>
 
           <View style={styles.lognDiv}>
-            <BlueButton
-              text="Login"
-              onPress={() => setUserAuthentic(!UserAuthentic)}
-            />
+            <BlueButton text="Login" onPress={() => funPostLogin()} />
           </View>
         </View>
       </View>
