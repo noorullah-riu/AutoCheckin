@@ -1,12 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userKey = '@User';
-const storeDataLogin = async (userDetails:any) => {
+const storeDataLogin = async (userDetails: any) => {
   try {
     const userProfile = JSON.stringify(userDetails);
     await AsyncStorage.setItem(userKey, userProfile);
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 
 const removeUser = async () => {

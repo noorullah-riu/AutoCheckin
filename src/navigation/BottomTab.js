@@ -3,9 +3,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {Image, View} from 'react-native';
 import {Home} from '../screens/App/Home';
-import {Home2} from '../screens/App/Checkin';
-import {Home3} from '../screens/App/Checkout';
-import {Home4} from '../screens/App/Home4';
+import {CheckIn} from '../screens/App/Checkin';
+import {CheckOut} from '../screens/App/Checkout';
+import {History} from '../screens/App/History';
 import rfSpacing from '../theme/rfSpacing';
 
 const Stack = createBottomTabNavigator();
@@ -16,6 +16,7 @@ export const BottomTab = () => {
       screenOptions={{
         headerShown: false,
         keyboardHidesTabBar: true,
+        tabBarActiveTintColor: '#296faa',
       }}>
       <Stack.Screen
         options={{
@@ -27,6 +28,7 @@ export const BottomTab = () => {
                 height: rfSpacing['5xl'],
                 width: rfSpacing['5xl'],
                 marginTop: rfSpacing.m,
+                marginBottom: rfSpacing.xs,
               }}
             />
           ),
@@ -41,15 +43,16 @@ export const BottomTab = () => {
               source={require('../Assets/Home/check-in.png')}
               style={{
                 resizeMode: 'contain',
-                height: rfSpacing['8xl'],
-                width: rfSpacing['8xl'],
+                height: rfSpacing['5xl'],
+                width: rfSpacing['5xl'],
                 marginTop: rfSpacing.m,
+                marginBottom: rfSpacing.xs,
               }}
             />
           ),
         }}
         name="CheckIn"
-        component={Home2}
+        component={CheckIn}
       />
       <Stack.Screen
         options={{
@@ -58,15 +61,16 @@ export const BottomTab = () => {
               source={require('../Assets/Home/checkout.png')}
               style={{
                 resizeMode: 'contain',
-                height: rfSpacing['8xl'],
-                width: rfSpacing['8xl'],
+                height: rfSpacing['6xl'],
+                width: rfSpacing['6xl'],
                 marginTop: rfSpacing.m,
+                marginBottom: rfSpacing.xs,
               }}
             />
           ),
         }}
         name="CheckOut"
-        component={Home3}
+        component={CheckOut}
       />
       <Stack.Screen
         options={{
@@ -78,13 +82,13 @@ export const BottomTab = () => {
                 height: rfSpacing['5xl'],
                 width: rfSpacing['5xl'],
                 marginTop: rfSpacing.m,
-                marginBottom: rfSpacing.s,
+                marginBottom: rfSpacing.xs,
               }}
             />
           ),
         }}
         name="History"
-        component={Home4}
+        component={History}
       />
     </Stack.Navigator>
   );

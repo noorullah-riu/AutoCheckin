@@ -1,11 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, View, StyleSheet, Pressable, Alert} from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
+import {removeUser} from '../../../storage/index';
+import ShowToast from '../../../ui/Toast';
+import EcomContext from '../../../contextApi/DataProvider';
 
 export const Home = props => {
+  const {UserAuthentic, Data, setUserAuthentic} = useContext(EcomContext);
+  const logOut = async () => {
+    const resp = await removeUser();
+    if (resp) {
+      setUserAuthentic(!UserAuthentic);
+      ShowToast('success', `See You Soon`);
+    }
+  };
   const username = `Username`;
   return (
     <>
@@ -27,10 +38,7 @@ export const Home = props => {
           </View>
           <View style={{flex: 1, paddingTop: rfSpacing['4xl']}}>
             <View style={styles.lognDiv}>
-              <BlueButton
-                text="Logout"
-                onPress={() => Alert.alert('Under Development')}
-              />
+              <BlueButton text="Logout" onPress={logOut} />
             </View>
           </View>
         </View>

@@ -1,4 +1,4 @@
-import React, {useCallback,useContext, useState,useEffect} from 'react';
+import React, {useCallback, useContext, useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -18,9 +18,9 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
 
-export const Home3 = props => {
+export const CheckOut = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
-  useContext(EcomContext);
+    useContext(EcomContext);
 
   const [genderOpen, setGenderOpen] = useState(false);
   const [genderValue, setGenderValue] = useState(null);
@@ -34,24 +34,21 @@ export const Home3 = props => {
     {label: 'Project3', value: 'Project3'},
     {label: 'Project4', value: 'Project4'},
     {label: 'Project5', value: 'Project5'},
+    {label: 'Project6', value: 'Project6'},
+    {label: 'Project7', value: 'Project7'},
+    {label: 'Project8', value: 'Project8'},
+    {label: 'Project9', value: 'Project9'},
+    {label: 'Project10', value: 'Project10'},
     {label: 'Project11', value: 'Project11'},
-    {label: 'Project111', value: 'Project111'},
-    {label: 'Project211', value: 'Project211'},
-    {label: 'Project311', value: 'Project311'},
-    {label: 'Project411', value: 'Project411'},
-    {label: 'Project511', value: 'Project511'},
-    {label: 'Proct', value: 'Proct'},
-    {label: 'Proct1', value: 'Proct1'},
-    {label: 'Proct2', value: 'Proct2'},
-    {label: 'Proct3', value: 'Proct1'},
-    {label: 'Proct4', value: 'Proct4'},
-    {label: 'Proct5', value: 'Prot5'},
-    {label: 'Proct', value: 'Proct'},
-    {label: 'Proc', value: 'Proct'},
-    {label: 'Pr', value: 'Proct'},
-    {label: 'Pro3', value: 'Proct'},
-    {label: 'Prt4', value: 'Proct'},
-    {label: 'Pct5', value: 'Prot'},
+    {label: 'Project12', value: 'Project12'},
+    {label: 'Project13', value: 'Project13'},
+    {label: 'Project14', value: 'Project14'},
+    {label: 'Project15', value: 'Project15'},
+    {label: 'Project16', value: 'Project16'},
+    {label: 'Project17', value: 'Project17'},
+    {label: 'Project18', value: 'Project18'},
+    {label: 'Project19', value: 'Project19'},
+    {label: 'Project20', value: 'Project20'},
   ]);
   const [loading, setLoading] = useState(false);
   const onGenderOpen = useCallback(() => {
@@ -66,27 +63,26 @@ export const Home3 = props => {
     console.log(data, 'data');
   };
 
-
   const funPostCheckOut = () => {
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
       axios
         .post('VMI/AddTimeSheet', {
-          employeeid:"1",
-          extEmpNo:"100001",
-          date:"12-01-2023",
-          type:"OUT",
-          time:"16:30",
-          project:"1025-AD-DAM",
-          langtitue:"senthil",
-          geolocation:"senthil1",
-          lattidue:"senthil"
+          employeeid: '1',
+          extEmpNo: '100001',
+          date: '12-01-2023',
+          type: 'OUT',
+          time: '16:30',
+          project: '1025-AD-DAM',
+          langtitue: 'senthil',
+          geolocation: 'senthil1',
+          lattidue: 'senthil',
         })
         .then(function (response) {
           console.log(response);
-       //   setData(response);
-        //  setUserAuthentic(!UserAuthentic);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
@@ -100,14 +96,14 @@ export const Home3 = props => {
     } else {
       axios
         .post('VMI/GetProjectDetails', {
-          employeeid:"1",
-          extEmpNo:"11407",
-          date:"10.01.2023"
+          employeeid: '1',
+          extEmpNo: '11407',
+          date: '10.01.2023',
         })
         .then(function (response) {
           console.log(response);
-       //   setData(response);
-        //  setUserAuthentic(!UserAuthentic);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
@@ -117,7 +113,7 @@ export const Home3 = props => {
 
   useEffect(() => {
     funGetCheckOut();
-  }, []); 
+  }, []);
   return (
     <View style={styles.containerStyling}>
       <Header title={'Check Out'} />
@@ -149,6 +145,7 @@ export const Home3 = props => {
                 nestedScrollEnabled: true,
               }}
               placeholder="Select Project"
+              searchPlaceholderTextColor="#296faa"
               placeholderStyle={styles.placeholderStyles}
               loading={loading}
               dropDownContainerStyle={{
@@ -164,53 +161,11 @@ export const Home3 = props => {
           )}
         />
       </View>
-  {/*     <View
-        style={{
-          marginTop: rfSpacing.m,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Field1</Text>
-        </View>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt2}>Field2</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          marginTop: rfSpacing['4xl'],
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle} keyboardType="default" />
-        </View>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle} keyboardType="default" />
-        </View>
-      </View>
-      <View
-        style={{
-          marginTop: rfSpacing['4xl'],
-          marginHorizontal: rfSpacing['5xl'],
-        }}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Field3</Text>
-        </View>
-        <View style={styles.inputEmail}>
-          <TextInput style={styles.inputStyle2} keyboardType="default" />
-        </View>
-      </View> */}
 
       <View style={styles.lognDiv}>
         <BlueButton
           text="Check Out"
-      //    funPostCheckOut
+          //    funPostCheckOut
           onPress={() => Alert.alert('Under Development')}
         />
       </View>
@@ -247,7 +202,7 @@ const styles = StyleSheet.create({
     paddingRight: rfSpacing['9xl'],
   },
   placeholderStyles: {
-    color: 'grey',
+    color: '#296faa',
   },
 
   dropdown: {

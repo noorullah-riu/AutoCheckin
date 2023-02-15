@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Pressable,
   TextInput,
-  Alert,
+  Image,
   Dimensions,
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
@@ -14,10 +14,14 @@ import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
 import Loader from '../../../ui/Loader';
 
+import logo from '../../../Assets/Home/logo.jpeg';
 const windowwidth = Dimensions.get('window').width;
 import EcomContext from '../../../contextApi/DataProvider';
 import Header from '../../../ui/Header';
 import axios from 'axios';
+import LoginHeader from '../../../ui/LoginHeader';
+import WhiteButton from '../../../ui/WhiteButton';
+
 export const Login = props => {
   const username = `Username/Email`;
   const Password = `Password`;
@@ -78,10 +82,10 @@ export const Login = props => {
       <View
         style={{
           flex: 1,
-
-          backgroundColor: '#fff',
+          backgroundColor: '#296faa',
         }}>
-        <Header title={'Login'} />
+        <LoginHeader title={'Login'} borderColor={colors.white} />
+        <Image resizeMode="stretch" style={styles.imgStyle} source={logo} />
         <View style={styles.containerStyling}>
           <View style={styles.h60}>
             <Text style={styles.singinTxt}>{username}</Text>
@@ -90,7 +94,7 @@ export const Login = props => {
           <View style={styles.inputEmail}>
             <TextInput
               style={styles.inputStyle}
-              placeholderTextColor={colors.new_black}
+              placeholderTextColor={'#296faa'}
               placeholder="User Name/Email"
               keyboardType="email-address"
               value={EmailIn}
@@ -104,7 +108,7 @@ export const Login = props => {
           <View style={styles.inputEmail}>
             <TextInput
               style={styles.inputStyle}
-              placeholderTextColor={colors.new_black}
+              placeholderTextColor={'#296faa'}
               placeholder="Password"
               keyboardType="visible-password"
               value={PasswordIn}
@@ -113,7 +117,7 @@ export const Login = props => {
           </View>
 
           <View style={styles.lognDiv}>
-            <BlueButton text="Login" onPress={() => funPostLogin()} />
+            <WhiteButton text="Login" onPress={() => funPostLogin()} />
           </View>
         </View>
       </View>
@@ -130,7 +134,15 @@ const styles = StyleSheet.create({
   textStyling: {
     marginTop: 20,
     textAlign: 'center',
-    color: '#000',
+    color: '#296faa',
+  },
+
+  imgStyle: {
+    width: rfSpacing['2.5H'],
+    alignSelf: 'center',
+    marginTop: rfSpacing['4xl'],
+    borderRadius: rfSpacing.m,
+    height: rfSpacing['2.5H'],
   },
   h60: {
     marginHorizontal: RFPercentage(7),
@@ -141,12 +153,12 @@ const styles = StyleSheet.create({
     width: rfSpacing['1.2H'],
     textAlignVertical: 'center',
     height: rfSpacing['6xl'],
-    color: colors.Boulder,
+    color: colors.white,
     fontSize: rfSpacing.xl,
     fontWeight: '600',
   },
   inputStyle: {
-    color: colors.activity_Date,
+    color: '#296faa',
     fontSize: rfSpacing.xl,
   },
   inputEmail: {
@@ -155,6 +167,7 @@ const styles = StyleSheet.create({
    // marginHorizontal: RFPercentage(7),
     borderWidth: 1,
     borderColor: colors.new_black,
+    backgroundColor: colors.white,
   },
   lognDiv: {
     marginTop: RFPercentage(7),
