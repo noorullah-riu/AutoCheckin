@@ -12,7 +12,8 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
-//import ax
+import Loader from '../../../ui/Loader';
+
 const windowwidth = Dimensions.get('window').width;
 import EcomContext from '../../../contextApi/DataProvider';
 import Header from '../../../ui/Header';
@@ -25,8 +26,9 @@ export const Login = props => {
     useContext(EcomContext);
 
   const [EmailIn, setEmailIn] = useState('');
-  const [PasswordIn, setPasswordIn] = useState('');
 
+  const [PasswordIn, setPasswordIn] = useState('');
+  const [loading, setloading] = useState(false);
   /*   axios.get('/GeeksforGeeks', {
     params: {
         articleID: articleID
@@ -43,24 +45,34 @@ export const Login = props => {
     }); */
 
   const funPostLogin = () => {
-    if (EmailIn || PasswordIn == '') {
+    if (EmailIn == '' || PasswordIn == '') {
       Alert.alert('Inputs Are Must');
     } else {
+      setloading(true);
       axios
-        .post('VMI/ValidateLogin', {
-          articleID: 'articleID',
-          title: 'Axios in React Native push',
+        .post('http://86.96.200.103:8092/api/VMI/ValidateLogin', {
+          username: EmailIn,//'IMV0858N',
+          password: PasswordIn,//'IMV0858N',
         })
         .then(function (response) {
-          console.log(response);
-          setData(response);
-          setUserAuthentic(!UserAuthentic);
+          console.log(response.data);
+          setloading(false);
+          Alert.alert('success', 'welcome');
+            setData(response.data);
+            setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
+          setloading(false);
+          Alert.alert(
+            'error',
+            'Error Loading ,Plz Try with differnet Credantials',
+          );
         });
     }
   };
+
+  if (loading) return <Loader />;
   return (
     <>
       <View
@@ -121,7 +133,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   h60: {
-    marginLeft: RFPercentage(7),
+    marginHorizontal: RFPercentage(7),
     alignSelf: 'flex-start',
     height: rfSpacing['6xl'],
   },
@@ -138,8 +150,9 @@ const styles = StyleSheet.create({
     fontSize: rfSpacing.xl,
   },
   inputEmail: {
-    height: rfSpacing['6xl'],
-    width: rfSpacing['3H'],
+    // height: rfSpacing['6xl'],
+    width: '80%',
+   // marginHorizontal: RFPercentage(7),
     borderWidth: 1,
     borderColor: colors.new_black,
   },

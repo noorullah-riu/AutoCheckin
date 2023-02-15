@@ -78,7 +78,7 @@ export const Home2 = props => {
       Alert.alert('Inputs Are Must');
     } else {
       axios
-        .post('VMI/GetProjectDetails', {
+        .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
           employeeid:"1",
           extEmpNo:"11407",
           date:"10.01.2023"

@@ -32,7 +32,7 @@ export const Home4 = props => {
       Alert.alert('Inputs Are Must');
     } else {
       axios
-        .post('VMI/GetHistory', {
+        .post('http://86.96.200.103:8092/api/VMI/GetHistory', {
           employeeid:"1",
           extEmpNo:"1234",
           fromdate:"10-01-2023",
