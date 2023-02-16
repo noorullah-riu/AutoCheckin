@@ -17,7 +17,7 @@ const LoginHeader = ({title}: any) => {
 
 const styles = StyleSheet.create({
   imgageBack: {
-    height: rfSpacing['10xl'],
+    height: rfSpacing['8xl'],
     width: windowwidth,
     backgroundColor: colors.white,
     borderBottomEndRadius: rfSpacing['6xl'],

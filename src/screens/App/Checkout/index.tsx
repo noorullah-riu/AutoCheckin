@@ -24,6 +24,7 @@ export const CheckOut = props => {
 
   const [genderOpen, setGenderOpen] = useState(false);
   const [genderValue, setGenderValue] = useState(null);
+  const [Projects, setProjects] = useState([]);
 
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
@@ -95,13 +96,14 @@ export const CheckOut = props => {
       Alert.alert('Inputs Are Must');
     } else {
       axios
-        .post('VMI/GetProjectDetails', {
+        .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
           employeeid: '1',
           extEmpNo: '11407',
           date: '10.01.2023',
         })
         .then(function (response) {
-          console.log(response);
+          console.log(response.data.ProjectDetails);
+          setProjects(response.data.ProjectDetails);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -136,7 +138,13 @@ export const CheckOut = props => {
               style={styles.dropdown}
               open={companyOpen}
               value={companyValue}
-              items={company}
+              //  items={company}
+              items={Projects?.map(option => ({
+                label: option.projectname,
+                value: option.projectcode,
+                //  phonecode: option.phonecode,
+                //  countryCode: option.iso,
+              }))}
               setOpen={setCompanyOpen}
               setValue={setCompanyValue}
               setItems={setComapny}

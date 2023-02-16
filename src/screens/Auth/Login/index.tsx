@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
   Pressable,
+  Alert,
   TextInput,
   Image,
   Dimensions,
@@ -55,8 +56,8 @@ export const Login = props => {
       setloading(true);
       axios
         .post('http://86.96.200.103:8092/api/VMI/ValidateLogin', {
-          username: EmailIn,//'IMV0858N',
-          password: PasswordIn,//'IMV0858N',
+          username: 'IMV0150D',//EmailIn,
+          password: 'IMV0150D',//PasswordIn,//'IMV0858N',
         })
         .then(function (response) {
           console.log(response.data);
@@ -68,9 +69,7 @@ export const Login = props => {
         .catch(function (error) {
           console.log(error);
           setloading(false);
-          Alert.alert(
-            'error',
-            'Error Loading ,Plz Try with differnet Credantials',
+          Alert.alert('Error Loading ,Plz Try with differnet Credantials',
           );
         });
     }
@@ -128,7 +127,7 @@ export const Login = props => {
 const styles = StyleSheet.create({
   containerStyling: {
     flex: 1,
-    justifyContent: 'center',
+   // justifyContent: 'center',
     alignItems: 'center',
   },
   textStyling: {
@@ -138,11 +137,12 @@ const styles = StyleSheet.create({
   },
 
   imgStyle: {
-    width: rfSpacing['2.5H'],
+    width: rfSpacing['1.5H'],
+    height: rfSpacing['1.5H'],
     alignSelf: 'center',
     marginTop: rfSpacing['4xl'],
     borderRadius: rfSpacing.m,
-    height: rfSpacing['2.5H'],
+
   },
   h60: {
     marginHorizontal: RFPercentage(7),

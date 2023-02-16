@@ -19,6 +19,8 @@ import {RFPercentage} from 'react-native-responsive-fontsize';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
+import Geolocation from '@react-native-community/geolocation';
+
 export const CheckIn = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
     useContext(EcomContext);
@@ -26,6 +28,9 @@ export const CheckIn = props => {
   const [genderOpen, setGenderOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
+  const [cors, setcors] = useState({});
+  const [url, seturl] = useState('');
+  const [Projects, setProjects] = useState([]);
   const [company, setComapny] = useState([
     {label: 'Project', value: 'Project'},
     {label: 'Project1', value: 'Project1'},
@@ -51,24 +56,29 @@ export const CheckIn = props => {
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
+      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+      console.log(a);
+      seturl(a);
       axios
-        .post('VMI/AddTimeSheet', {
-          employeeid: '1',
-          extEmpNo: '100001',
+        .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo, //'100001',
           date: '12-01-2023',
-          type: 'OUT',
+          type: 'IN', //'OUT',
           time: '16:30',
-          project: '1025-AD-DAM',
-          langtitue: 'senthil',
+          project: companyValue, //'1025-AD-DAM',
+          langtitue: cors?.coords?.longitude,
           geolocation: 'senthil1',
-          lattidue: 'senthil',
+          lattidue: cors?.coords?.latitude,
         })
         .then(function (response) {
-          console.log(response);
+          console.log(response.data);
+          Alert.alert(response.data.Status);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
+          Alert.alert(error.data.Status);
           console.log(error);
         });
     }
@@ -80,12 +90,13 @@ export const CheckIn = props => {
     } else {
       axios
         .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
-          employeeid:"1",
-          extEmpNo:"11407",
-          date:"10.01.2023"
+          employeeid: '1',
+          extEmpNo: '11407',
+          date: '10.01.2023',
         })
         .then(function (response) {
-          console.log(response);
+          console.log(response?.data?.ProjectDetails);
+          setProjects(response?.data?.ProjectDetails);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -94,8 +105,21 @@ export const CheckIn = props => {
         });
     }
   };
+  const getCurrentPosition = () => {
+    Geolocation.getCurrentPosition(
+      pos => {
+        setcors(JSON.stringify(pos));
+      },
+      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      {enableHighAccuracy: true},
+    );
+  };
 
   useEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      setcors(info), {enableHighAccuracy: true};
+    });
+    // getCurrentPosition();
     funGetCheckin();
   }, []);
 
@@ -109,12 +133,12 @@ export const CheckIn = props => {
             marginHorizontal: rfSpacing['5xl'],
           }}>
           <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Project</Text>
+            <Text style={styles.singinTxt}>Project {url}</Text>
           </View>
         </View>
         <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
           <Controller
-            name="Country"
+            name="Projects"
             defaultValue="null"
             control={control}
             render={({field: {onChange, value}}) => (
@@ -122,7 +146,13 @@ export const CheckIn = props => {
                 style={styles.dropdown}
                 open={companyOpen}
                 value={companyValue}
-                items={company}
+                //  items={company}
+                items={Projects?.map(option => ({
+                  label: option.projectname,
+                  value: option.projectcode,
+                  //  phonecode: option.phonecode,
+                  //  countryCode: option.iso,
+                }))}
                 setOpen={setCompanyOpen}
                 setValue={setCompanyValue}
                 setItems={setComapny}
@@ -144,10 +174,7 @@ export const CheckIn = props => {
           />
 
           <View style={styles.lognDiv}>
-            <BlueButton
-              text="Check In"
-              onPress={() => Alert.alert('Under Development')}
-            />
+            <BlueButton text="Check In" onPress={() => funPostCheckin()} />
           </View>
         </View>
       </View>
