@@ -50,14 +50,14 @@ export const Login = props => {
     }); */
 
   const funPostLogin = () => {
-    if (EmailIn == '' || PasswordIn == '') {
+    if (EmailIn == '' || PasswordIn == '') {    
       Alert.alert('Inputs Are Must');
     } else {
       setloading(true);
       axios
         .post('http://86.96.200.103:8092/api/VMI/ValidateLogin', {
-          username: 'IMV0150D',//EmailIn,
-          password: 'IMV0150D',//PasswordIn,//'IMV0858N',
+          username: EmailIn,//'IMV0150D'
+          password: PasswordIn,//'IMV0858N',
         })
         .then(function (response) {
           console.log(response.data);

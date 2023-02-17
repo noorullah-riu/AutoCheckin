@@ -33,7 +33,7 @@ export const Home = props => {
               <Text style={styles.singinTxt}>Welcome</Text>
             </View>
             <View style={styles.h60}>
-              <Text style={styles.singinTxt2}>{username}</Text>
+              <Text style={styles.singinTxt2}>{Data?.username}</Text>
             </View>
           </View>
           <View style={{flex: 1, paddingTop: rfSpacing['4xl']}}>

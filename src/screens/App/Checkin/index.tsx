@@ -52,6 +52,24 @@ export const CheckIn = props => {
     console.log(data, 'data');
   };
 
+  const [date, setDate] = useState(new Date().toDateString());
+  const [time, setTime] = useState("");
+
+  const getCurrentDate = () => {
+    var date = new Date().getDate() - 1;
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    setDate(date + '-' + month + '-' + year);
+    console.log(date + '-' + month + '-' + year);
+
+    let today = new Date();
+    let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
+    let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+    setTime(hours + ':' + minutes + ':' + seconds);
+    //Alert.alert(date + '-' + month + '-' + year);
+  };
+
   const funPostCheckin = () => {
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
@@ -63,12 +81,12 @@ export const CheckIn = props => {
         .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo, //'100001',
-          date: '12-01-2023',
+          date: date,
           type: 'IN', //'OUT',
-          time: '16:30',
+          time: time,
           project: companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,
-          geolocation: 'senthil1',
+          geolocation: a,
           lattidue: cors?.coords?.latitude,
         })
         .then(function (response) {
@@ -119,6 +137,7 @@ export const CheckIn = props => {
     Geolocation.getCurrentPosition(info => {
       setcors(info), {enableHighAccuracy: true};
     });
+    getCurrentDate();
     // getCurrentPosition();
     funGetCheckin();
   }, []);
@@ -133,7 +152,7 @@ export const CheckIn = props => {
             marginHorizontal: rfSpacing['5xl'],
           }}>
           <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Project {url}</Text>
+            <Text style={styles.singinTxt}>Project</Text>
           </View>
         </View>
         <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>

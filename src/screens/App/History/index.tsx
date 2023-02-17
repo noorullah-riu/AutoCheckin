@@ -6,13 +6,15 @@ import {
   Pressable,
   Alert,
   TextInput,
+  Platform,
   Dimensions,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 
 import BlueButton from '../../../ui/BlueButton';
-import DatePicker from '../../../componenets/DatePicker';
+//import DatePicker from '../../../componenets/DatePicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Header from '../../../ui/Header';
 import FlatCard from './FlatCard';
 const windowwidth = Dimensions.get('window').width;
@@ -22,79 +24,187 @@ import EcomContext from '../../../contextApi/DataProvider';
 export const History = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
     useContext(EcomContext);
+   const [historyArr, sethistoryArr] = useState([]);
 
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [isPickerShow, setIsPickerShow] = useState(false);
+  const [date, setDate] = useState(new Date(Date.now()));
 
+  const [isPickerShow2, setIsPickerShow2] = useState(false);
+  const [date2, setDate2] = useState(new Date(Date.now()));
+
+  const [fromdate, setfromDate] = useState('');
+  const [todate, settoDate] = useState('');
+
+  const onChange = (event, value) => {
+    setDate(value);
+    if (Platform.OS === 'android') {
+      setIsPickerShow(false);
+    }
+    console.log('------------', value.getFullYear());
+    console.log('------------', value.getMonth());
+    console.log('------------', value.getDate());
+
+    var date = value.getDate(); //Current Date
+    var month = value.getMonth() + 1; //Current Month
+    var year = value.getFullYear(); //Current Year,.
+    var today =
+    (date < 10 ? '0' + date : date) +
+    '-' +
+    (month < 10 ? '0' + month : month) +
+    '-' +
+    year;
+    console.log('today', today);
+    setfromDate(today);
+    // handleDateChange(today);
+  };
+
+  const onChange2 = (event, value) => {
+    setDate2(value);
+    if (Platform.OS === 'android') {
+      setIsPickerShow2(false);
+    }
+    console.log('------------', value.getFullYear());
+    console.log('------------', value.getMonth());
+    console.log('------------', value.getDate());
+
+    var date = value.getDate(); //Current Date
+    var month = value.getMonth() + 1; //Current Month
+    var year = value.getFullYear(); //Current Year,.
+    var today =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+    /*  year +'-' + (month < 10 ? '0' + month : month) +'-' +(date < 10 ? '0' + date : date); */
+
+    console.log('today', today);
+    settoDate(today);
+    //handleDateChange(today);
+  };
   const funGetHistory = () => {
-    if (Data == null) {
-      Alert.alert('Inputs Are Must');
+    // console.log(date, 'date--->>');
+        if (fromdate == "" || todate =="") {
+      Alert.alert('Date is must');
     } else {
       axios
         .post('http://86.96.200.103:8092/api/VMI/GetHistory', {
-          employeeid:"1",
-          extEmpNo:"1234",
-          fromdate:"10-01-2023",
-          todate:"15-01-2023",
+          employeeid:Data?.employeeid,
+          extEmpNo:Data?.extEmpNo,
+          fromdate:fromdate,
+          todate:todate,
           project:""
         })
         .then(function (response) {
-          console.log(response);
+          console.log(response.data.TimesheetDetails);
+          sethistoryArr(response.data.TimesheetDetails);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           console.log(error);
         });
-    }
+    } 
   };
 
   useEffect(() => {
-    funGetHistory();
+    // funGetHistory();
   }, []);
 
   return (
     <View style={styles.containerStyling}>
       <Header title={'History'} />
       <View style={styles.dateDIv}>
-        <View style={styles.h60}>
-          <Text style={styles.singinTxt}>Date</Text>
-        </View>
-        <View style={styles.date}>
-          <View style={{flex: 1}}>
-            <DatePicker
-              title={'Start Date'}
-              open={open}
-              setOpen={setOpen}
-              date={date}
-              setDate={setDate}
-            />
+        <Pressable
+          onPress={() => setIsPickerShow(true)}
+          style={{
+            flexDirection: 'row',
+            marginTop: 20,
+            borderColor: '#aaa',
+            borderWidth: 1,
+          }}>
+          <View
+            style={{
+              marginHorizontal: 10,
+              marginVertical: 0,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{}}>From Date</Text>
           </View>
-        </View>
 
-        <View style={styles.h61}>
-          <Text style={styles.singinTxt}>To</Text>
-        </View>
-        <View style={styles.date2}>
-          <View style={{flex: 1}}>
-            <DatePicker
-              title={'Start Date'}
-              open={open}
-              setOpen={setOpen}
-              date={date}
-              setDate={setDate}
-            />
+          <View
+            style={{
+              marginTop: 0,
+              flex: 1,
+              backgroundColor: '#296faa',
+              height: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: '#fff'}}>{fromdate}</Text>
           </View>
-        </View>
+        </Pressable>
+
+        {isPickerShow && (
+          <DateTimePicker
+            value={date}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={false}
+            onChange={onChange}
+          />
+        )}
+      </View>
+      <View style={styles.dateDIv}>
+        <Pressable
+          onPress={() => setIsPickerShow2(true)}
+          style={{
+            flexDirection: 'row',
+            marginTop: 20,
+            borderColor: '#aaa',
+            borderWidth: 1,
+          }}>
+          <View
+            style={{
+              marginHorizontal: 10,
+              marginVertical: 0,
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{}}>To Date</Text>
+          </View>
+
+          <View
+            style={{
+              marginTop: 0,
+              flex: 1,
+              backgroundColor: '#296faa',
+              height: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: '#fff'}}>{todate}</Text>
+          </View>
+        </Pressable>
+
+        {isPickerShow2 && (
+          <DateTimePicker
+            value={date2}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={false}
+            onChange={onChange2}
+          />
+        )}
       </View>
       <View style={styles.lognDiv}>
-        <BlueButton
-          text="Get History"
-          onPress={() => Alert.alert('Under Development')}
-        />
+        <BlueButton text="Get History" onPress={funGetHistory} />
       </View>
 
-      <FlatCard />
+          <FlatCard  historyArr={historyArr}/> 
     </View>
   );
 };

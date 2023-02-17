@@ -14,6 +14,7 @@ import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import Geolocation from '@react-native-community/geolocation';
 
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
@@ -52,6 +53,8 @@ export const CheckOut = props => {
     {label: 'Project20', value: 'Project20'},
   ]);
   const [loading, setLoading] = useState(false);
+  const [cors, setcors] = useState({});
+
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(true);
   }, []);
@@ -64,28 +67,51 @@ export const CheckOut = props => {
     console.log(data, 'data');
   };
 
+  const [date, setDate] = useState(new Date().toDateString());
+  const [time, setTime] = useState("");
+
+  const getCurrentDate = () => {
+    var date = new Date().getDate() - 1;
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    setDate(date + '-' + month + '-' + year);
+    console.log(date + '-' + month + '-' + year);
+
+    let today = new Date();
+    let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
+    let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
+    let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+    setTime(hours + ':' + minutes + ':' + seconds);
+    //Alert.alert(date + '-' + month + '-' + year);
+  };
+
   const funPostCheckOut = () => {
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
+      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+      console.log(a);
+    //  seturl(a);
       axios
-        .post('VMI/AddTimeSheet', {
-          employeeid: '1',
-          extEmpNo: '100001',
-          date: '12-01-2023',
+        .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo, //'100001',
+          date: date,
           type: 'OUT',
-          time: '16:30',
-          project: '1025-AD-DAM',
-          langtitue: 'senthil',
-          geolocation: 'senthil1',
-          lattidue: 'senthil',
+          time: time,
+          project: companyValue, //'1025-AD-DAM',
+          langtitue: cors?.coords?.longitude,
+          geolocation: a,
+          lattidue: cors?.coords?.latitude,
         })
         .then(function (response) {
           console.log(response);
+          Alert.alert(response.data.Status);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
+          Alert.alert(error.data.Status);
           console.log(error);
         });
     }
@@ -95,6 +121,7 @@ export const CheckOut = props => {
     if (Data == null) {
       Alert.alert('Inputs Are Must');
     } else {
+
       axios
         .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
           employeeid: '1',
@@ -114,6 +141,10 @@ export const CheckOut = props => {
   };
 
   useEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      setcors(info), {enableHighAccuracy: true};
+    });
+    getCurrentDate();
     funGetCheckOut();
   }, []);
   return (
@@ -174,7 +205,7 @@ export const CheckOut = props => {
         <BlueButton
           text="Check Out"
           //    funPostCheckOut
-          onPress={() => Alert.alert('Under Development')}
+          onPress={() =>funPostCheckOut()}
         />
       </View>
     </View>
