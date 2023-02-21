@@ -56,8 +56,8 @@ export const Login = props => {
       setloading(true);
       axios
         .post('http://86.96.200.103:8092/api/VMI/ValidateLogin', {
-          username: EmailIn,//'IMV0150D'
-          password: PasswordIn,//'IMV0858N',
+          username:'IMV0150D',// EmailIn,//'IMV0150D'
+          password:'IMV0150D',// PasswordIn,//'IMV0858N',
         })
         .then(function (response) {
           console.log(response.data);
@@ -93,7 +93,7 @@ export const Login = props => {
           <View style={styles.inputEmail}>
             <TextInput
               style={styles.inputStyle}
-              placeholderTextColor={'#296faa'}
+           //   placeholderTextColor={'#296faa'}
               placeholder="User Name/Email"
               keyboardType="email-address"
               value={EmailIn}
@@ -106,11 +106,13 @@ export const Login = props => {
           </View>
           <View style={styles.inputEmail}>
             <TextInput
+              secureTextEntry={true}
               style={styles.inputStyle}
-              placeholderTextColor={'#296faa'}
+            //  placeholderTextColor={'#296faa'}
               placeholder="Password"
-              keyboardType="visible-password"
+          //    keyboardType="visible-password"
               value={PasswordIn}
+            
               onChangeText={PasswordIn => setPasswordIn(PasswordIn)}
             />
           </View>

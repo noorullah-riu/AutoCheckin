@@ -15,6 +15,7 @@ import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import Geolocation from '@react-native-community/geolocation';
+import Modal from 'react-native-modal';
 
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
@@ -22,10 +23,17 @@ import EcomContext from '../../../contextApi/DataProvider';
 export const CheckOut = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
     useContext(EcomContext);
-
+    const [loadingM, setLoadingM] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
+  
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
   const [genderOpen, setGenderOpen] = useState(false);
   const [genderValue, setGenderValue] = useState(null);
   const [Projects, setProjects] = useState([]);
+  const [url, seturl] = useState('');
+
 
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
@@ -68,10 +76,10 @@ export const CheckOut = props => {
   };
 
   const [date, setDate] = useState(new Date().toDateString());
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState('');
 
   const getCurrentDate = () => {
-    var date = new Date().getDate() - 1;
+    var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     setDate(date + '-' + month + '-' + year);
@@ -91,7 +99,7 @@ export const CheckOut = props => {
     } else {
       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
       console.log(a);
-    //  seturl(a);
+      seturl(a);
       axios
         .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
           employeeid: Data?.employeeid,
@@ -106,7 +114,8 @@ export const CheckOut = props => {
         })
         .then(function (response) {
           console.log(response);
-          Alert.alert(response.data.Status);
+          toggleModal();
+        //  Alert.alert(response.data.Status);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -121,11 +130,10 @@ export const CheckOut = props => {
     if (Data == null) {
       Alert.alert('Inputs Are Must');
     } else {
-
       axios
         .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
-          employeeid: '1',
-          extEmpNo: '11407',
+          employeeid:  Data?.employeeid,
+          extEmpNo: Data?.extEmpNo, 
           date: '10.01.2023',
         })
         .then(function (response) {
@@ -149,6 +157,25 @@ export const CheckOut = props => {
   }, []);
   return (
     <View style={styles.containerStyling}>
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>You have checked Out with following details</Text>
+          <Text>Date:{date}</Text>
+          <Text>Time:{time}</Text>
+          {/*       <Text>Project:{companyValue}</Text> */}
+          <Text>Location:{url}</Text>
+
+          <View style={styles.lognDiv}>
+            <BlueButton text="Okay" onPress={toggleModal} />
+          </View>
+        </View>
+      </Modal>
       <Header title={'Check Out'} />
       <View
         style={{
@@ -205,7 +232,7 @@ export const CheckOut = props => {
         <BlueButton
           text="Check Out"
           //    funPostCheckOut
-          onPress={() =>funPostCheckOut()}
+          onPress={() => funPostCheckOut()}
         />
       </View>
     </View>

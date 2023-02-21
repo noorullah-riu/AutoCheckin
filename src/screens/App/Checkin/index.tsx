@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
   Alert,
-  TextInput,
-  KeyboardAvoidingView,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
@@ -20,6 +18,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
 import Geolocation from '@react-native-community/geolocation';
+import Modal from 'react-native-modal';
 
 export const CheckIn = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
@@ -40,6 +39,12 @@ export const CheckIn = props => {
     {label: 'Project5', value: 'Project5'},
   ]);
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(true);
   }, []);
@@ -47,16 +52,17 @@ export const CheckIn = props => {
   const onCompanyOpen = useCallback(() => {
     setGenderOpen(false);
   }, []);
+
   const {handleSubmit, control} = useForm();
   const onSubmit = data => {
     console.log(data, 'data');
   };
 
   const [date, setDate] = useState(new Date().toDateString());
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState('');
 
   const getCurrentDate = () => {
-    var date = new Date().getDate() - 1;
+    var date = new Date().getDate() ;
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     setDate(date + '-' + month + '-' + year);
@@ -91,7 +97,8 @@ export const CheckIn = props => {
         })
         .then(function (response) {
           console.log(response.data);
-          Alert.alert(response.data.Status);
+       //   Alert.alert(response.data.Status);
+          toggleModal();
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -108,8 +115,8 @@ export const CheckIn = props => {
     } else {
       axios
         .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
-          employeeid: '1',
-          extEmpNo: '11407',
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo,
           date: '10.01.2023',
         })
         .then(function (response) {
@@ -144,8 +151,30 @@ export const CheckIn = props => {
 
   return (
     <>
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>You have checked In with following details</Text>
+          <Text>Date:{date}</Text>
+          <Text>Time:{time}</Text>
+    {/*       <Text>Project:{companyValue}</Text> */}
+          <Text>Location:{url}</Text>
+
+      
+          <View style={styles.lognDiv}>
+          <BlueButton text="Okay" onPress={toggleModal} />
+          </View>
+        </View>
+      </Modal>
       <View style={{backgroundColor: '#FFF', flex: 1}}>
         <Header title={'Check In'} />
+    
+
         <View
           style={{
             marginTop: rfSpacing['4xl'],

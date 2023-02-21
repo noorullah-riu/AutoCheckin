@@ -131,7 +131,7 @@ export const History = props => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{}}>From Date</Text>
+            <Text style={{}}>Select From Date</Text>
           </View>
 
           <View
@@ -172,9 +172,9 @@ export const History = props => {
               marginVertical: 0,
               flex: 1,
               justifyContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}>
-            <Text style={{}}>To Date</Text>
+            <Text style={{}}>Select To Date</Text>
           </View>
 
           <View
