@@ -1,10 +1,5 @@
 import React, {useCallback, useContext, useState, useEffect} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {Text, View, StyleSheet, Alert} from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -21,7 +16,7 @@ import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
 
 export const CheckIn = props => {
-  const {UserAuthentic, setUserAuthentic, Data, setData} =
+  const {UserAuthentic, setUserAuthentic, Data, setData,setactiveProject, activeProject} =
     useContext(EcomContext);
 
   const [genderOpen, setGenderOpen] = useState(false);
@@ -62,7 +57,7 @@ export const CheckIn = props => {
   const [time, setTime] = useState('');
 
   const getCurrentDate = () => {
-    var date = new Date().getDate() ;
+    var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
     setDate(date + '-' + month + '-' + year);
@@ -72,7 +67,7 @@ export const CheckIn = props => {
     let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
     let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
     let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-    setTime(hours + ':' + minutes + ':' + seconds);
+    setTime(hours + ':' + minutes);
     //Alert.alert(date + '-' + month + '-' + year);
   };
 
@@ -84,7 +79,7 @@ export const CheckIn = props => {
       console.log(a);
       seturl(a);
       axios
-        .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
+        .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo, //'100001',
           date: date,
@@ -97,8 +92,10 @@ export const CheckIn = props => {
         })
         .then(function (response) {
           console.log(response.data);
-       //   Alert.alert(response.data.Status);
+          //   Alert.alert(response.data.Status);
+          
           toggleModal();
+          setactiveProject(true);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -114,7 +111,7 @@ export const CheckIn = props => {
       Alert.alert('Inputs Are Must');
     } else {
       axios
-        .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
+        .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo,
           date: '10.01.2023',
@@ -159,72 +156,79 @@ export const CheckIn = props => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>You have checked In with following details</Text>
+          <Text>Checked In Successfully</Text>
           <Text>Date:{date}</Text>
           <Text>Time:{time}</Text>
-    {/*       <Text>Project:{companyValue}</Text> */}
-          <Text>Location:{url}</Text>
+          {/*       <Text>Project:{companyValue}</Text> */}
+          {/*        <Text>Location:{url}</Text> */}
 
-      
           <View style={styles.lognDiv}>
-          <BlueButton text="Okay" onPress={toggleModal} />
+            <BlueButton text="Okay" onPress={toggleModal} />
           </View>
         </View>
       </Modal>
       <View style={{backgroundColor: '#FFF', flex: 1}}>
         <Header title={'Check In'} />
-    
 
-        <View
-          style={{
-            marginTop: rfSpacing['4xl'],
-            marginHorizontal: rfSpacing['5xl'],
-          }}>
-          <View style={styles.h60}>
-            <Text style={styles.singinTxt}>Project</Text>
-          </View>
-        </View>
-        <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
-          <Controller
-            name="Projects"
-            defaultValue="null"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <DropDownPicker
-                style={styles.dropdown}
-                open={companyOpen}
-                value={companyValue}
-                //  items={company}
-                items={Projects?.map(option => ({
-                  label: option.projectname,
-                  value: option.projectcode,
-                  //  phonecode: option.phonecode,
-                  //  countryCode: option.iso,
-                }))}
-                setOpen={setCompanyOpen}
-                setValue={setCompanyValue}
-                setItems={setComapny}
-                listMode="MODAL"
-                scrollViewProps={{nestedScrollEnabled: true}}
-                placeholder="Select Project"
-                placeholderStyle={styles.placeholderStyles}
-                loading={loading}
-                dropDownContainerStyle={{
-                  maxHeight: 500,
-                }}
-                activityIndicatorColor="#5188E3"
-                searchable={true}
-                searchPlaceholder="Search your Project here..."
-                onOpen={onCompanyOpen}
-                onChangeValue={onChange}
+        {!activeProject ? (
+          <>
+            <View
+              style={{
+                marginTop: rfSpacing['4xl'],
+                marginHorizontal: rfSpacing['5xl'],
+              }}>
+              <View style={styles.h60}>
+                <Text style={styles.singinTxt}>Project</Text>
+              </View>
+            </View>
+            <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
+              <Controller
+                name="Projects"
+                defaultValue="null"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <DropDownPicker
+                    style={styles.dropdown}
+                    open={companyOpen}
+                    value={companyValue}
+                    //  items={company}
+                    items={Projects?.map(option => ({
+                      label: option.projectname,
+                      value: option.projectcode,
+                      //  phonecode: option.phonecode,
+                      //  countryCode: option.iso,
+                    }))}
+                    setOpen={setCompanyOpen}
+                    setValue={setCompanyValue}
+                    setItems={setComapny}
+                    listMode="MODAL"
+                    scrollViewProps={{nestedScrollEnabled: true}}
+                    placeholder="Select Project"
+                    placeholderStyle={styles.placeholderStyles}
+                    loading={loading}
+                    dropDownContainerStyle={{
+                      maxHeight: 500,
+                    }}
+                    activityIndicatorColor="#5188E3"
+                    searchable={true}
+                    searchPlaceholder="Search your Project here..."
+                    onOpen={onCompanyOpen}
+                    onChangeValue={onChange}
+                  />
+                )}
               />
-            )}
-          />
 
-          <View style={styles.lognDiv}>
-            <BlueButton text="Check In" onPress={() => funPostCheckin()} />
+              <View style={styles.lognDiv}>
+                <BlueButton text="Check In" onPress={() => funPostCheckin()} />
+              </View>
+            </View>
+          </>
+        ) : (
+          <View
+            style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
+            <Text>You have an Active project. Checkout first...!</Text>
           </View>
-        </View>
+        )}
       </View>
     </>
   );

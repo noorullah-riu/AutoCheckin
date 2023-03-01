@@ -6,7 +6,6 @@ import {Footer_Component} from '../../../componenets/FooterComponent';
 import styles from './styles';
 
 const FlatCard = ({historyArr}: any) => {
-
   const renderItem = ({item}) => (
     <View>
       <View style={styles.itemDiv}>

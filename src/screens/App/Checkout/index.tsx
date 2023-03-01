@@ -21,19 +21,26 @@ import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
 
 export const CheckOut = props => {
-  const {UserAuthentic, setUserAuthentic, Data, setData} =
-    useContext(EcomContext);
-    const [loadingM, setLoadingM] = useState(false);
-    const [isModalVisible, setModalVisible] = useState(false);
-  
-    const toggleModal = () => {
-      setModalVisible(!isModalVisible);
-    };
+  const {
+    UserAuthentic,
+    setUserAuthentic,
+    Data,
+    setData,
+    activeProject,
+    setactiveProject,
+    activeProjectName,
+    setactiveProjectName,
+  } = useContext(EcomContext);
+  const [loadingM, setLoadingM] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   const [genderOpen, setGenderOpen] = useState(false);
   const [genderValue, setGenderValue] = useState(null);
   const [Projects, setProjects] = useState([]);
   const [url, seturl] = useState('');
-
 
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
@@ -89,40 +96,46 @@ export const CheckOut = props => {
     let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
     let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
     let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
-    setTime(hours + ':' + minutes + ':' + seconds);
+    setTime(hours + ':' + minutes);
     //Alert.alert(date + '-' + month + '-' + year);
   };
 
   const funPostCheckOut = () => {
-    if (companyValue == null) {
-      Alert.alert('Inputs Are Must');
+/*     if (activeProjectName != '') {
+   //   Alert.alert('have actve project');
+       */setCompanyValue(activeProjectName);
+  //  }
+    if (activeProjectName == '') {
+      Alert.alert('Project is Must');
     } else {
-      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+          const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
       console.log(a);
       seturl(a);
       axios
-        .post('http://86.96.200.103:8092/api/VMI/AddTimeSheet', {
+        .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo, //'100001',
           date: date,
           type: 'OUT',
           time: time,
-          project: companyValue, //'1025-AD-DAM',
+          project: activeProjectName,//companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,
           geolocation: a,
           lattidue: cors?.coords?.latitude,
         })
         .then(function (response) {
           console.log(response);
+          setactiveProject(false);
+          setactiveProjectName('');
           toggleModal();
-        //  Alert.alert(response.data.Status);
+          //  Alert.alert(response.data.Status);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           Alert.alert(error.data.Status);
           console.log(error);
-        });
+        }); 
     }
   };
 
@@ -131,9 +144,9 @@ export const CheckOut = props => {
       Alert.alert('Inputs Are Must');
     } else {
       axios
-        .post('http://86.96.200.103:8092/api/VMI/GetProjectDetails', {
-          employeeid:  Data?.employeeid,
-          extEmpNo: Data?.extEmpNo, 
+        .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo,
           date: '10.01.2023',
         })
         .then(function (response) {
@@ -154,6 +167,12 @@ export const CheckOut = props => {
     });
     getCurrentDate();
     funGetCheckOut();
+    /*     Alert.alert(activeProjectName);
+    if(activeProjectName == "")
+    {
+      Alert.alert(activeProjectName);
+      setProjects([]);
+    } */
   }, []);
   return (
     <View style={styles.containerStyling}>
@@ -165,11 +184,11 @@ export const CheckOut = props => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>You have checked Out with following details</Text>
+          <Text>Checked Out Successfully</Text>
           <Text>Date:{date}</Text>
           <Text>Time:{time}</Text>
           {/*       <Text>Project:{companyValue}</Text> */}
-          <Text>Location:{url}</Text>
+          {/*      <Text>Location:{url}</Text> */}
 
           <View style={styles.lognDiv}>
             <BlueButton text="Okay" onPress={toggleModal} />
@@ -186,55 +205,73 @@ export const CheckOut = props => {
           <Text style={styles.singinTxt}>Project</Text>
         </View>
       </View>
-      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
-        <Controller
-          name="Country"
-          defaultValue="null"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <DropDownPicker
-              style={styles.dropdown}
-              open={companyOpen}
-              value={companyValue}
-              //  items={company}
-              items={Projects?.map(option => ({
-                label: option.projectname,
-                value: option.projectcode,
-                //  phonecode: option.phonecode,
-                //  countryCode: option.iso,
-              }))}
-              setOpen={setCompanyOpen}
-              setValue={setCompanyValue}
-              setItems={setComapny}
-              listMode="MODAL"
-              scrollViewProps={{
-                nestedScrollEnabled: true,
-              }}
-              placeholder="Select Project"
-              searchPlaceholderTextColor="#296faa"
-              placeholderStyle={styles.placeholderStyles}
-              loading={loading}
-              dropDownContainerStyle={{
-                maxHeight: 200,
-              }}
-              zIndex={-1000}
-              activityIndicatorColor="#5188E3"
-              searchable={true}
-              searchPlaceholder="Search your Project here..."
-              onOpen={onCompanyOpen}
-              onChangeValue={onChange}
+      {!activeProjectName ? (
+        <>
+           <View
+          style={{backgroundColor: '#ddd', padding: 10, marginHorizontal: 20}}>
+          <Text>No Active Project to Checkout</Text>
+        </View>
+     {/*      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
+            <Controller
+              name="Country"
+              defaultValue="null"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <DropDownPicker
+                  style={styles.dropdown}
+                  open={companyOpen}
+                  value={companyValue}
+                  //  items={company}
+                  items={Projects?.map(option => ({
+                    label: option.projectname,
+                    value: option.projectcode,
+                    //  phonecode: option.phonecode,
+                    //  countryCode: option.iso,
+                  }))}
+                  setOpen={setCompanyOpen}
+                  setValue={setCompanyValue}
+                  setItems={setComapny}
+                  listMode="MODAL"
+                  scrollViewProps={{
+                    nestedScrollEnabled: true,
+                  }}
+                  placeholder="Select Project"
+                  searchPlaceholderTextColor="#296faa"
+                  placeholderStyle={styles.placeholderStyles}
+                  loading={loading}
+                  dropDownContainerStyle={{
+                    maxHeight: 200,
+                  }}
+                  zIndex={-1000}
+                  activityIndicatorColor="#5188E3"
+                  searchable={true}
+                  searchPlaceholder="Search your Project here..."
+                  onOpen={onCompanyOpen}
+                  onChangeValue={onChange}
+                />
+              )}
             />
-          )}
-        />
-      </View>
+          </View> */}
+        </>
+      ) : (
+        <View
+          style={{borderColor: '#ddd',borderWidth:1,padding: 10, marginHorizontal: 20}}>
+          <Text>{activeProjectName}</Text>
+        </View>
+      )}
 
-      <View style={styles.lognDiv}>
+{!activeProjectName ? <>
+
+</>:<>
+<View style={styles.lognDiv}>
         <BlueButton
           text="Check Out"
           //    funPostCheckOut
           onPress={() => funPostCheckOut()}
         />
       </View>
+</>}
+  
     </View>
   );
 };

@@ -88,7 +88,7 @@ export const History = props => {
       Alert.alert('Date is must');
     } else {
       axios
-        .post('http://86.96.200.103:8092/api/VMI/GetHistory', {
+        .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
           employeeid:Data?.employeeid,
           extEmpNo:Data?.extEmpNo,
           fromdate:fromdate,

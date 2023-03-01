@@ -55,9 +55,9 @@ export const Login = props => {
     } else {
       setloading(true);
       axios
-        .post('http://86.96.200.103:8092/api/VMI/ValidateLogin', {
-          username:'IMV0150D',// EmailIn,//'IMV0150D'
-          password:'IMV0150D',// PasswordIn,//'IMV0858N',
+        .post('https://time.vmivmi.co:8092/api/VMI/ValidateLogin', {
+          username: EmailIn,//'IMV0150D'
+          password: PasswordIn,//'IMV0858N',
         })
         .then(function (response) {
           console.log(response.data);

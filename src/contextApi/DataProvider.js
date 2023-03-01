@@ -48,6 +48,8 @@ const EcomContext = React[_0x1ef3f6(0xdf)]();
 export const EcomProvider = ({children}) => {
   const [Data, setData] = useState('');
   const [UserAuthentic, setUserAuthentic] = useState(true);
+  const [activeProject, setactiveProject] = useState(false);
+  const [activeProjectName, setactiveProjectName] = useState("");
 
   const getData = async () => {
     const resp = await getDataContext();
@@ -68,6 +70,9 @@ export const EcomProvider = ({children}) => {
         setData,
         UserAuthentic,
         setUserAuthentic,
+
+        activeProject, setactiveProject,
+        activeProjectName, setactiveProjectName,
       }}>
       {children}
     </EcomContext.Provider>
