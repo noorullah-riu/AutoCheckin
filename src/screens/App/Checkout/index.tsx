@@ -101,14 +101,14 @@ export const CheckOut = props => {
   };
 
   const funPostCheckOut = () => {
-/*     if (activeProjectName != '') {
+    /*     if (activeProjectName != '') {
    //   Alert.alert('have actve project');
-       */setCompanyValue(activeProjectName);
-  //  }
+       */ setCompanyValue(activeProjectName);
+    //  }
     if (activeProjectName == '') {
       Alert.alert('Project is Must');
     } else {
-          const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
       console.log(a);
       seturl(a);
       axios
@@ -118,7 +118,7 @@ export const CheckOut = props => {
           date: date,
           type: 'OUT',
           time: time,
-          project: activeProjectName,//companyValue, //'1025-AD-DAM',
+          project: activeProjectName, //companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,
           geolocation: a,
           lattidue: cors?.coords?.latitude,
@@ -135,7 +135,7 @@ export const CheckOut = props => {
         .catch(function (error) {
           Alert.alert(error.data.Status);
           console.log(error);
-        }); 
+        });
     }
   };
 
@@ -174,17 +174,31 @@ export const CheckOut = props => {
       setProjects([]);
     } */
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      // The screen is focused
+      getCurrentDate();
+      funGetCheckOut();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [props.navigation]);
   return (
     <View style={styles.containerStyling}>
       <Modal isVisible={isModalVisible}>
         <View
           style={{
-            flex: 1,
+            //     height:300,
+            paddingVertical: 20,
             backgroundColor: '#fff',
-            justifyContent: 'center',
+            //     justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>Checked Out Successfully</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 16}}>
+            Checked Out Successfully
+          </Text>
           <Text>Date:{date}</Text>
           <Text>Time:{time}</Text>
           {/*       <Text>Project:{companyValue}</Text> */}
@@ -207,11 +221,15 @@ export const CheckOut = props => {
       </View>
       {!activeProjectName ? (
         <>
-           <View
-          style={{backgroundColor: '#ddd', padding: 10, marginHorizontal: 20}}>
-          <Text>No Active Project to Checkout</Text>
-        </View>
-     {/*      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
+          <View
+            style={{
+              backgroundColor: '#ddd',
+              padding: 10,
+              marginHorizontal: 20,
+            }}>
+            <Text>No Active Project to Checkout</Text>
+          </View>
+          {/*      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
             <Controller
               name="Country"
               defaultValue="null"
@@ -255,23 +273,29 @@ export const CheckOut = props => {
         </>
       ) : (
         <View
-          style={{borderColor: '#ddd',borderWidth:1,padding: 10, marginHorizontal: 20}}>
+          style={{
+            borderColor: '#ddd',
+            borderWidth: 1,
+            padding: 10,
+            marginHorizontal: 20,
+          }}>
           <Text>{activeProjectName}</Text>
         </View>
       )}
 
-{!activeProjectName ? <>
-
-</>:<>
-<View style={styles.lognDiv}>
-        <BlueButton
-          text="Check Out"
-          //    funPostCheckOut
-          onPress={() => funPostCheckOut()}
-        />
-      </View>
-</>}
-  
+      {!activeProjectName ? (
+        <></>
+      ) : (
+        <>
+          <View style={styles.lognDiv}>
+            <BlueButton
+              text="Check Out"
+              //    funPostCheckOut
+              onPress={() => funPostCheckOut()}
+            />
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -293,7 +317,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     height: rfSpacing['6xl'],
     color: colors.Boulder,
-    fontSize: rfSpacing.xl,
+    fontSize:14,
     fontWeight: '600',
   },
   singinTxt2: {
@@ -339,9 +363,8 @@ const styles = StyleSheet.create({
     borderWidth: rfSpacing['3xxs'],
   },
   lognDiv: {
-    marginTop: RFPercentage(15),
-    height: rfSpacing['7xl'],
+    marginTop: RFPercentage(5),
+    height: rfSpacing['7xl'], 
     alignItems: 'center',
-    justifyContent: 'center',
   },
 });

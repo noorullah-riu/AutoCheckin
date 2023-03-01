@@ -52,7 +52,7 @@ export const Home = props => {
     var year = new Date().getFullYear(); //Current Year,.
     if (date == 0) {
       date = 28;
-      month=month-1;
+      month = month - 1;
     }
     var today2 =
       (date < 10 ? '0' + date : date) +
@@ -81,6 +81,8 @@ export const Home = props => {
             //   Alert.alert('found null');
             setactiveProjectName(element.project);
             setactiveProject(true);
+          } else {
+            setactiveProject(false);
           }
         });
         sethistoryArrToday(response.data.TimesheetDetails);
@@ -271,7 +273,7 @@ export const Home = props => {
                           </View>
                         </View>
 
-      {/*                   <View
+                        {/*                   <View
                           style={{
                             flexDirection: 'row',
                             marginTop: 5,
@@ -398,7 +400,7 @@ export const Home = props => {
                       </View>
                     </View>
 
-          {/*           <View
+                    {/*           <View
                       style={{
                         flexDirection: 'row',
                         marginTop: 5,
@@ -456,8 +458,8 @@ const styles = StyleSheet.create({
     //  height: rfSpacing['6xl'],
     marginLeft: 20,
     color: colors.Indigo,
-    fontSize: rfSpacing['3xl'],
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: 'bold',
   },
   singinTxt2: {
     //  marginTop:10,
@@ -465,7 +467,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     //  height: rfSpacing['6xl'],
     color: colors.tomato,
-    fontSize: rfSpacing.xl,
+    fontSize: 12,
     fontWeight: 'bold',
   },
   lognDiv: {

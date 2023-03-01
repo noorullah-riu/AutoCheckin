@@ -16,8 +16,14 @@ import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
 
 export const CheckIn = props => {
-  const {UserAuthentic, setUserAuthentic, Data, setData,setactiveProject, activeProject} =
-    useContext(EcomContext);
+  const {
+    UserAuthentic,
+    setUserAuthentic,
+    Data,
+    setData,
+    setactiveProject,
+    activeProject,
+  } = useContext(EcomContext);
 
   const [genderOpen, setGenderOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
@@ -93,7 +99,7 @@ export const CheckIn = props => {
         .then(function (response) {
           console.log(response.data);
           //   Alert.alert(response.data.Status);
-          
+
           toggleModal();
           setactiveProject(true);
           //   setData(response);
@@ -146,17 +152,31 @@ export const CheckIn = props => {
     funGetCheckin();
   }, []);
 
+  React.useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getCurrentDate();
+      // getCurrentPosition();
+      funGetCheckin();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [props.navigation]);
+
   return (
     <>
       <Modal isVisible={isModalVisible}>
         <View
           style={{
-            flex: 1,
+            //   height: 300,
+            paddingVertical: 20,
             backgroundColor: '#fff',
-            justifyContent: 'center',
+            //   justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>Checked In Successfully</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 16}}>
+            Checked In Successfully
+          </Text>
           <Text>Date:{date}</Text>
           <Text>Time:{time}</Text>
           {/*       <Text>Project:{companyValue}</Text> */}
@@ -251,7 +271,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     height: rfSpacing['6xl'],
     color: colors.Boulder,
-    fontSize: rfSpacing.xl,
+    fontSize: 14,
     fontWeight: '600',
   },
   singinTxt2: {
@@ -292,9 +312,9 @@ const styles = StyleSheet.create({
     borderWidth: rfSpacing['3xxs'],
   },
   lognDiv: {
-    marginTop: RFPercentage(15),
+    marginTop: RFPercentage(5),
     height: rfSpacing['7xl'],
     alignItems: 'center',
-    justifyContent: 'center',
+   // justifyContent: 'center',
   },
 });
