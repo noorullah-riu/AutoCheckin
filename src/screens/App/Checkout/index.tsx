@@ -97,10 +97,14 @@ export const CheckOut = props => {
     let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
     let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
     setTime(hours + ':' + minutes);
+
+    let T = `${hours}:${minutes} `;
+    return T;
     //Alert.alert(date + '-' + month + '-' + year);
   };
 
   const funPostCheckOut = () => {
+    var TT = getCurrentDate();
     /*     if (activeProjectName != '') {
    //   Alert.alert('have actve project');
        */ setCompanyValue(activeProjectName);
@@ -117,7 +121,7 @@ export const CheckOut = props => {
           extEmpNo: Data?.extEmpNo, //'100001',
           date: date,
           type: 'OUT',
-          time: time,
+          time: TT.toString(),
           project: activeProjectName, //companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,
           geolocation: a,
@@ -133,7 +137,7 @@ export const CheckOut = props => {
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
-          Alert.alert(error.data.Status);
+          Alert.alert(error.response.data.Message);
           console.log(error);
         });
     }
@@ -317,7 +321,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     height: rfSpacing['6xl'],
     color: colors.Boulder,
-    fontSize:14,
+    fontSize: 14,
     fontWeight: '600',
   },
   singinTxt2: {
@@ -364,7 +368,7 @@ const styles = StyleSheet.create({
   },
   lognDiv: {
     marginTop: RFPercentage(5),
-    height: rfSpacing['7xl'], 
+    height: rfSpacing['7xl'],
     alignItems: 'center',
   },
 });

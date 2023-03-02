@@ -62,7 +62,7 @@ export const Login = props => {
         .then(function (response) {
           console.log(response.data);
           setloading(false);
-          Alert.alert('success', 'welcome');
+          Alert.alert('Success', `Welcome ${response.data.employeename}`);
             setData(response.data);
             setUserAuthentic(!UserAuthentic);
         })

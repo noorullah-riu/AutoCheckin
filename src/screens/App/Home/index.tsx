@@ -273,7 +273,7 @@ export const Home = props => {
                           </View>
                         </View>
 
-                        {/*                   <View
+                                      <View
                           style={{
                             flexDirection: 'row',
                             marginTop: 5,
@@ -287,7 +287,7 @@ export const Home = props => {
                           </View>
                         </View>
 
-                        <View
+                {/*             <View
                           style={{
                             flexDirection: 'row',
                             marginTop: 5,
@@ -361,7 +361,7 @@ export const Home = props => {
                     <View
                       style={{
                         flexDirection: 'row',
-                        marginTop: 10,
+                        marginTop: 5,
                         marginLeft: 10,
                       }}>
                       <View style={{flex: 1}}>
@@ -400,7 +400,7 @@ export const Home = props => {
                       </View>
                     </View>
 
-                    {/*           <View
+                             <View
                       style={{
                         flexDirection: 'row',
                         marginTop: 5,
@@ -414,7 +414,7 @@ export const Home = props => {
                       </View>
                     </View>
 
-                    <View
+           {/*           <View
                       style={{
                         flexDirection: 'row',
                         marginTop: 5,

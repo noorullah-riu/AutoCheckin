@@ -73,16 +73,21 @@ export const CheckIn = props => {
     let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
     let minutes = (today.getMinutes() < 10 ? '0' : '') + today.getMinutes();
     let seconds = (today.getSeconds() < 10 ? '0' : '') + today.getSeconds();
+
     setTime(hours + ':' + minutes);
+    let T = `${hours}:${minutes} `;
+    return T;
     //Alert.alert(date + '-' + month + '-' + year);
   };
 
   const funPostCheckin = () => {
+    var TT = getCurrentDate();
+   // Alert.alert(TT);
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
-      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
-      console.log(a);
+       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+     //  console.log(a);
       seturl(a);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
@@ -90,7 +95,7 @@ export const CheckIn = props => {
           extEmpNo: Data?.extEmpNo, //'100001',
           date: date,
           type: 'IN', //'OUT',
-          time: time,
+          time: TT.toString(),
           project: companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,
           geolocation: a,
@@ -99,16 +104,16 @@ export const CheckIn = props => {
         .then(function (response) {
           console.log(response.data);
           //   Alert.alert(response.data.Status);
-
+          setCompanyValue(null);
           toggleModal();
           setactiveProject(true);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
-          Alert.alert(error.data.Status);
-          console.log(error);
-        });
+          Alert.alert(error.response.data.Message);
+          console.log(error.response.data.Message);
+        }); 
     }
   };
 
@@ -147,12 +152,13 @@ export const CheckIn = props => {
     Geolocation.getCurrentPosition(info => {
       setcors(info), {enableHighAccuracy: true};
     });
+ 
     getCurrentDate();
     // getCurrentPosition();
     funGetCheckin();
   }, []);
 
-  React.useEffect(() => {
+  /*   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       getCurrentDate();
       // getCurrentPosition();
@@ -161,7 +167,7 @@ export const CheckIn = props => {
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [props.navigation]);
+  }, [props.navigation]); */
 
   return (
     <>
@@ -315,6 +321,6 @@ const styles = StyleSheet.create({
     marginTop: RFPercentage(5),
     height: rfSpacing['7xl'],
     alignItems: 'center',
-   // justifyContent: 'center',
+    // justifyContent: 'center',
   },
 });
