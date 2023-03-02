@@ -72,6 +72,22 @@ export const Home = props => {
     console.log('yesteday', today2);
     funGetHistoryYesterday(today2);
   };
+  const outDate = date => {
+    //Current Date
+
+    if (date == 0) {
+      date = 28;
+      month = month - 1;
+    }
+    var today2 =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+    console.log('yesteday', today2);
+    funGetHistoryYesterday(today2);
+  };
 
   const funGetHistoryToday = a => {
     axios
@@ -303,6 +319,11 @@ export const Home = props => {
                       <View style={styles.itemDiv}>
                         <View style={styles.fRow}>
                           <View style={styles.f1}>
+                            <Text style={styles.cName1}>{item.project}</Text>
+                          </View>
+                        </View>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
                             <Text style={styles.s13}>Date:</Text>
                           </View>
                           <View style={styles.f1}>
@@ -312,10 +333,12 @@ export const Home = props => {
 
                         <View style={styles.fRow}>
                           <View style={styles.f1}>
-                            <Text style={styles.s13}>Project</Text>
+                            <Text style={styles.s13}>Total Hours:</Text>
                           </View>
                           <View style={styles.f1}>
-                            <Text style={styles.cName1}>{item.project}</Text>
+                            <Text style={styles.yellowTxt}>
+                              {item.totalhours}
+                            </Text>
                           </View>
                         </View>
 
@@ -327,6 +350,7 @@ export const Home = props => {
                             <Text style={styles.yellowTxt1}>{item.intime}</Text>
                           </View>
                         </View>
+
                         <View style={styles.fRow}>
                           <View style={styles.f1}>
                             <Text style={styles.s13}>Out Time:</Text>
@@ -334,16 +358,6 @@ export const Home = props => {
                           <View style={styles.f1}>
                             <Text style={styles.yellowTxt1}>
                               {item.outtime}
-                            </Text>
-                          </View>
-                        </View>
-                        <View style={styles.fRow}>
-                          <View style={styles.f1}>
-                            <Text style={styles.s13}>Total Hours:</Text>
-                          </View>
-                          <View style={styles.f1}>
-                            <Text style={styles.yellowTxt}>
-                              {item.totalhours}
                             </Text>
                           </View>
                         </View>
@@ -481,6 +495,11 @@ export const Home = props => {
                   <View style={styles.itemDiv}>
                     <View style={styles.fRow}>
                       <View style={styles.f1}>
+                        <Text style={styles.cName1}>{item.project}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
                         <Text style={styles.s13}>Date:</Text>
                       </View>
                       <View style={styles.f1}>
@@ -490,10 +509,10 @@ export const Home = props => {
 
                     <View style={styles.fRow}>
                       <View style={styles.f1}>
-                        <Text style={styles.s13}>Project</Text>
+                        <Text style={styles.s13}>Total Hours:</Text>
                       </View>
                       <View style={styles.f1}>
-                        <Text style={styles.cName1}>{item.project}</Text>
+                        <Text style={styles.yellowTxt}>{item.totalhours}</Text>
                       </View>
                     </View>
 
@@ -505,6 +524,7 @@ export const Home = props => {
                         <Text style={styles.yellowTxt1}>{item.intime}</Text>
                       </View>
                     </View>
+
                     <View style={styles.fRow}>
                       <View style={styles.f1}>
                         <Text style={styles.s13}>Out Time:</Text>
@@ -523,14 +543,6 @@ export const Home = props => {
                         }}>
                         <Text style={styles.singinTxt2}>CheckOut</Text>
                       </Pressable>
-                    </View>
-                    <View style={styles.fRow}>
-                      <View style={styles.f1}>
-                        <Text style={styles.s13}>Total Hours:</Text>
-                      </View>
-                      <View style={styles.f1}>
-                        <Text style={styles.yellowTxt}>{item.totalhours}</Text>
-                      </View>
                     </View>
                   </View>
                 </View>
@@ -609,11 +621,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cName1: {
+    marginLeft: rfSpacing.xl,
     color: colors.Indigo,
     fontWeight: 'bold',
     fontSize: rfSpacing.xl,
-    textAlign: 'right',
-    marginRight: rfSpacing['xl'],
+  },
+  s13: {
+    marginLeft: rfSpacing.xl,
+    fontSize: rfSpacing.l,
+    color: colors.grey,
   },
   fRow: {
     flexDirection: 'row',
@@ -631,11 +647,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginRight: rfSpacing['xl'],
   },
-  s13: {
-    marginLeft: rfSpacing.xl,
-    fontSize: rfSpacing.l,
-    color: colors.grey,
-  },
+
   s15: {
     marginLeft: rfSpacing.xl,
     fontSize: rfSpacing.l,
