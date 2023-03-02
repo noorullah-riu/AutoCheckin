@@ -72,22 +72,22 @@ export const Home = props => {
     console.log('yesteday', today2);
     funGetHistoryYesterday(today2);
   };
-  const outDate = date => {
-    //Current Date
+  // const outDate = date => {
+  //   //Current Date
 
-    if (date == 0) {
-      date = 28;
-      month = month - 1;
-    }
-    var today2 =
-      (date < 10 ? '0' + date : date) +
-      '-' +
-      (month < 10 ? '0' + month : month) +
-      '-' +
-      year;
-    console.log('yesteday', today2);
-    funGetHistoryYesterday(today2);
-  };
+  //   if (date == 0) {
+  //     date = 28;
+  //     month = month - 1;
+  //   }
+  //   var today2 =
+  //     (date < 10 ? '0' + date : date) +
+  //     '-' +
+  //     (month < 10 ? '0' + month : month) +
+  //     '-' +
+  //     year;
+  //   console.log('yesteday', today2);
+  //   funGetHistoryYesterday(today2);
+  // };
 
   const funGetHistoryToday = a => {
     axios
