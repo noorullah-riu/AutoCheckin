@@ -44,6 +44,10 @@ export const CheckIn = props => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+
+/*     props.navigation.navigate('Home', {
+      screen: 'Home',
+    }); */
   };
 
   const onGenderOpen = useCallback(() => {
@@ -107,6 +111,8 @@ export const CheckIn = props => {
           setCompanyValue(null);
           toggleModal();
           setactiveProject(true);
+
+
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })

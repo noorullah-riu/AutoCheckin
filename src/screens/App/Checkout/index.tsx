@@ -131,6 +131,7 @@ export const CheckOut = props => {
           console.log(response);
           setactiveProject(false);
           setactiveProjectName('');
+   
           toggleModal();
           //  Alert.alert(response.data.Status);
           //   setData(response);
