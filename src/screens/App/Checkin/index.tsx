@@ -45,7 +45,7 @@ export const CheckIn = props => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
 
-/*     props.navigation.navigate('Home', {
+    /*     props.navigation.navigate('Home', {
       screen: 'Home',
     }); */
   };
@@ -86,12 +86,12 @@ export const CheckIn = props => {
 
   const funPostCheckin = () => {
     var TT = getCurrentDate();
-   // Alert.alert(TT);
+    // Alert.alert(TT);
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
     } else {
-       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
-     //  console.log(a);
+      const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
+      //  console.log(a);
       seturl(a);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
@@ -112,14 +112,13 @@ export const CheckIn = props => {
           toggleModal();
           setactiveProject(true);
 
-
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           Alert.alert(error.response.data.Message);
           console.log(error.response.data.Message);
-        }); 
+        });
     }
   };
 
@@ -158,7 +157,7 @@ export const CheckIn = props => {
     Geolocation.getCurrentPosition(info => {
       setcors(info), {enableHighAccuracy: true};
     });
- 
+
     getCurrentDate();
     // getCurrentPosition();
     funGetCheckin();
@@ -258,7 +257,9 @@ export const CheckIn = props => {
         ) : (
           <View
             style={{justifyContent: 'center', flex: 1, alignItems: 'center'}}>
-            <Text>You have an Active project. Checkout first...!</Text>
+            <Text style={{color: colors.grey}}>
+              You have an Active project. Checkout first...!
+            </Text>
           </View>
         )}
       </View>

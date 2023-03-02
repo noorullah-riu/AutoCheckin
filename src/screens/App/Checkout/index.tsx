@@ -131,7 +131,7 @@ export const CheckOut = props => {
           console.log(response);
           setactiveProject(false);
           setactiveProjectName('');
-   
+
           toggleModal();
           //  Alert.alert(response.data.Status);
           //   setData(response);
@@ -229,6 +229,7 @@ export const CheckOut = props => {
           <View
             style={{
               backgroundColor: '#ddd',
+
               padding: 10,
               marginHorizontal: 20,
             }}>
@@ -284,7 +285,7 @@ export const CheckOut = props => {
             padding: 10,
             marginHorizontal: 20,
           }}>
-          <Text>{activeProjectName}</Text>
+          <Text style={{color: colors.grey}}>{activeProjectName}</Text>
         </View>
       )}
 

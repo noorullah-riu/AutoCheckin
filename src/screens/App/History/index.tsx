@@ -24,7 +24,7 @@ import EcomContext from '../../../contextApi/DataProvider';
 export const History = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
     useContext(EcomContext);
-   const [historyArr, sethistoryArr] = useState([]);
+  const [historyArr, sethistoryArr] = useState([]);
 
   const [isPickerShow, setIsPickerShow] = useState(false);
   const [date, setDate] = useState(new Date(Date.now()));
@@ -48,11 +48,11 @@ export const History = props => {
     var month = value.getMonth() + 1; //Current Month
     var year = value.getFullYear(); //Current Year,.
     var today =
-    (date < 10 ? '0' + date : date) +
-    '-' +
-    (month < 10 ? '0' + month : month) +
-    '-' +
-    year;
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
     console.log('today', today);
     setfromDate(today);
     // handleDateChange(today);
@@ -84,16 +84,16 @@ export const History = props => {
   };
   const funGetHistory = () => {
     // console.log(date, 'date--->>');
-        if (fromdate == "" || todate =="") {
+    if (fromdate == '' || todate == '') {
       Alert.alert('Date is must');
     } else {
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
-          employeeid:Data?.employeeid,
-          extEmpNo:Data?.extEmpNo,
-          fromdate:fromdate,
-          todate:todate,
-          project:""
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo,
+          fromdate: fromdate,
+          todate: todate,
+          project: '',
         })
         .then(function (response) {
           console.log(response.data.TimesheetDetails);
@@ -104,7 +104,7 @@ export const History = props => {
         .catch(function (error) {
           console.log(error);
         });
-    } 
+    }
   };
 
   useEffect(() => {
@@ -131,7 +131,7 @@ export const History = props => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{}}>Select From Date</Text>
+            <Text style={{color: colors.grey}}>Select From Date</Text>
           </View>
 
           <View
@@ -172,9 +172,9 @@ export const History = props => {
               marginVertical: 0,
               flex: 1,
               justifyContent: 'center',
-              alignItems: 'center'
+              alignItems: 'center',
             }}>
-            <Text style={{}}>Select To Date</Text>
+            <Text style={{color: colors.grey}}>Select To Date</Text>
           </View>
 
           <View
@@ -204,7 +204,7 @@ export const History = props => {
         <BlueButton text="Get History" onPress={funGetHistory} />
       </View>
 
-          <FlatCard  historyArr={historyArr}/> 
+      <FlatCard historyArr={historyArr} />
     </View>
   );
 };

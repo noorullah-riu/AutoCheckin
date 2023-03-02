@@ -1,5 +1,13 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Pressable, FlatList, Alert} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  Alert,
+  Dimensions,
+} from 'react-native';
 import colors from '../../../theme/colors';
 import rfSpacing from '../../../theme/rfSpacing';
 import BlueButton from '../../../ui/BlueButton';
@@ -8,7 +16,8 @@ import {removeUser} from '../../../storage/index';
 import ShowToast from '../../../ui/Toast';
 import EcomContext from '../../../contextApi/DataProvider';
 import axios from 'axios';
-
+const windowwidth = Dimensions.get('window').width;
+const windowheight = Dimensions.get('window').height;
 export const Home = props => {
   const {
     UserAuthentic,
@@ -196,6 +205,7 @@ export const Home = props => {
             <Text
               style={{
                 fontSize: 14,
+                color: colors.grey,
                 fontWeight: 'bold',
                 marginLeft: 20,
                 marginBottom: 10,
@@ -209,97 +219,134 @@ export const Home = props => {
                   data={historyArrYesterday}
                   keyExtractor={item => item.date}
                   renderItem={({item, index, separators}) => (
-                    <View
-                      style={{
-                        backgroundColor: '#eee',
-                        marginRight: 10,
-                        borderRadius: 20,
-                        paddingBottom: 10,
-                      }}>
-                      <View style={{width: 250}}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 10,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>Date</Text>
+                    <View>
+                      {/* <View
+                        style={{
+                          backgroundColor: '#eee',
+                          marginRight: 10,
+                          borderRadius: 20,
+                          paddingBottom: 10,
+                        }}>
+                        <View style={{width: 250}}>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 10,
+                              marginLeft: 10,
+                            }}>
+                            <View style={{flex: 1}}>
+                              <Text>Date</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                              <Text>{item.date}</Text>
+                            </View>
                           </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.date}</Text>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 5,
+                              marginLeft: 10,
+                            }}>
+                            <View style={{flex: 1}}>
+                              <Text>Project</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                              <Text>{item.project}</Text>
+                            </View>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 5,
+                              marginLeft: 10,
+                            }}>
+                            <View style={{flex: 1}}>
+                              <Text>In Time</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                              <Text>{item.intime}</Text>
+                            </View>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 5,
+                              marginLeft: 10,
+                            }}>
+                            <View style={{flex: 1}}>
+                              <Text>Out Time</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                              <Text>{item.outtime}</Text>
+                            </View>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginTop: 5,
+                              marginLeft: 10,
+                            }}>
+                            <View style={{flex: 1}}>
+                              <Text>Total Hours</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                              <Text>{item.totalhours}</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View> */}
+
+                      <View style={styles.itemDiv}>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>Date:</Text>
+                          </View>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt1}>{item.date}</Text>
                           </View>
                         </View>
 
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>Project</Text>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>Project</Text>
                           </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.project}</Text>
+                          <View style={styles.f1}>
+                            <Text style={styles.cName1}>{item.project}</Text>
                           </View>
                         </View>
 
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>In Time</Text>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>In Time:</Text>
                           </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.intime}</Text>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt1}>{item.intime}</Text>
                           </View>
                         </View>
-
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>Out Time</Text>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>Out Time:</Text>
                           </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.outtime}</Text>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt1}>
+                              {item.outtime}
+                            </Text>
                           </View>
                         </View>
-
-                                      <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>Total Hours</Text>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>Total Hours:</Text>
                           </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.totalhours}</Text>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt}>
+                              {item.totalhours}
+                            </Text>
                           </View>
                         </View>
-
-                {/*             <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 5,
-                            marginLeft: 10,
-                          }}>
-                          <View style={{flex: 1}}>
-                            <Text>Status</Text>
-                          </View>
-                          <View style={{flex: 1}}>
-                            <Text>{item.status}</Text>
-                          </View>
-                        </View> */}
                       </View>
                     </View>
                   )}
@@ -310,7 +357,7 @@ export const Home = props => {
                 <Text
                   style={{
                     fontSize: 12,
-                    //    marginLeft: 20,
+                    color: colors.grey,
                     marginTop: 10,
                     textAlign: 'center',
                     marginBottom: 10,
@@ -326,6 +373,7 @@ export const Home = props => {
               style={{
                 fontSize: 14,
                 fontWeight: 'bold',
+                color: colors.grey,
                 marginLeft: 20,
                 marginTop: 10,
                 marginBottom: 10,
@@ -337,96 +385,153 @@ export const Home = props => {
               data={historyArrToday}
               keyExtractor={item => item.date}
               renderItem={({item, index, separators}) => (
-                <View
-                  style={{
-                    backgroundColor: '#eee',
-                    marginRight: 10,
-                    borderRadius: 20,
-                    paddingBottom: 10,
-                  }}>
-                  <View style={{width: 250}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 10,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>Date</Text>
+                // <View
+                //   style={{
+                //     backgroundColor: '#eee',
+                //     marginRight: 10,
+                //     borderRadius: 20,
+                //     paddingBottom: 10,
+                //   }}>
+                //   <View style={{width: 250}}>
+                //     <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 10,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>Date</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.date}</Text>
+                //       </View>
+                //     </View>
+                //     <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 5,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>Project</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.project}</Text>
+                //       </View>
+                //     </View>
+
+                //     <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 5,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>In Time</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.intime}</Text>
+                //       </View>
+                //     </View>
+
+                //     <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 5,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>Out Time</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.outtime}</Text>
+                //       </View>
+                //     </View>
+
+                //     <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 5,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>Total Hours</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.totalhours}</Text>
+                //       </View>
+                //     </View>
+
+                //     {/*           <View
+                //       style={{
+                //         flexDirection: 'row',
+                //         marginTop: 5,
+                //         marginLeft: 10,
+                //       }}>
+                //       <View style={{flex: 1}}>
+                //         <Text>Status</Text>
+                //       </View>
+                //       <View style={{flex: 1}}>
+                //         <Text>{item.status}</Text>
+                //       </View>
+                //     </View> */}
+                //   </View>
+                // </View>
+                <View>
+                  <View style={styles.itemDiv}>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>Date:</Text>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Text>{item.date}</Text>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 5,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>Project</Text>
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Text>{item.project}</Text>
+                      <View style={styles.f1}>
+                        <Text style={styles.yellowTxt1}>{item.date}</Text>
                       </View>
                     </View>
 
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 5,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>In Time</Text>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>Project</Text>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Text>{item.intime}</Text>
+                      <View style={styles.f1}>
+                        <Text style={styles.cName1}>{item.project}</Text>
                       </View>
                     </View>
 
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 5,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>Out Time</Text>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>In Time:</Text>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Text>{item.outtime}</Text>
+                      <View style={styles.f1}>
+                        <Text style={styles.yellowTxt1}>{item.intime}</Text>
                       </View>
                     </View>
-
-                             <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 5,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>Total Hours</Text>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>Out Time:</Text>
                       </View>
                       <View style={{flex: 1}}>
-                        <Text>{item.totalhours}</Text>
+                        <Text style={styles.yellowTxt1}>{item.outtime}</Text>
+                      </View>
+                      <Pressable
+                        onPress={() => Alert.alert('CheckOut')}
+                        style={{
+                          flex: 0.8,
+                          borderColor: colors.tomato,
+                          borderWidth: 1,
+                          marginRight: rfSpacing.m,
+                          marginBottom: rfSpacing.ms,
+                        }}>
+                        <Text style={styles.singinTxt2}>CheckOut</Text>
+                      </Pressable>
+                    </View>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>Total Hours:</Text>
+                      </View>
+                      <View style={styles.f1}>
+                        <Text style={styles.yellowTxt}>{item.totalhours}</Text>
                       </View>
                     </View>
-
-           {/*           <View
-                      style={{
-                        flexDirection: 'row',
-                        marginTop: 5,
-                        marginLeft: 10,
-                      }}>
-                      <View style={{flex: 1}}>
-                        <Text>Status</Text>
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Text>{item.status}</Text>
-                      </View>
-                    </View> */}
                   </View>
                 </View>
               )}
@@ -475,5 +580,95 @@ const styles = StyleSheet.create({
     height: rfSpacing['7xl'],
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container: {
+    padding: rfSpacing.m,
+    alignItems: 'center',
+  },
+  itemDiv: {
+    marginTop: rfSpacing.m,
+    paddingVertical: rfSpacing.m,
+    width: windowwidth - rfSpacing['6xl'],
+    backgroundColor: colors.white,
+    marginLeft: rfSpacing.m,
+    borderRadius: rfSpacing.m,
+    alignSelf: 'center',
+    borderWidth: 1,
+  },
+  cName: {
+    color: colors.Indigo,
+    fontWeight: 'bold',
+    fontSize: rfSpacing.xl,
+    textAlign: 'center',
+  },
+  cnameDiv1: {
+    flexDirection: 'row',
+    paddingHorizontal: rfSpacing.xl,
+  },
+  f1: {
+    flex: 1,
+  },
+  cName1: {
+    color: colors.Indigo,
+    fontWeight: 'bold',
+    fontSize: rfSpacing.xl,
+    textAlign: 'right',
+    marginRight: rfSpacing['xl'],
+  },
+  fRow: {
+    flexDirection: 'row',
+  },
+  s12: {
+    marginLeft: rfSpacing.xl,
+    fontSize: rfSpacing.l,
+    marginTop: rfSpacing.xs,
+    color: colors.grey,
+  },
+  yellowTxt: {
+    fontSize: rfSpacing.m,
+    color: colors.meeting,
+    fontWeight: '700',
+    textAlign: 'right',
+    marginRight: rfSpacing['xl'],
+  },
+  s13: {
+    marginLeft: rfSpacing.xl,
+    fontSize: rfSpacing.l,
+    color: colors.grey,
+  },
+  s15: {
+    marginLeft: rfSpacing.xl,
+    fontSize: rfSpacing.l,
+    fontWeight: '500',
+    color: colors.Indigo,
+  },
+  txtDate: {
+    marginTop: rfSpacing.xl,
+    color: colors.white,
+    alignSelf: 'center',
+  },
+  item1Div: {
+    marginTop: rfSpacing['4xl'],
+    width: rfSpacing['2H'],
+    height: rfSpacing['7xl'],
+    borderRadius: rfSpacing.m,
+    backgroundColor: colors.Indigo,
+  },
+
+  cnameDiv: {
+    flexDirection: 'row',
+    marginTop: rfSpacing.m,
+    marginBottom: rfSpacing.m,
+    paddingVertical: rfSpacing.m,
+    backgroundColor: colors.white,
+    marginHorizontal: rfSpacing['8xl'],
+  },
+
+  yellowTxt1: {
+    fontSize: rfSpacing.m,
+    color: colors.Rajah,
+    fontWeight: '700',
+    textAlign: 'right',
+    marginRight: rfSpacing['xl'],
   },
 });
