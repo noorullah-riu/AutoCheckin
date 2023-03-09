@@ -529,20 +529,28 @@ export const Home = props => {
                       <View style={styles.f1}>
                         <Text style={styles.s13}>Out Time:</Text>
                       </View>
-                      <View style={{flex: 1}}>
-                        <Text style={styles.yellowTxt1}>{item.outtime}</Text>
-                      </View>
-                      <Pressable
-                        onPress={() => Alert.alert('CheckOut')}
-                        style={{
-                          flex: 0.8,
-                          borderColor: colors.tomato,
-                          borderWidth: 1,
-                          marginRight: rfSpacing.m,
-                          marginBottom: rfSpacing.ms,
-                        }}>
-                        <Text style={styles.singinTxt2}>CheckOut</Text>
-                      </Pressable>
+                      {item?.outtime ? (
+                        <View style={{flex: 1}}>
+                          <Text style={styles.yellowTxt1}>{item.outtime}</Text>
+                        </View>
+                      ) : (
+                        <Pressable
+                          onPress={() =>
+                            props.navigation.navigate('CheckOut', {
+                              screen: 'CheckOut',
+                            })
+                          }
+                          style={{
+                            flex: 0.5,
+                            borderColor: colors.tomato,
+                            borderWidth: 1,
+                            marginRight: rfSpacing.m,
+                            paddingVertical: 5,
+                            //   marginBottom: rfSpacing.ms,
+                          }}>
+                          <Text style={styles.singinTxt2}>CheckOut</Text>
+                        </Pressable>
+                      )}
                     </View>
                   </View>
                 </View>

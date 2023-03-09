@@ -34,9 +34,19 @@ export const CheckOut = props => {
   const [loadingM, setLoadingM] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const toggleModal = () => {
+  const toggleModalBtn = () => {
+    setModalVisible(!isModalVisible);
+    props.navigation.navigate('Home', {
+      screen: 'Home',
+    });
+  };
+
+  const toggleModalNavgate = () => {
     setModalVisible(!isModalVisible);
   };
+
+  
+
   const [genderOpen, setGenderOpen] = useState(false);
   const [genderValue, setGenderValue] = useState(null);
   const [Projects, setProjects] = useState([]);
@@ -107,7 +117,8 @@ export const CheckOut = props => {
     var TT = getCurrentDate();
     /*     if (activeProjectName != '') {
    //   Alert.alert('have actve project');
-       */ setCompanyValue(activeProjectName);
+       */ 
+      setCompanyValue(activeProjectName);
     //  }
     if (activeProjectName == '') {
       Alert.alert('Project is Must');
@@ -132,7 +143,7 @@ export const CheckOut = props => {
           setactiveProject(false);
           setactiveProjectName('');
 
-          toggleModal();
+          toggleModalNavgate();
           //  Alert.alert(response.data.Status);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
@@ -210,7 +221,7 @@ export const CheckOut = props => {
           {/*      <Text>Location:{url}</Text> */}
 
           <View style={styles.lognDiv}>
-            <BlueButton text="Okay" onPress={toggleModal} />
+            <BlueButton text="Okay" onPress={toggleModalBtn} />
           </View>
         </View>
       </Modal>

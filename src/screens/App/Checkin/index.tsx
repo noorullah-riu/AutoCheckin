@@ -50,6 +50,17 @@ export const CheckIn = props => {
     }); */
   };
 
+  const toggleModalBtn = () => {
+    setModalVisible(!isModalVisible);                                                           
+    props.navigation.navigate('Home', {
+      screen: 'Home',
+    });
+  };
+
+  const toggleModalNavgate = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const onGenderOpen = useCallback(() => {
     setCompanyOpen(true);
   }, []);
@@ -109,8 +120,10 @@ export const CheckIn = props => {
           console.log(response.data);
           //   Alert.alert(response.data.Status);
           setCompanyValue(null);
-          toggleModal();
+          //   toggleModal();
           setactiveProject(true);
+
+          toggleModalNavgate();
 
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
@@ -194,7 +207,8 @@ export const CheckIn = props => {
           {/*        <Text>Location:{url}</Text> */}
 
           <View style={styles.lognDiv}>
-            <BlueButton text="Okay" onPress={toggleModal} />
+        {/*     <BlueButton text="Okay" onPress={toggleModal} /> */}
+            <BlueButton text="Okay" onPress={toggleModalBtn} />
           </View>
         </View>
       </Modal>
