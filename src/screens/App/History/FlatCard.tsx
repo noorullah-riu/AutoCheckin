@@ -31,6 +31,24 @@ const FlatCard = ({historyArr}: any) => {
             <Text style={styles.yellowTxt}>{item.totalhours}</Text>
           </View>
         </View>
+
+        <View style={styles.fRow}>
+          <View style={styles.f1}>
+            <Text style={styles.s13}>In Device ID:</Text>
+          </View>
+          <View style={styles.f1}>
+            <Text style={styles.yellowTxt}>{item?.INdeviceID}</Text>
+          </View>
+        </View>
+        <View style={styles.fRow}>
+          <View style={styles.f1}>
+            <Text style={styles.s13}>Out Device ID:</Text>
+          </View>
+          <View style={styles.f1}>
+            <Text style={styles.yellowTxt}>{item?.OUTDeviceID}</Text>
+          </View>
+        </View>
+
         <View style={styles.fRow}>
           <View style={styles.f1}>
             <Text style={styles.s13}>In Time:</Text>

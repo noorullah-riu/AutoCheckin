@@ -9,13 +9,14 @@ import {
   Dimensions,
 } from 'react-native';
 import colors from '../../../theme/colors';
-import rfSpacing from '../../../theme/rfSpacing';
+import Loader from '../../../ui/Loader';
 import BlueButton from '../../../ui/BlueButton';
 import Header from '../../../ui/Header';
 import {removeUser} from '../../../storage/index';
 import ShowToast from '../../../ui/Toast';
 import EcomContext from '../../../contextApi/DataProvider';
 import axios from 'axios';
+import Spacings from '../../../theme/Spacings';
 const windowwidth = Dimensions.get('window').width;
 const windowheight = Dimensions.get('window').height;
 export const Home = props => {
@@ -27,12 +28,17 @@ export const Home = props => {
     setactiveProject,
     activeProjectName,
     setactiveProjectName,
+    activeProjectYesterday,
+    setactiveProjectYesterday,
+
+    ActiveProjectDeviceID, setActiveProjectDeviceID,
   } = useContext(EcomContext);
   const [historyArrToday, sethistoryArrToday] = useState([]);
   const [historyArrYesterday, sethistoryArrYesterday] = useState([]);
   const [BhistoryArrYesterday, setBhistoryArrYesterday] = useState(false);
   const [fromdate, setfromDate] = useState('');
   const [todate, settoDate] = useState('');
+  const [loading, setloading] = useState(false);
 
   const logOut = async () => {
     const resp = await removeUser();
@@ -72,24 +78,8 @@ export const Home = props => {
     console.log('yesteday', today2);
     funGetHistoryYesterday(today2);
   };
-  // const outDate = date => {
-  //   //Current Date
-
-  //   if (date == 0) {
-  //     date = 28;
-  //     month = month - 1;
-  //   }
-  //   var today2 =
-  //     (date < 10 ? '0' + date : date) +
-  //     '-' +
-  //     (month < 10 ? '0' + month : month) +
-  //     '-' +
-  //     year;
-  //   console.log('yesteday', today2);
-  //   funGetHistoryYesterday(today2);
-  // };
-
   const funGetHistoryToday = a => {
+    setloading(true);
     axios
       .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
         employeeid: Data?.employeeid,
@@ -102,21 +92,26 @@ export const Home = props => {
         //   console.log(response.data.TimesheetDetails);
         response?.data?.TimesheetDetails?.forEach(async element => {
           //   console.log(element?.outtime, '------------');
-          if (element?.outtime == null) {
+          if (!element.outtime) {
             //   Alert.alert('found null');
             setactiveProjectName(element.project);
             setactiveProject(true);
+            setActiveProjectDeviceID(element.INdeviceID);
+            setloading(false);
           } else {
             setactiveProject(false);
+            setloading(false);
           }
         });
         sethistoryArrToday(response.data.TimesheetDetails);
       })
       .catch(function (error) {
+        setloading(false);
         console.log(error);
       });
   };
   const funGetHistoryYesterday = a => {
+    setloading(true);
     axios
       .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
         employeeid: Data?.employeeid,
@@ -128,25 +123,32 @@ export const Home = props => {
       .then(function (response) {
         response?.data?.TimesheetDetails?.forEach(async element => {
           //   console.log(element?.outtime, '------------');
-          if (element?.outtime == null) {
-            //   Alert.alert('found null');
+          if (!element.outtime) {
+            //  Alert.alert('found null');
+            setloading(false);
             setactiveProjectName(element.project);
             setactiveProject(true);
+            setactiveProjectYesterday(true);
+            setActiveProjectDeviceID(element.INdeviceID);
+          } else {
+            setloading(false);
+            setactiveProject(false);
           }
         });
         sethistoryArrYesterday(response?.data?.TimesheetDetails);
-        //  setactiveProject
+        // setactiveProject
       })
       .catch(function (error) {
+        setloading(false);
         //    Alert.alert('error');
         console.log(error);
       });
   };
-  /* 
+
   useEffect(() => {
     getCurrentDate_1();
     getCurrentDate();
-  }, []); */
+  }, []);
 
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -159,37 +161,7 @@ export const Home = props => {
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [props.navigation]);
-
-  const username = `Username`;
-  const DATA = [
-    {
-      date: '2023-02-28',
-      project: '0004-DXB-NEU',
-      intime: '11:03',
-      outtime: '11:09',
-      totalhours: '00:06',
-      remarks: null,
-      status: 'Open',
-    },
-    {
-      date: '2023-02-28',
-      project: '0011-DXB-CASH',
-      intime: '17:30',
-      outtime: null,
-      totalhours: null,
-      remarks: null,
-      status: 'Open',
-    },
-    {
-      date: '2023-02-28',
-      project: '0011-DXB-CASH',
-      intime: '18:30',
-      outtime: null,
-      totalhours: null,
-      remarks: null,
-      status: 'Open',
-    },
-  ];
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -198,7 +170,7 @@ export const Home = props => {
         <View style={styles.containerStyling}>
           <View
             style={{
-              marginBottom: 20,
+              marginBottom: Spacings['4xl'],
               flexDirection: 'row',
             }}>
             <View style={{flex: 3}}>
@@ -210,7 +182,7 @@ export const Home = props => {
                 flex: 1,
                 borderColor: colors.tomato,
                 borderWidth: 1,
-                marginTop: 10,
+                marginTop: Spacings.m,
               }}>
               <Text style={styles.singinTxt2}>LogOut</Text>
             </Pressable>
@@ -220,11 +192,11 @@ export const Home = props => {
           <View>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: Spacings.xl,
                 color: colors.grey,
                 fontWeight: 'bold',
-                marginLeft: 20,
-                marginBottom: 10,
+                marginLeft: Spacings['w4xl'],
+                marginBottom: Spacings.m,
               }}>
               Previous Day
             </Text>
@@ -233,89 +205,9 @@ export const Home = props => {
                 <FlatList
                   horizontal={true}
                   data={historyArrYesterday}
-                  keyExtractor={item => item.date}
+                  keyExtractor={item => item?.INGlocation + item?.outtime}
                   renderItem={({item, index, separators}) => (
                     <View>
-                      {/* <View
-                        style={{
-                          backgroundColor: '#eee',
-                          marginRight: 10,
-                          borderRadius: 20,
-                          paddingBottom: 10,
-                        }}>
-                        <View style={{width: 250}}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              marginTop: 10,
-                              marginLeft: 10,
-                            }}>
-                            <View style={{flex: 1}}>
-                              <Text>Date</Text>
-                            </View>
-                            <View style={{flex: 1}}>
-                              <Text>{item.date}</Text>
-                            </View>
-                          </View>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              marginTop: 5,
-                              marginLeft: 10,
-                            }}>
-                            <View style={{flex: 1}}>
-                              <Text>Project</Text>
-                            </View>
-                            <View style={{flex: 1}}>
-                              <Text>{item.project}</Text>
-                            </View>
-                          </View>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              marginTop: 5,
-                              marginLeft: 10,
-                            }}>
-                            <View style={{flex: 1}}>
-                              <Text>In Time</Text>
-                            </View>
-                            <View style={{flex: 1}}>
-                              <Text>{item.intime}</Text>
-                            </View>
-                          </View>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              marginTop: 5,
-                              marginLeft: 10,
-                            }}>
-                            <View style={{flex: 1}}>
-                              <Text>Out Time</Text>
-                            </View>
-                            <View style={{flex: 1}}>
-                              <Text>{item.outtime}</Text>
-                            </View>
-                          </View>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              marginTop: 5,
-                              marginLeft: 10,
-                            }}>
-                            <View style={{flex: 1}}>
-                              <Text>Total Hours</Text>
-                            </View>
-                            <View style={{flex: 1}}>
-                              <Text>{item.totalhours}</Text>
-                            </View>
-                          </View>
-                        </View>
-                      </View> */}
-
                       <View style={styles.itemDiv}>
                         <View style={styles.fRow}>
                           <View style={styles.f1}>
@@ -344,6 +236,27 @@ export const Home = props => {
 
                         <View style={styles.fRow}>
                           <View style={styles.f1}>
+                            <Text style={styles.s13}>In Device ID</Text>
+                          </View>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt}>
+                              {item?.INdeviceID}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
+                            <Text style={styles.s13}>Out Device ID</Text>
+                          </View>
+                          <View style={styles.f1}>
+                            <Text style={styles.yellowTxt}>
+                              {item?.OUTDeviceID}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View style={styles.fRow}>
+                          <View style={styles.f1}>
                             <Text style={styles.s13}>In Time:</Text>
                           </View>
                           <View style={styles.f1}>
@@ -355,11 +268,34 @@ export const Home = props => {
                           <View style={styles.f1}>
                             <Text style={styles.s13}>Out Time:</Text>
                           </View>
-                          <View style={styles.f1}>
+                          {item?.outtime ? (
+                            <View style={{flex: 1}}>
+                              <Text style={styles.yellowTxt1}>
+                                {item.outtime}
+                              </Text>
+                            </View>
+                          ) : (
+                            <Pressable
+                              onPress={() =>
+                                props.navigation.navigate('CheckOut', {
+                                  screen: 'CheckOut',
+                                })
+                              }
+                              style={{
+                                flex: 0.5,
+                                borderColor: colors.tomato,
+                                borderWidth: 1,
+                                marginRight: Spacings.wm,
+                                paddingVertical: Spacings.xs,
+                              }}>
+                              <Text style={styles.singinTxt2}>CheckOut</Text>
+                            </Pressable>
+                          )}
+                          {/* <View style={styles.f1}>
                             <Text style={styles.yellowTxt1}>
                               {item.outtime}
                             </Text>
-                          </View>
+                          </View>  */}
                         </View>
                       </View>
                     </View>
@@ -370,11 +306,11 @@ export const Home = props => {
               <>
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: Spacings.l,
                     color: colors.grey,
-                    marginTop: 10,
+                    marginTop: Spacings.m,
                     textAlign: 'center',
-                    marginBottom: 10,
+                    marginBottom: Spacings.m,
                   }}>
                   No Previous Day History
                 </Text>
@@ -385,112 +321,20 @@ export const Home = props => {
           <View>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: Spacings.xl,
                 fontWeight: 'bold',
                 color: colors.grey,
-                marginLeft: 20,
-                marginTop: 10,
-                marginBottom: 10,
+                marginLeft: Spacings.w4xl,
+                marginTop: Spacings.m,
+                marginBottom: Spacings.m,
               }}>
               Current Day
             </Text>
             <FlatList
               horizontal={true}
               data={historyArrToday}
-              keyExtractor={item => item.date}
+              keyExtractor={item => item?.INGlocation + item?.outtime}
               renderItem={({item, index, separators}) => (
-                // <View
-                //   style={{
-                //     backgroundColor: '#eee',
-                //     marginRight: 10,
-                //     borderRadius: 20,
-                //     paddingBottom: 10,
-                //   }}>
-                //   <View style={{width: 250}}>
-                //     <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 10,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>Date</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.date}</Text>
-                //       </View>
-                //     </View>
-                //     <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 5,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>Project</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.project}</Text>
-                //       </View>
-                //     </View>
-
-                //     <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 5,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>In Time</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.intime}</Text>
-                //       </View>
-                //     </View>
-
-                //     <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 5,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>Out Time</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.outtime}</Text>
-                //       </View>
-                //     </View>
-
-                //     <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 5,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>Total Hours</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.totalhours}</Text>
-                //       </View>
-                //     </View>
-
-                //     {/*           <View
-                //       style={{
-                //         flexDirection: 'row',
-                //         marginTop: 5,
-                //         marginLeft: 10,
-                //       }}>
-                //       <View style={{flex: 1}}>
-                //         <Text>Status</Text>
-                //       </View>
-                //       <View style={{flex: 1}}>
-                //         <Text>{item.status}</Text>
-                //       </View>
-                //     </View> */}
-                //   </View>
-                // </View>
                 <View>
                   <View style={styles.itemDiv}>
                     <View style={styles.fRow}>
@@ -516,6 +360,24 @@ export const Home = props => {
                       </View>
                     </View>
 
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>In Device ID</Text>
+                      </View>
+                      <View style={styles.f1}>
+                        <Text style={styles.yellowTxt}>{item?.INdeviceID}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.fRow}>
+                      <View style={styles.f1}>
+                        <Text style={styles.s13}>Out Device ID</Text>
+                      </View>
+                      <View style={styles.f1}>
+                        <Text style={styles.yellowTxt}>
+                          {item?.OUTDeviceID}
+                        </Text>
+                      </View>
+                    </View>
                     <View style={styles.fRow}>
                       <View style={styles.f1}>
                         <Text style={styles.s13}>In Time:</Text>
@@ -544,9 +406,8 @@ export const Home = props => {
                             flex: 0.5,
                             borderColor: colors.tomato,
                             borderWidth: 1,
-                            marginRight: rfSpacing.m,
-                            paddingVertical: 5,
-                            //   marginBottom: rfSpacing.ms,
+                            marginRight: Spacings.wm,
+                            paddingVertical: Spacings.xs,
                           }}>
                           <Text style={styles.singinTxt2}>CheckOut</Text>
                         </Pressable>
@@ -568,127 +429,125 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textStyling: {
-    marginTop: rfSpacing['4xl'],
+    marginTop: Spacings['4xl'],
     textAlign: 'center',
     color: '#000',
   },
   h60: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     flex: 1,
   },
   singinTxt: {
-    marginTop: 10,
-    //  textAlignVertical: 'center',
-    //   textAlign: 'center',
-    //  height: rfSpacing['6xl'],
-    marginLeft: 20,
+    marginTop: Spacings.m,
+
+    marginLeft: Spacings.w4xl,
     color: colors.Indigo,
-    fontSize: 13,
+    fontSize: Spacings.l,
     fontWeight: 'bold',
   },
   singinTxt2: {
     //  marginTop:10,
     textAlignVertical: 'center',
     textAlign: 'center',
-    //  height: rfSpacing['6xl'],
     color: colors.tomato,
-    fontSize: 12,
+    fontSize: Spacings.l,
     fontWeight: 'bold',
   },
   lognDiv: {
-    marginTop: rfSpacing['5xl'],
-    height: rfSpacing['7xl'],
+    marginTop: Spacings['5xl'],
+    height: Spacings['7xl'],
     alignItems: 'center',
     justifyContent: 'center',
   },
   container: {
-    padding: rfSpacing.m,
+    padding: Spacings.m,
     alignItems: 'center',
   },
   itemDiv: {
-    marginTop: rfSpacing.m,
-    paddingVertical: rfSpacing.m,
-    width: windowwidth - rfSpacing['6xl'],
+    marginTop: Spacings.m,
+    paddingVertical: Spacings.m,
+    width: windowwidth - Spacings['w6xl'],
     backgroundColor: colors.white,
-    marginLeft: rfSpacing.m,
-    borderRadius: rfSpacing.m,
+    marginLeft: Spacings.wm,
+    borderRadius: Spacings.wm,
     alignSelf: 'center',
     borderWidth: 1,
   },
   cName: {
     color: colors.Indigo,
     fontWeight: 'bold',
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     textAlign: 'center',
   },
   cnameDiv1: {
     flexDirection: 'row',
-    paddingHorizontal: rfSpacing.xl,
+    paddingHorizontal: Spacings.wxl,
   },
   f1: {
     flex: 1,
   },
   cName1: {
-    marginLeft: rfSpacing.xl,
+    marginLeft: Spacings.wxl,
     color: colors.Indigo,
     fontWeight: 'bold',
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
   },
   s13: {
-    marginLeft: rfSpacing.xl,
-    fontSize: rfSpacing.l,
+    marginLeft: Spacings.wxl,
+    fontSize: Spacings.l,
     color: colors.grey,
   },
   fRow: {
     flexDirection: 'row',
   },
   s12: {
-    marginLeft: rfSpacing.xl,
-    fontSize: rfSpacing.l,
-    marginTop: rfSpacing.xs,
+    marginLeft: Spacings.wxl,
+    fontSize: Spacings.l,
+    marginTop: Spacings.xs,
     color: colors.grey,
   },
   yellowTxt: {
-    fontSize: rfSpacing.m,
+    fontSize: Spacings.m,
     color: colors.meeting,
     fontWeight: '700',
     textAlign: 'right',
-    marginRight: rfSpacing['xl'],
+    marginRight: Spacings['wxl'],
   },
 
   s15: {
-    marginLeft: rfSpacing.xl,
-    fontSize: rfSpacing.l,
+    fontSize: Spacings.l,
     fontWeight: '500',
     color: colors.Indigo,
   },
   txtDate: {
-    marginTop: rfSpacing.xl,
+    marginTop: Spacings.xl,
     color: colors.white,
     alignSelf: 'center',
   },
   item1Div: {
-    marginTop: rfSpacing['4xl'],
-    width: rfSpacing['2H'],
-    height: rfSpacing['7xl'],
-    borderRadius: rfSpacing.m,
+    marginTop: Spacings['4xl'],
+    width: Spacings['w2H'],
+    height: Spacings['7xl'],
+    borderRadius: Spacings.wm,
     backgroundColor: colors.Indigo,
   },
 
   cnameDiv: {
     flexDirection: 'row',
-    marginTop: rfSpacing.m,
-    marginBottom: rfSpacing.m,
-    paddingVertical: rfSpacing.m,
+    marginTop: Spacings.m,
+    marginBottom: Spacings.m,
+    paddingVertical: Spacings.m,
     backgroundColor: colors.white,
-    marginHorizontal: rfSpacing['8xl'],
+    marginHorizontal: Spacings['8xl'],
+    borderWidth: 2,
+    borderColor: colors.new_black,
   },
 
   yellowTxt1: {
-    fontSize: rfSpacing.m,
+    fontSize: Spacings.m,
     color: colors.Rajah,
     fontWeight: '700',
     textAlign: 'right',
-    marginRight: rfSpacing['xl'],
+    marginRight: Spacings['wxl'],
   },
 });

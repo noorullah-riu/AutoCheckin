@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState,useEffect} from 'react';
 import {
   Text,
   View,
@@ -11,17 +11,15 @@ import {
 } from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import colors from '../../../theme/colors';
-import rfSpacing from '../../../theme/rfSpacing';
-import BlueButton from '../../../ui/BlueButton';
 import Loader from '../../../ui/Loader';
-
 import logo from '../../../Assets/Home/logo.jpeg';
-const windowwidth = Dimensions.get('window').width;
 import EcomContext from '../../../contextApi/DataProvider';
-import Header from '../../../ui/Header';
 import axios from 'axios';
 import LoginHeader from '../../../ui/LoginHeader';
 import WhiteButton from '../../../ui/WhiteButton';
+import Spacings from '../../../theme/Spacings';
+import {storeDataLogin} from '../../../storage';
+import {getDataContext} from '../../../storage';
 
 export const Login = props => {
   const username = `Username/Email`;
@@ -49,31 +47,47 @@ export const Login = props => {
         // always executed
     }); */
 
+    const getData = async () => {
+      const resp = await getDataContext();
+      if (resp) {
+        setData(resp);
+        console.log("-------reesp",resp?.username);
+        console.log("-------reesp",resp?.Password);
+        setEmailIn(resp?.username);
+        setPasswordIn(resp?.Password);
+   //     setUserAuthentic(!UserAuthentic);
+      }
+    };
+
   const funPostLogin = () => {
-    if (EmailIn == '' || PasswordIn == '') {    
+    if (EmailIn == '' || PasswordIn == '') {
       Alert.alert('Inputs Are Must');
     } else {
       setloading(true);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/ValidateLogin', {
-          username: EmailIn,//'IMV0150D'
-          password: PasswordIn,//'IMV0858N',
+          username: EmailIn, //'IMV0150D'
+          password: PasswordIn, //'IMV0858N',
         })
         .then(function (response) {
           console.log(response.data);
           setloading(false);
           Alert.alert('Success', `Welcome ${response.data.employeename}`);
-            setData(response.data);
-            setUserAuthentic(!UserAuthentic);
+          setData(response.data);
+          setUserAuthentic(!UserAuthentic);
+          storeDataLogin(response.data);
         })
         .catch(function (error) {
           console.log(error);
           setloading(false);
-          Alert.alert('Error Loading ,Plz Try with differnet Credantials',
-          );
+          Alert.alert('Error Loading ,Plz Try with different Credantials');
         });
     }
   };
+
+  useEffect(() => {
+     getData();
+   }, []);
 
   if (loading) return <Loader />;
   return (
@@ -93,7 +107,7 @@ export const Login = props => {
           <View style={styles.inputEmail}>
             <TextInput
               style={styles.inputStyle}
-           //   placeholderTextColor={'#296faa'}
+              //   placeholderTextColor={'#296faa'}
               placeholder="User Name/Email"
               keyboardType="email-address"
               value={EmailIn}
@@ -108,11 +122,10 @@ export const Login = props => {
             <TextInput
               secureTextEntry={true}
               style={styles.inputStyle}
-            //  placeholderTextColor={'#296faa'}
+              //  placeholderTextColor={'#296faa'}
               placeholder="Password"
-          //    keyboardType="visible-password"
+              //    keyboardType="visible-password"
               value={PasswordIn}
-            
               onChangeText={PasswordIn => setPasswordIn(PasswordIn)}
             />
           </View>
@@ -129,51 +142,52 @@ export const Login = props => {
 const styles = StyleSheet.create({
   containerStyling: {
     flex: 1,
-   // justifyContent: 'center',
     alignItems: 'center',
   },
   textStyling: {
-    marginTop: 20,
+    marginTop: Spacings['4xl'],
     textAlign: 'center',
     color: '#296faa',
   },
 
   imgStyle: {
-    width: rfSpacing['1.5H'],
-    height: rfSpacing['1.5H'],
+    width: Spacings['w1.5H'],
+    height: Spacings['1.5H'],
     alignSelf: 'center',
-    marginTop: rfSpacing['4xl'],
-    borderRadius: rfSpacing.m,
-
+    marginTop: Spacings['4xl'],
+    borderRadius: Spacings.wm,
   },
   h60: {
-    marginHorizontal: RFPercentage(7),
+    marginHorizontal: Spacings['w7xl'],
     alignSelf: 'flex-start',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
   },
   singinTxt: {
-    width: rfSpacing['1.2H'],
+    width: Spacings['w1.2H'],
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.white,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     fontWeight: '600',
+    marginTop: Spacings.m,
   },
   inputStyle: {
     color: '#296faa',
-    fontSize: rfSpacing.xl,
+    paddingVertical:5,
+    fontSize: Spacings.xl,
+    textAlignVertical:"center",
   },
   inputEmail: {
-    // height: rfSpacing['6xl'],
     width: '80%',
-   // marginHorizontal: RFPercentage(7),
+    justifyContent:"center",
+    height:Spacings.w5xl,
     borderWidth: 1,
     borderColor: colors.new_black,
     backgroundColor: colors.white,
   },
   lognDiv: {
-    marginTop: RFPercentage(7),
-    height: rfSpacing['7xl'],
+    marginTop: Spacings['6xl'],
+    height: Spacings['7xl'],
     alignItems: 'center',
   },
 });

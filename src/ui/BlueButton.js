@@ -4,6 +4,7 @@ import {color} from 'react-native-reanimated';
 
 import colors from '../theme/colors';
 import rfSpacing from '../theme/rfSpacing';
+import Spacings from '../theme/Spacings';
 
 const BlueButton = ({text, onPress}) => {
   return (
@@ -16,15 +17,15 @@ const BlueButton = ({text, onPress}) => {
 const styles = StyleSheet.create({
   buttonBgStyle: {
     backgroundColor: '#296faa',
-    width: rfSpacing['2H'],
+    width: Spacings['w2H'],
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: rfSpacing.m,
+    borderRadius: Spacings.wm,
   },
   buttonTextStyle: {
-    fontSize: rfSpacing['3xl'],
-    fontWeight: '900',
+    fontSize: Spacings.xxl,//Spacings['3xl'],
+    fontWeight: '600',
     color: colors.white,
   },
 });

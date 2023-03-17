@@ -1,19 +1,21 @@
 import React, {useCallback, useContext, useState, useEffect} from 'react';
 import {Text, View, StyleSheet, Alert} from 'react-native';
 import colors from '../../../theme/colors';
-import rfSpacing from '../../../theme/rfSpacing';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
+import Loader from '../../../ui/Loader';
 import Header from '../../../ui/Header';
 import {removeUser} from '../../../storage/index';
 import ShowToast from '../../../ui/Toast';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import {ScrollView} from 'react-native-gesture-handler';
+import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
 import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
+import Spacings from '../../../theme/Spacings';
 
 export const CheckIn = props => {
   const {
@@ -23,6 +25,8 @@ export const CheckIn = props => {
     setData,
     setactiveProject,
     activeProject,
+    DeviceID,
+    setDeviceID,
   } = useContext(EcomContext);
 
   const [genderOpen, setGenderOpen] = useState(false);
@@ -31,6 +35,9 @@ export const CheckIn = props => {
   const [cors, setcors] = useState({});
   const [url, seturl] = useState('');
   const [Projects, setProjects] = useState([]);
+  const [ProjectName, setProjectName] = useState('');
+  const [ActivePLocal, setActivePLocal] = useState(false);
+
   const [company, setComapny] = useState([
     {label: 'Project', value: 'Project'},
     {label: 'Project1', value: 'Project1'},
@@ -51,7 +58,7 @@ export const CheckIn = props => {
   };
 
   const toggleModalBtn = () => {
-    setModalVisible(!isModalVisible);                                                           
+    setModalVisible(!isModalVisible);
     props.navigation.navigate('Home', {
       screen: 'Home',
     });
@@ -115,18 +122,15 @@ export const CheckIn = props => {
           langtitue: cors?.coords?.longitude,
           geolocation: a,
           lattidue: cors?.coords?.latitude,
+          deviseID: DeviceID,
         })
         .then(function (response) {
           console.log(response.data);
+          toggleModalNavgate();
           //   Alert.alert(response.data.Status);
-          setCompanyValue(null);
+
           //   toggleModal();
           setactiveProject(true);
-
-          toggleModalNavgate();
-
-          //   setData(response);
-          //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
           Alert.alert(error.response.data.Message);
@@ -136,6 +140,7 @@ export const CheckIn = props => {
   };
 
   const funGetCheckin = () => {
+    setLoading(true);
     if (Data == null) {
       Alert.alert('Inputs Are Must');
     } else {
@@ -155,6 +160,7 @@ export const CheckIn = props => {
           console.log(error);
         });
     }
+    setLoading(false);
   };
   const getCurrentPosition = () => {
     Geolocation.getCurrentPosition(
@@ -166,48 +172,75 @@ export const CheckIn = props => {
     );
   };
 
-  useEffect(() => {
-    Geolocation.getCurrentPosition(info => {
-      setcors(info), {enableHighAccuracy: true};
-    });
-
-    getCurrentDate();
-    // getCurrentPosition();
-    funGetCheckin();
-  }, []);
-
-  /*   React.useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
+      Geolocation.getCurrentPosition(info => {
+        setcors(info), {enableHighAccuracy: true};
+      });
+      DeviceInfo.getUniqueId().then(uniqueId => {
+        setDeviceID(uniqueId);
+        console.log(uniqueId, 'uniqueId ------------');
+      });
+      setCompanyValue(null);
+      funGetCheckin();
       getCurrentDate();
       // getCurrentPosition();
-      funGetCheckin();
+      // if (!activeProject) {
+      //   setActivePLocal(true);
+      // }
     });
-
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
-  }, [props.navigation]); */
+  }, [props.navigation]);
 
+  if (loading) return <Loader />;
   return (
     <>
       <Modal isVisible={isModalVisible}>
         <View
           style={{
-            //   height: 300,
-            paddingVertical: 20,
+            paddingVertical: Spacings['4xl'],
             backgroundColor: '#fff',
-            //   justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: 16}}>
+          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl}}>
             Checked In Successfully
           </Text>
-          <Text>Date:{date}</Text>
-          <Text>Time:{time}</Text>
-          {/*       <Text>Project:{companyValue}</Text> */}
-          {/*        <Text>Location:{url}</Text> */}
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Project ID:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{companyValue}</Text>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Project Name:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{ProjectName}</Text>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Date:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{date}</Text>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Time:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{time}</Text>
+            </View>
+          </View>
 
           <View style={styles.lognDiv}>
-        {/*     <BlueButton text="Okay" onPress={toggleModal} /> */}
+            {/*     <BlueButton text="Okay" onPress={toggleModal} /> */}
             <BlueButton text="Okay" onPress={toggleModalBtn} />
           </View>
         </View>
@@ -219,14 +252,15 @@ export const CheckIn = props => {
           <>
             <View
               style={{
-                marginTop: rfSpacing['4xl'],
-                marginHorizontal: rfSpacing['5xl'],
+                marginTop: Spacings['4xl'],
+                marginBottom: Spacings.m,
+                marginHorizontal: Spacings['w5xl'],
               }}>
               <View style={styles.h60}>
                 <Text style={styles.singinTxt}>Project</Text>
               </View>
             </View>
-            <View style={{margin: rfSpacing['4xl'], zIndex: 1500}}>
+            <View style={{marginHorizontal: Spacings['4xl'], zIndex: 1500}}>
               <Controller
                 name="Projects"
                 defaultValue="null"
@@ -238,7 +272,7 @@ export const CheckIn = props => {
                     value={companyValue}
                     //  items={company}
                     items={Projects?.map(option => ({
-                      label: option.projectname,
+                      label: `${option.projectname} -- "${option.projectcode}"`,
                       value: option.projectcode,
                       //  phonecode: option.phonecode,
                       //  countryCode: option.iso,
@@ -259,6 +293,10 @@ export const CheckIn = props => {
                     searchPlaceholder="Search your Project here..."
                     onOpen={onCompanyOpen}
                     onChangeValue={onChange}
+                    onSelectItem={item => {
+                      console.log(item);
+                      setProjectName(item?.label);
+                    }}
                   />
                 )}
               />
@@ -287,60 +325,60 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textStyling: {
-    marginTop: rfSpacing['4xl'],
+    marginTop: Spacings['4xl'],
     textAlign: 'center',
     color: '#000',
   },
   h60: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
   },
   singinTxt: {
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.Boulder,
-    fontSize: 14,
+    fontSize: Spacings.xl,
     fontWeight: '600',
   },
   singinTxt2: {
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.Boulder,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     fontWeight: '600',
-    paddingRight: rfSpacing['9xl'],
+    paddingRight: Spacings['w9xl'],
   },
   placeholderStyles: {
     color: 'grey',
   },
 
   dropdown: {
-    PadingTop: rfSpacing['3xl'],
-    paddingLeft: rfSpacing['4xl'],
+    PadingTop: Spacings['3xl'],
+    paddingLeft: Spacings['w4xl'],
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 0,
-    minHeight: rfSpacing['7xl'],
+    minHeight: Spacings['7xl'],
   },
   inputEmail: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     justifyContent: 'center',
   },
   inputStyle: {
-    width: rfSpacing['1.2H'],
+    width: Spacings['w1.2H'],
     color: colors.activity_Date,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     borderColor: colors.font_grey,
-    borderWidth: rfSpacing['3xxs'],
+    borderWidth: Spacings['w3xxs'],
   },
   inputStyle2: {
     color: colors.activity_Date,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     borderColor: colors.font_grey,
-    borderWidth: rfSpacing['3xxs'],
+    borderWidth: Spacings['w3xxs'],
   },
   lognDiv: {
-    marginTop: RFPercentage(5),
-    height: rfSpacing['7xl'],
+    marginTop: Spacings['6xl'],
+    height: Spacings['7xl'],
     alignItems: 'center',
     // justifyContent: 'center',
   },

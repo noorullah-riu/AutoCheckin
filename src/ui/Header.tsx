@@ -3,6 +3,7 @@ import {Text, View, StyleSheet, Dimensions} from 'react-native';
 
 import colors from '../theme/colors';
 import rfSpacing from '../theme/rfSpacing';
+import Spacings from '../theme/Spacings';
 const dat = ['Bilal'];
 const windowwidth = Dimensions.get('window').width;
 const Header = ({title}: any) => {
@@ -17,11 +18,11 @@ const Header = ({title}: any) => {
 
 const styles = StyleSheet.create({
   imgageBack: {
-    height: rfSpacing['10xl'],
+    height: Spacings['10xl'],
     width: windowwidth,
     backgroundColor: '#296faa',
-    borderBottomEndRadius: rfSpacing['6xl'],
-    borderBottomStartRadius: rfSpacing['6xl'],
+    borderBottomEndRadius: Spacings['w6xl'],
+    borderBottomStartRadius: Spacings['w6xl'],
   },
 
   titleDiv: {
@@ -30,11 +31,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleTxt: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.white,
     fontWeight: '700',
-    fontSize: rfSpacing['xxl'],
-    paddingTop: rfSpacing.xs,
+    fontSize: Spacings['xxl'],
+    paddingTop: Spacings.xs,
   },
 });
 export default Header;

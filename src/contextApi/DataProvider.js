@@ -49,8 +49,11 @@ export const EcomProvider = ({children}) => {
   const [Data, setData] = useState('');
   const [UserAuthentic, setUserAuthentic] = useState(true);
   const [activeProject, setactiveProject] = useState(false);
-  const [activeProjectName, setactiveProjectName] = useState("");
-
+  const [activeProjectYesterday, setactiveProjectYesterday] = useState(false);
+  const [activeProjectName, setactiveProjectName] = useState('');
+  const [DeviceID, setDeviceID] = useState('');
+  const [ActiveProjectDeviceID, setActiveProjectDeviceID] = useState('');
+  
   const getData = async () => {
     const resp = await getDataContext();
     if (resp) {
@@ -60,7 +63,7 @@ export const EcomProvider = ({children}) => {
   };
 
   useEffect(() => {
-    getData();
+   // getData();
   }, []);
 
   return (
@@ -71,8 +74,16 @@ export const EcomProvider = ({children}) => {
         UserAuthentic,
         setUserAuthentic,
 
-        activeProject, setactiveProject,
-        activeProjectName, setactiveProjectName,
+        activeProject,
+        setactiveProject,
+        activeProjectName,
+        setactiveProjectName,
+        activeProjectYesterday,
+        setactiveProjectYesterday,
+        ActiveProjectDeviceID,
+        setActiveProjectDeviceID,
+        DeviceID,
+        setDeviceID,
       }}>
       {children}
     </EcomContext.Provider>

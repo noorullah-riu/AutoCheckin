@@ -10,16 +10,18 @@ import {
   Dimensions,
 } from 'react-native';
 import colors from '../../../theme/colors';
-import rfSpacing from '../../../theme/rfSpacing';
-
 import BlueButton from '../../../ui/BlueButton';
 //import DatePicker from '../../../componenets/DatePicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {DatePickerIOSBase} from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import TimeCard from './Time';
 import Header from '../../../ui/Header';
 import FlatCard from './FlatCard';
-const windowwidth = Dimensions.get('window').width;
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
+import Spacings from '../../../theme/Spacings';
 
 export const History = props => {
   const {UserAuthentic, setUserAuthentic, Data, setData} =
@@ -107,6 +109,68 @@ export const History = props => {
     }
   };
 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = value => {
+    console.warn('A date has been picked: ', value);
+
+    console.log('------------', value.getFullYear());
+    console.log('------------', value.getMonth());
+    console.log('------------', value.getDate());
+
+    var date = value.getDate(); //Current Date
+    var month = value.getMonth() + 1; //Current Month
+    var year = value.getFullYear(); //Current Year,.
+    var today =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+    console.log('today', today);
+    setfromDate(today);
+    hideDatePicker();
+  };
+
+  const [isDatePickerVisible2, setDatePickerVisibility2] = useState(false);
+
+  const showDatePicker2 = () => {
+    setDatePickerVisibility2(true);
+  };
+
+  const hideDatePicker2 = () => {
+    setDatePickerVisibility2(false);
+  };
+
+  const handleConfirm2 = value => {
+    console.warn('A date has been picked: ', value);
+
+    console.log('------------', value.getFullYear());
+    console.log('------------', value.getMonth());
+    console.log('------------', value.getDate());
+
+    var date = value.getDate(); //Current Date
+    var month = value.getMonth() + 1; //Current Month
+    var year = value.getFullYear(); //Current Year,.
+    var today =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+    console.log('today', today);
+    settoDate(today);
+    hideDatePicker2();
+  };
+
   useEffect(() => {
     // funGetHistory();
   }, []);
@@ -114,18 +178,34 @@ export const History = props => {
   return (
     <View style={styles.containerStyling}>
       <Header title={'History'} />
+
+      <TimeCard
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+      <TimeCard
+        isVisible={isDatePickerVisible2}
+        mode="date"
+        onConfirm={handleConfirm2}
+        onCancel={hideDatePicker2}
+      />
       <View style={styles.dateDIv}>
         <Pressable
-          onPress={() => setIsPickerShow(true)}
+          onPress={() =>
+            //  setIsPickerShow(true)
+            showDatePicker()
+          }
           style={{
             flexDirection: 'row',
-            marginTop: 20,
+            marginTop: Spacings['4xl'],
             borderColor: '#aaa',
             borderWidth: 1,
           }}>
           <View
             style={{
-              marginHorizontal: 10,
+              marginHorizontal: Spacings.wm,
               marginVertical: 0,
               flex: 1,
               justifyContent: 'center',
@@ -139,14 +219,14 @@ export const History = props => {
               marginTop: 0,
               flex: 1,
               backgroundColor: '#296faa',
-              height: 40,
+              height: Spacings['6xl'],
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <Text style={{color: '#fff'}}>{fromdate}</Text>
           </View>
         </Pressable>
-
+        {/* 
         {isPickerShow && (
           <DateTimePicker
             value={date}
@@ -155,20 +235,23 @@ export const History = props => {
             is24Hour={false}
             onChange={onChange}
           />
-        )}
+        )} */}
       </View>
       <View style={styles.dateDIv}>
         <Pressable
-          onPress={() => setIsPickerShow2(true)}
+          onPress={() =>
+            //   setIsPickerShow2(true)
+            showDatePicker2()
+          }
           style={{
             flexDirection: 'row',
-            marginTop: 20,
+            marginTop: Spacings['4xl'],
             borderColor: '#aaa',
             borderWidth: 1,
           }}>
           <View
             style={{
-              marginHorizontal: 10,
+              marginHorizontal: Spacings.wm,
               marginVertical: 0,
               flex: 1,
               justifyContent: 'center',
@@ -182,14 +265,14 @@ export const History = props => {
               marginTop: 0,
               flex: 1,
               backgroundColor: '#296faa',
-              height: 40,
+              height: Spacings['6xl'],
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <Text style={{color: '#fff'}}>{todate}</Text>
           </View>
         </Pressable>
-
+        {/* 
         {isPickerShow2 && (
           <DateTimePicker
             value={date2}
@@ -198,7 +281,7 @@ export const History = props => {
             is24Hour={false}
             onChange={onChange2}
           />
-        )}
+        )} */}
       </View>
       <View style={styles.lognDiv}>
         <BlueButton text="Get History" onPress={funGetHistory} />
@@ -215,44 +298,44 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateDIv: {
-    marginTop: rfSpacing.m,
+    marginTop: Spacings.m,
     flexDirection: 'row',
     alignItems: 'center',
   },
   textStyling: {
-    marginTop: rfSpacing['4xl'],
+    marginTop: Spacings['4xl'],
     textAlign: 'center',
     color: '#000',
   },
   h60: {
-    height: rfSpacing['6xl'],
-    paddingLeft: rfSpacing.xxl,
+    height: Spacings['6xl'],
+    paddingLeft: Spacings.wxxl,
   },
   h61: {
-    height: rfSpacing['6xl'],
-    marginHorizontal: rfSpacing.l,
+    height: Spacings['6xl'],
+    marginHorizontal: Spacings.wl,
   },
   singinTxt: {
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.Boulder,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     fontWeight: '600',
   },
   date: {
     flexDirection: 'row',
-    marginVertical: rfSpacing.m,
-    marginLeft: rfSpacing.l,
-    width: rfSpacing['1.2H'],
+    marginVertical: Spacings.m,
+    marginLeft: Spacings.wl,
+    width: Spacings['w1.2H'],
   },
   date2: {
     flexDirection: 'row',
-    marginVertical: rfSpacing.l,
-    width: rfSpacing['1.2H'],
+    marginVertical: Spacings.l,
+    width: Spacings['w1.2H'],
   },
   lognDiv: {
-    marginTop: rfSpacing['5xl'],
-    height: rfSpacing['7xl'],
+    marginTop: Spacings['5xl'],
+    height: Spacings['7xl'],
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -8,7 +8,6 @@ import {
   TextInput,
 } from 'react-native';
 import colors from '../../../theme/colors';
-import rfSpacing from '../../../theme/rfSpacing';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
 import BlueButton from '../../../ui/BlueButton';
@@ -16,9 +15,11 @@ import Header from '../../../ui/Header';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
+import DeviceInfo from 'react-native-device-info';
 
 import axios from 'axios';
 import EcomContext from '../../../contextApi/DataProvider';
+import Spacings from '../../../theme/Spacings';
 
 export const CheckOut = props => {
   const {
@@ -30,12 +31,18 @@ export const CheckOut = props => {
     setactiveProject,
     activeProjectName,
     setactiveProjectName,
+    activeProjectYesterday,
+    DeviceID,
+    setDeviceID,
+    ActiveProjectDeviceID,
   } = useContext(EcomContext);
   const [loadingM, setLoadingM] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModalBtn = () => {
+    
     setModalVisible(!isModalVisible);
+    setactiveProjectName('');
     props.navigation.navigate('Home', {
       screen: 'Home',
     });
@@ -43,63 +50,36 @@ export const CheckOut = props => {
 
   const toggleModalNavgate = () => {
     setModalVisible(!isModalVisible);
+ 
   };
 
-  
-
-  const [genderOpen, setGenderOpen] = useState(false);
-  const [genderValue, setGenderValue] = useState(null);
   const [Projects, setProjects] = useState([]);
   const [url, seturl] = useState('');
 
   const [companyOpen, setCompanyOpen] = useState(false);
   const [companyValue, setCompanyValue] = useState(null);
-  const [company, setComapny] = useState([
-    {label: 'Project', value: 'Project'},
-    {label: 'Project1', value: 'Project1'},
-    {label: 'Project2', value: 'Project2'},
-    {label: 'Project3', value: 'Project3'},
-    {label: 'Project4', value: 'Project4'},
-    {label: 'Project5', value: 'Project5'},
-    {label: 'Project6', value: 'Project6'},
-    {label: 'Project7', value: 'Project7'},
-    {label: 'Project8', value: 'Project8'},
-    {label: 'Project9', value: 'Project9'},
-    {label: 'Project10', value: 'Project10'},
-    {label: 'Project11', value: 'Project11'},
-    {label: 'Project12', value: 'Project12'},
-    {label: 'Project13', value: 'Project13'},
-    {label: 'Project14', value: 'Project14'},
-    {label: 'Project15', value: 'Project15'},
-    {label: 'Project16', value: 'Project16'},
-    {label: 'Project17', value: 'Project17'},
-    {label: 'Project18', value: 'Project18'},
-    {label: 'Project19', value: 'Project19'},
-    {label: 'Project20', value: 'Project20'},
-  ]);
+
   const [loading, setLoading] = useState(false);
   const [cors, setcors] = useState({});
 
-  const onGenderOpen = useCallback(() => {
-    setCompanyOpen(true);
-  }, []);
-
-  const onCompanyOpen = useCallback(() => {
-    setGenderOpen(false);
-  }, []);
   const {handleSubmit, control} = useForm();
-  const onSubmit = data => {
-    console.log(data, 'data');
-  };
 
   const [date, setDate] = useState(new Date().toDateString());
   const [time, setTime] = useState('');
 
   const getCurrentDate = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    setDate(date + '-' + month + '-' + year);
+    if (activeProjectYesterday) {
+      var date = new Date().getDate() - 1;
+      var month = new Date().getMonth() + 1;
+      var year = new Date().getFullYear();
+      setDate(date + '-' + month + '-' + year);
+    } else {
+      var date = new Date().getDate();
+      var month = new Date().getMonth() + 1;
+      var year = new Date().getFullYear();
+      setDate(date + '-' + month + '-' + year);
+    }
+
     console.log(date + '-' + month + '-' + year);
 
     let today = new Date();
@@ -115,16 +95,14 @@ export const CheckOut = props => {
 
   const funPostCheckOut = () => {
     var TT = getCurrentDate();
-    /*     if (activeProjectName != '') {
-   //   Alert.alert('have actve project');
-       */ 
-      setCompanyValue(activeProjectName);
-    //  }
+
     if (activeProjectName == '') {
       Alert.alert('Project is Must');
+    } else if (ActiveProjectDeviceID != DeviceID) {
+      Alert.alert('Please use same device you used for Checkin');
     } else {
       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
-      console.log(a);
+      //   console.log(a);
       seturl(a);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
@@ -137,11 +115,12 @@ export const CheckOut = props => {
           langtitue: cors?.coords?.longitude,
           geolocation: a,
           lattidue: cors?.coords?.latitude,
+          deviseID: DeviceID,
         })
         .then(function (response) {
-          console.log(response);
+          //     console.log(response);
           setactiveProject(false);
-          setactiveProjectName('');
+       
 
           toggleModalNavgate();
           //  Alert.alert(response.data.Status);
@@ -150,7 +129,7 @@ export const CheckOut = props => {
         })
         .catch(function (error) {
           Alert.alert(error.response.data.Message);
-          console.log(error);
+          //   console.log(error);
         });
     }
   };
@@ -166,13 +145,13 @@ export const CheckOut = props => {
           date: '10.01.2023',
         })
         .then(function (response) {
-          console.log(response.data.ProjectDetails);
+          //   console.log(response.data.ProjectDetails);
           setProjects(response.data.ProjectDetails);
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
         .catch(function (error) {
-          console.log(error);
+          //    console.log(error);
         });
     }
   };
@@ -180,6 +159,13 @@ export const CheckOut = props => {
   useEffect(() => {
     Geolocation.getCurrentPosition(info => {
       setcors(info), {enableHighAccuracy: true};
+    });
+    DeviceInfo.getUniqueId().then(uniqueId => {
+      // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
+      // Android: "dd96dec43fb81c97"
+      // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
+      setDeviceID(uniqueId);
+      console.log(uniqueId, 'uniqueId ------------');
     });
     getCurrentDate();
     funGetCheckOut();
@@ -203,24 +189,51 @@ export const CheckOut = props => {
   }, [props.navigation]);
   return (
     <View style={styles.containerStyling}>
-      <Modal isVisible={isModalVisible}>
+         <Modal isVisible={isModalVisible}>
         <View
           style={{
-            //     height:300,
-            paddingVertical: 20,
+            paddingVertical: Spacings['4xl'],
             backgroundColor: '#fff',
-            //     justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: 16}}>
+          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl}}>
             Checked Out Successfully
           </Text>
-          <Text>Date:{date}</Text>
-          <Text>Time:{time}</Text>
-          {/*       <Text>Project:{companyValue}</Text> */}
-          {/*      <Text>Location:{url}</Text> */}
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Project ID:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{activeProjectName}</Text>
+            </View>
+          </View>
+          {/* <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Project Name:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{ProjectName}</Text>
+            </View>
+          </View> */}
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Date:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{date}</Text>
+            </View>
+          </View>
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+            <View style={{flex: 1}}>
+              <Text>Time:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight:"700"}}>{time}</Text>
+            </View>
+          </View>
 
           <View style={styles.lognDiv}>
+            {/*     <BlueButton text="Okay" onPress={toggleModal} /> */}
             <BlueButton text="Okay" onPress={toggleModalBtn} />
           </View>
         </View>
@@ -228,8 +241,8 @@ export const CheckOut = props => {
       <Header title={'Check Out'} />
       <View
         style={{
-          marginTop: rfSpacing['4xl'],
-          marginHorizontal: rfSpacing['5xl'],
+          marginTop: Spacings['4xl'],
+          marginHorizontal: Spacings['w5xl'],
         }}>
         <View style={styles.h60}>
           <Text style={styles.singinTxt}>Project</Text>
@@ -241,8 +254,8 @@ export const CheckOut = props => {
             style={{
               backgroundColor: '#ddd',
 
-              padding: 10,
-              marginHorizontal: 20,
+              padding: Spacings.m,
+              marginHorizontal: Spacings.w4xl,
             }}>
             <Text>No Active Project to Checkout</Text>
           </View>
@@ -293,8 +306,8 @@ export const CheckOut = props => {
           style={{
             borderColor: '#ddd',
             borderWidth: 1,
-            padding: 10,
-            marginHorizontal: 20,
+            padding: Spacings.m,
+            marginHorizontal: Spacings.w4xl,
           }}>
           <Text style={{color: colors.grey}}>{activeProjectName}</Text>
         </View>
@@ -323,65 +336,60 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   textStyling: {
-    marginTop: rfSpacing['4xl'],
+    marginTop: Spacings['4xl'],
     textAlign: 'center',
     color: '#000',
   },
   h60: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
   },
   singinTxt: {
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.Boulder,
-    fontSize: 14,
+    fontSize: Spacings.xl,
     fontWeight: '600',
   },
   singinTxt2: {
     textAlignVertical: 'center',
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     color: colors.Boulder,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     fontWeight: '600',
-    paddingRight: rfSpacing['9xl'],
+    paddingRight: Spacings['w9xl'],
   },
   placeholderStyles: {
     color: '#296faa',
   },
 
   dropdown: {
-    // PadingTop: rfSpacing['3xl'],
-    // paddingLeft: rfSpacing['4xl'],
-    // borderColor: 'grey',
-    // borderWidth: 1,
-    // borderRadius: 0,
-    marginTop: rfSpacing['3xl'],
-    paddingLeft: rfSpacing['4xl'],
+    marginTop: Spacings['3xl'],
+    paddingLeft: Spacings['w4xl'],
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 0,
-    minHeight: 50,
+    minHeight: Spacings['7xl'],
   },
   inputEmail: {
-    height: rfSpacing['6xl'],
+    height: Spacings['6xl'],
     justifyContent: 'center',
   },
   inputStyle: {
-    width: rfSpacing['1.2H'],
+    width: Spacings['w1.2H'],
     color: colors.activity_Date,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     borderColor: colors.font_grey,
-    borderWidth: rfSpacing['3xxs'],
+    borderWidth: Spacings['w3xxs'],
   },
   inputStyle2: {
     color: colors.activity_Date,
-    fontSize: rfSpacing.xl,
+    fontSize: Spacings.xl,
     borderColor: colors.font_grey,
-    borderWidth: rfSpacing['3xxs'],
+    borderWidth: Spacings['w3xxs'],
   },
   lognDiv: {
-    marginTop: RFPercentage(5),
-    height: rfSpacing['7xl'],
+    marginTop: Spacings['4xl'],
+    height: Spacings['7xl'],
     alignItems: 'center',
   },
 });
