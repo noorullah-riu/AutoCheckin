@@ -196,15 +196,15 @@ export const CheckOut = props => {
             backgroundColor: '#fff',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl}}>
+          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl,color:"#aaa"}}>
             Checked Out Successfully
           </Text>
           <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
             <View style={{flex: 1}}>
-              <Text>Project ID:</Text>
+              <Text style={{color:"#aaa"}}>Project ID:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700"}}>{activeProjectName}</Text>
+              <Text style={{fontWeight:"700",color:"#aaa"}}>{activeProjectName}</Text>
             </View>
           </View>
           {/* <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
@@ -217,18 +217,18 @@ export const CheckOut = props => {
           </View> */}
           <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
             <View style={{flex: 1}}>
-              <Text>Date:</Text>
+              <Text style={{color:"#aaa"}}>Date:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700"}}>{date}</Text>
+              <Text style={{fontWeight:"700",color:"#aaa"}}>{date}</Text>
             </View>
           </View>
           <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
             <View style={{flex: 1}}>
-              <Text>Time:</Text>
+              <Text style={{color:"#aaa"}}>Time:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700"}}>{time}</Text>
+              <Text style={{fontWeight:"700",color:"#aaa"}}>{time}</Text>
             </View>
           </View>
 
