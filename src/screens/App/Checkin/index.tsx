@@ -177,10 +177,11 @@ export const CheckIn = props => {
       Geolocation.getCurrentPosition(info => {
         setcors(info), {enableHighAccuracy: true};
       });
-      DeviceInfo.getUniqueId().then(uniqueId => {
-        setDeviceID(uniqueId);
-        console.log(uniqueId, 'uniqueId ------------');
-      });
+      // DeviceInfo.getUniqueId().then(uniqueId => {
+      //   setDeviceID(uniqueId);
+      //   console.log(uniqueId, 'uniqueId ------------');
+      // });
+      setDeviceID("uniqueId");
       setCompanyValue(null);
       funGetCheckin();
       getCurrentDate();
@@ -206,7 +207,7 @@ export const CheckIn = props => {
           <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl,color:"#aaa"}}>
             Checked In Successfully
           </Text>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,color:"#aaa"}}>
+          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
             <View style={{flex: 1}}>
               <Text style={{color:"#aaa"}}>Project ID:</Text>
             </View>

@@ -160,13 +160,14 @@ export const CheckOut = props => {
     Geolocation.getCurrentPosition(info => {
       setcors(info), {enableHighAccuracy: true};
     });
-    DeviceInfo.getUniqueId().then(uniqueId => {
-      // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
-      // Android: "dd96dec43fb81c97"
-      // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
-      setDeviceID(uniqueId);
-      console.log(uniqueId, 'uniqueId ------------');
-    });
+    // DeviceInfo.getUniqueId().then(uniqueId => {
+    //   // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
+    //   // Android: "dd96dec43fb81c97"
+    //   // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
+    //   setDeviceID(uniqueId);
+    //   console.log(uniqueId, 'uniqueId ------------');
+    // });
+    setDeviceID("uniqueId");
     getCurrentDate();
     funGetCheckOut();
     /*     Alert.alert(activeProjectName);
