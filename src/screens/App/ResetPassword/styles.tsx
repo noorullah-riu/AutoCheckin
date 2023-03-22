@@ -81,6 +81,7 @@ export default StyleSheet.create({
   emailTxt: {fontSize: wp('3.5%'), color: '#949494', paddingBottom: wp('1%')},
   txtInput: {
     borderColor: '#aaa',
+    color:"#111",
     borderWidth: wp('0.2%'),
     paddingVertical: hp('0.5%'),
     paddingLeft: wp('3%'),

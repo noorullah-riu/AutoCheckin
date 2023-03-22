@@ -100,6 +100,11 @@ export const CheckOut = props => {
       Alert.alert('Project is Must');
     } else if (ActiveProjectDeviceID != DeviceID) {
       Alert.alert('Please use same device you used for Checkin');
+    }else if (!cors?.coords?.longitude) {
+      Alert.alert('Turn on your location please,and restart the app');
+      props.navigation.navigate('Home', {
+        screen: 'Home',
+      });
     } else {
       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
       //   console.log(a);
@@ -160,22 +165,13 @@ export const CheckOut = props => {
     Geolocation.getCurrentPosition(info => {
       setcors(info);
     });
-    // DeviceInfo.getUniqueId().then(uniqueId => {
-    //   // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
-    //   // Android: "dd96dec43fb81c97"
-    //   // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
-    //   setDeviceID(uniqueId);
-    //   console.log(uniqueId, 'uniqueId ------------');
-    // });
-    setDeviceID("uniqueId");
+    DeviceInfo.getUniqueId().then(uniqueId => {
+      setDeviceID(uniqueId);
+      console.log(uniqueId, 'uniqueId ------------');
+    });
+  //  setDeviceID("uniqueId");
     getCurrentDate();
     funGetCheckOut();
-    /*     Alert.alert(activeProjectName);
-    if(activeProjectName == "")
-    {
-      Alert.alert(activeProjectName);
-      setProjects([]);
-    } */
   }, []);
 
   React.useEffect(() => {
@@ -208,14 +204,7 @@ export const CheckOut = props => {
               <Text style={{fontWeight:"700",color:"#aaa"}}>{activeProjectName}</Text>
             </View>
           </View>
-          {/* <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
-            <View style={{flex: 1}}>
-              <Text>Project Name:</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700"}}>{ProjectName}</Text>
-            </View>
-          </View> */}
+   
           <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
             <View style={{flex: 1}}>
               <Text style={{color:"#aaa"}}>Date:</Text>
@@ -250,7 +239,6 @@ export const CheckOut = props => {
         </View>
       </View>
       {!activeProjectName ? (
-        <>
           <View
             style={{
               backgroundColor: '#ddd',
@@ -260,48 +248,7 @@ export const CheckOut = props => {
             }}>
             <Text>No Active Project to Checkout</Text>
           </View>
-          {/*      <View style={{margin: rfSpacing['4xl'], zIndex: 1000}}>
-            <Controller
-              name="Country"
-              defaultValue="null"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <DropDownPicker
-                  style={styles.dropdown}
-                  open={companyOpen}
-                  value={companyValue}
-                  //  items={company}
-                  items={Projects?.map(option => ({
-                    label: option.projectname,
-                    value: option.projectcode,
-                    //  phonecode: option.phonecode,
-                    //  countryCode: option.iso,
-                  }))}
-                  setOpen={setCompanyOpen}
-                  setValue={setCompanyValue}
-                  setItems={setComapny}
-                  listMode="MODAL"
-                  scrollViewProps={{
-                    nestedScrollEnabled: true,
-                  }}
-                  placeholder="Select Project"
-                  searchPlaceholderTextColor="#296faa"
-                  placeholderStyle={styles.placeholderStyles}
-                  loading={loading}
-                  dropDownContainerStyle={{
-                    maxHeight: 200,
-                  }}
-                  zIndex={-1000}
-                  activityIndicatorColor="#5188E3"
-                  searchable={true}
-                  searchPlaceholder="Search your Project here..."
-                  onOpen={onCompanyOpen}
-                  onChangeValue={onChange}
-                />
-              )}
-            />
-          </View> */}
-        </>
+
       ) : (
         <View
           style={{

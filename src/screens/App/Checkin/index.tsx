@@ -1,5 +1,12 @@
 import React, {useCallback, useContext, useState, useEffect} from 'react';
-import {Text, View, StyleSheet, Alert} from 'react-native';
+import {
+  Text,
+  Platform,
+  View,
+  StyleSheet,
+  Alert,
+  PermissionsAndroid,
+} from 'react-native';
 import colors from '../../../theme/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
@@ -16,11 +23,14 @@ import EcomContext from '../../../contextApi/DataProvider';
 import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
 import Spacings from '../../../theme/Spacings';
+import {request, PERMISSIONS} from 'react-native-permissions';
+//import * as Geolocation from "@react-native-community/geolocation";
 
 export const CheckIn = props => {
   const {
     UserAuthentic,
     setUserAuthentic,
+    setactiveProjectName,
     Data,
     setData,
     setactiveProject,
@@ -37,6 +47,8 @@ export const CheckIn = props => {
   const [Projects, setProjects] = useState([]);
   const [ProjectName, setProjectName] = useState('');
   const [ActivePLocal, setActivePLocal] = useState(false);
+
+  const [permiss, setpermiss] = useState('');
 
   const [company, setComapny] = useState([
     {label: 'Project', value: 'Project'},
@@ -116,8 +128,6 @@ export const CheckIn = props => {
         .then(function (response) {
           console.log(response?.data?.ProjectDetails);
           setProjects(response?.data?.ProjectDetails);
-          //   setData(response);
-          //  setUserAuthentic(!UserAuthentic);
           setLoading(false);
         })
         .catch(function (error) {
@@ -126,24 +136,20 @@ export const CheckIn = props => {
         });
     }
   };
-  const getCurrentPosition = () => {
-    Geolocation.getCurrentPosition(
-      pos => {
-        setcors(JSON.stringify(pos));
-      },
-      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
-      {enableHighAccuracy: true},
-    );
-  };
 
-  const funPostCheckin2 = () => {
+
+  const funPostCheckin2 = async () => {
     var TT = getCurrentDate();
-    // Alert.alert(TT);
     if (companyValue == null) {
       Alert.alert('Inputs Are Must');
+    } else if (!cors?.coords?.longitude) {
+      Alert.alert('Turn on your location please,and restart the app');
+      props.navigation.navigate('Home', {
+        screen: 'Home',
+      });
     } else {
       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
-      //  console.log(a);
+      // //  console.log(a);
       seturl(a);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
@@ -161,9 +167,6 @@ export const CheckIn = props => {
         .then(function (response) {
           console.log(response.data);
           toggleModalNavgate();
-          //   Alert.alert(response.data.Status);
-
-          //   toggleModal();
           setactiveProject(true);
         })
         .catch(function (error) {
@@ -197,53 +200,57 @@ export const CheckIn = props => {
         project: '',
       })
       .then(function (response) {
-        //   console.log(response.data.TimesheetDetails);
         response?.data?.TimesheetDetails?.forEach(async element => {
-          //   console.log(element?.outtime, '------------');
           if (!element.outtime) {
-            //   Alert.alert('found null');
-            //     setactiveProjectName(element.project);
+            setactiveProjectName(element.project);
             setactiveProject(true);
-            //    setActiveProjectDeviceID(element.INdeviceID);
             setLoading(false);
           } else {
             setactiveProject(false);
             setLoading(false);
           }
         });
-        //  sethistoryArrToday(response.data.TimesheetDetails);
       })
       .catch(function (error) {
         setLoading(false);
         console.log(error);
       });
   };
-  useEffect(() => {
-    Geolocation.getCurrentPosition(info => {
-      setcors(info);
-    });
-    // DeviceInfo.getUniqueId().then(uniqueId => {
-    //   // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
-    //   // Android: "dd96dec43fb81c97"
-    //   // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
-    //   setDeviceID(uniqueId);
-    //   console.log(uniqueId, 'uniqueId ------------');
-    // });
-    setDeviceID('uniqueId');
 
+  const requestCameraPermission = async () => {
+    try {
+      request(
+        Platform.OS === 'ios'
+          ? PERMISSIONS.IOS.LOCATION_ALWAYS
+          : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+      ).then(result => {
+        if (result == 'granted') {
+          console.log('Location is enabled');
+          Geolocation.getCurrentPosition(info => {
+            setcors(info);
+          });
+        } else {
+          console.log('Location is not enabled');
+        }
+      });
+    } catch (error) {
+      console.log('location set error:', error);
+    }
+  };
+
+  useEffect(() => {
+    DeviceInfo.getUniqueId().then(uniqueId => {
+      setDeviceID(uniqueId);
+      console.log(uniqueId, 'uniqueId ------------');
+    });
     funGetCheckin();
     getCurrentDate();
-    /*     Alert.alert(activeProjectName);
-    if(activeProjectName == "")
-    {
-      Alert.alert(activeProjectName);
-      setProjects([]);
-    } */
   }, []);
 
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       // The screen is focused
+      requestCameraPermission();
       getCurrentDatehme();
       setCompanyValue(null);
     });
@@ -307,50 +314,7 @@ export const CheckIn = props => {
             </View>
           </View>
 
-          <View
-            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
-            <View style={{flex: 1}}>
-              <Text style={{color: '#aaa'}}>{Data?.employeeid}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight: '700', color: '#aaa'}}>
-                {Data?.extEmpNo}
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
-            <View style={{flex: 1}}>
-              <Text style={{color: '#aaa'}}>{date}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight: '700', color: '#aaa'}}>
-                {companyValue}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
-            <View style={{flex: 1}}>
-              <Text style={{color: '#aaa'}}>{cors?.coords?.longitude}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight: '700', color: '#aaa'}}>{url}</Text>
-            </View>
-          </View>
-          <View
-            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
-            <View style={{flex: 1}}>
-              <Text style={{color: '#aaa'}}>{cors?.coords?.latitude}</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight: '700', color: '#aaa'}}>{DeviceID}</Text>
-            </View>
-          </View>
-
           <View style={styles.lognDiv}>
-            {/*     <BlueButton text="Okay" onPress={toggleModal} /> */}
             <BlueButton text="Okay" onPress={toggleModalBtn} />
           </View>
         </View>
