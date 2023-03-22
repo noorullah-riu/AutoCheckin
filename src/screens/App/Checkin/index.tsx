@@ -102,7 +102,41 @@ export const CheckIn = props => {
     //Alert.alert(date + '-' + month + '-' + year);
   };
 
-  const funPostCheckin = () => {
+  const funGetCheckin = () => {
+    setLoading(true);
+    if (Data == null) {
+      Alert.alert('Inputs Are Must');
+    } else {
+      axios
+        .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
+          employeeid: Data?.employeeid,
+          extEmpNo: Data?.extEmpNo,
+          date: '10.01.2023',
+        })
+        .then(function (response) {
+          console.log(response?.data?.ProjectDetails);
+          setProjects(response?.data?.ProjectDetails);
+          //   setData(response);
+          //  setUserAuthentic(!UserAuthentic);
+          setLoading(false);
+        })
+        .catch(function (error) {
+          console.log(error);
+          setLoading(false);
+        });
+    }
+  };
+  const getCurrentPosition = () => {
+    Geolocation.getCurrentPosition(
+      pos => {
+        setcors(JSON.stringify(pos));
+      },
+      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
+      {enableHighAccuracy: true},
+    );
+  };
+
+  const funPostCheckin2 = () => {
     var TT = getCurrentDate();
     // Alert.alert(TT);
     if (companyValue == null) {
@@ -139,57 +173,81 @@ export const CheckIn = props => {
     }
   };
 
-  const funGetCheckin = () => {
+  const getCurrentDatehme = () => {
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year,.
+    var today =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+    console.log('today', today);
+    funGetHistoryToday(today);
+  };
+  const funGetHistoryToday = a => {
     setLoading(true);
-    if (Data == null) {
-      Alert.alert('Inputs Are Must');
-    } else {
-      axios
-        .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
-          employeeid: Data?.employeeid,
-          extEmpNo: Data?.extEmpNo,
-          date: '10.01.2023',
-        })
-        .then(function (response) {
-          console.log(response?.data?.ProjectDetails);
-          setProjects(response?.data?.ProjectDetails);
-          //   setData(response);
-          //  setUserAuthentic(!UserAuthentic);
-        })
-        .catch(function (error) {
-          console.log(error);
+    axios
+      .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
+        employeeid: Data?.employeeid,
+        extEmpNo: Data?.extEmpNo,
+        fromdate: a,
+        todate: a,
+        project: '',
+      })
+      .then(function (response) {
+        //   console.log(response.data.TimesheetDetails);
+        response?.data?.TimesheetDetails?.forEach(async element => {
+          //   console.log(element?.outtime, '------------');
+          if (!element.outtime) {
+            //   Alert.alert('found null');
+            //     setactiveProjectName(element.project);
+            setactiveProject(true);
+            //    setActiveProjectDeviceID(element.INdeviceID);
+            setLoading(false);
+          } else {
+            setactiveProject(false);
+            setLoading(false);
+          }
         });
-    }
-    setLoading(false);
+        //  sethistoryArrToday(response.data.TimesheetDetails);
+      })
+      .catch(function (error) {
+        setLoading(false);
+        console.log(error);
+      });
   };
-  const getCurrentPosition = () => {
-    Geolocation.getCurrentPosition(
-      pos => {
-        setcors(JSON.stringify(pos));
-      },
-      error => Alert.alert('GetCurrentPosition Error', JSON.stringify(error)),
-      {enableHighAccuracy: true},
-    );
-  };
+  useEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      setcors(info);
+    });
+    // DeviceInfo.getUniqueId().then(uniqueId => {
+    //   // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
+    //   // Android: "dd96dec43fb81c97"
+    //   // Windows: "{2cf7cb3c-da7a-d508-0d7f-696bb51185b4}"
+    //   setDeviceID(uniqueId);
+    //   console.log(uniqueId, 'uniqueId ------------');
+    // });
+    setDeviceID('uniqueId');
+
+    funGetCheckin();
+    getCurrentDate();
+    /*     Alert.alert(activeProjectName);
+    if(activeProjectName == "")
+    {
+      Alert.alert(activeProjectName);
+      setProjects([]);
+    } */
+  }, []);
 
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
-      Geolocation.getCurrentPosition(info => {
-        setcors(info), {enableHighAccuracy: true};
-      });
-      // DeviceInfo.getUniqueId().then(uniqueId => {
-      //   setDeviceID(uniqueId);
-      //   console.log(uniqueId, 'uniqueId ------------');
-      // });
-      setDeviceID("uniqueId");
+      // The screen is focused
+      getCurrentDatehme();
       setCompanyValue(null);
-      funGetCheckin();
-      getCurrentDate();
-      // getCurrentPosition();
-      // if (!activeProject) {
-      //   setActivePLocal(true);
-      // }
     });
+
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [props.navigation]);
@@ -204,39 +262,90 @@ export const CheckIn = props => {
             backgroundColor: '#fff',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl,color:"#aaa"}}>
+          <Text
+            style={{fontWeight: 'bold', fontSize: Spacings.xxl, color: '#aaa'}}>
             Checked In Successfully
           </Text>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
             <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Project ID:</Text>
+              <Text style={{color: '#aaa'}}>Project ID:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{companyValue}</Text>
-            </View>
-          </View>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
-            <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Project Name:</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{ProjectName}</Text>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>
+                {companyValue}
+              </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
             <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Date:</Text>
+              <Text style={{color: '#aaa'}}>Project Name:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{date}</Text>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>
+                {ProjectName}
+              </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
             <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Time:</Text>
+              <Text style={{color: '#aaa'}}>Date:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{time}</Text>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{date}</Text>
+            </View>
+          </View>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>Time:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{time}</Text>
+            </View>
+          </View>
+
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>{Data?.employeeid}</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>
+                {Data?.extEmpNo}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>{date}</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>
+                {companyValue}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>{cors?.coords?.longitude}</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{url}</Text>
+            </View>
+          </View>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>{cors?.coords?.latitude}</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{DeviceID}</Text>
             </View>
           </View>
 
@@ -303,7 +412,7 @@ export const CheckIn = props => {
               />
 
               <View style={styles.lognDiv}>
-                <BlueButton text="Check In" onPress={() => funPostCheckin()} />
+                <BlueButton text="Check In" onPress={() => funPostCheckin2()} />
               </View>
             </View>
           </>

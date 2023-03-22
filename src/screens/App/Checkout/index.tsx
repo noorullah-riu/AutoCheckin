@@ -74,7 +74,7 @@ export const CheckOut = props => {
       var year = new Date().getFullYear();
       setDate(date + '-' + month + '-' + year);
     } else {
-      var date = new Date().getDate();
+      var date = new Date().getDate() -1;
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
       setDate(date + '-' + month + '-' + year);
@@ -158,7 +158,7 @@ export const CheckOut = props => {
 
   useEffect(() => {
     Geolocation.getCurrentPosition(info => {
-      setcors(info), {enableHighAccuracy: true};
+      setcors(info);
     });
     // DeviceInfo.getUniqueId().then(uniqueId => {
     //   // iOS: "FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9"
