@@ -104,6 +104,7 @@ export const Home = props => {
           }
         });
         sethistoryArrToday(response.data.TimesheetDetails);
+        setloading(false);
       })
       .catch(function (error) {
         setloading(false);
@@ -111,6 +112,7 @@ export const Home = props => {
       });
   };
   const funGetHistoryYesterday = a => {
+    //  ADV1004A and password 12345.
     setloading(true);
     axios
       .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
@@ -136,6 +138,7 @@ export const Home = props => {
           }
         });
         sethistoryArrYesterday(response?.data?.TimesheetDetails);
+        setloading(false);
         // setactiveProject
       })
       .catch(function (error) {

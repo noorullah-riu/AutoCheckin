@@ -5,7 +5,6 @@ import {
   View,
   StyleSheet,
   Alert,
-  PermissionsAndroid,
 } from 'react-native';
 import colors from '../../../theme/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -24,7 +23,6 @@ import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
 import Spacings from '../../../theme/Spacings';
 import {request, PERMISSIONS} from 'react-native-permissions';
-//import * as Geolocation from "@react-native-community/geolocation";
 
 export const CheckIn = props => {
   const {
@@ -210,6 +208,7 @@ export const CheckIn = props => {
             setLoading(false);
           }
         });
+         setLoading(false);
       })
       .catch(function (error) {
         setLoading(false);
@@ -221,7 +220,7 @@ export const CheckIn = props => {
     try {
       request(
         Platform.OS === 'ios'
-          ? PERMISSIONS.IOS.LOCATION_ALWAYS
+          ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
           : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       ).then(result => {
         if (result == 'granted') {
@@ -457,3 +456,4 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
 });
+
