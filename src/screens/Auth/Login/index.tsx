@@ -1,4 +1,4 @@
-import React, {useContext, useState,useEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -47,17 +47,17 @@ export const Login = props => {
         // always executed
     }); */
 
-    const getData = async () => {
-      const resp = await getDataContext();
-      if (resp) {
-        setData(resp);
-        console.log("-------reesp",resp?.username);
-        console.log("-------reesp",resp?.Password);
-        setEmailIn(resp?.username);
-        setPasswordIn(resp?.Password);
-   //     setUserAuthentic(!UserAuthentic);
-      }
-    };
+  const getData = async () => {
+    const resp = await getDataContext();
+    if (resp) {
+      setData(resp);
+      console.log('-------reesp', resp?.username);
+      console.log('-------reesp', resp?.Password);
+      setEmailIn(resp?.username);
+      setPasswordIn(resp?.Password);
+      //     setUserAuthentic(!UserAuthentic);
+    }
+  };
 
   const funPostLogin = () => {
     if (EmailIn == '' || PasswordIn == '') {
@@ -70,24 +70,31 @@ export const Login = props => {
           password: PasswordIn, //'IMV0858N',
         })
         .then(function (response) {
-          console.log(response.data);
+          console.log(response?.data);
           setloading(false);
-          Alert.alert('Success', `Welcome ${response.data.employeename}`);
-          setData(response.data);
+          Alert.alert('Success', `Welcome ${response?.data?.employeename}`);
+          setData(response?.data);
           setUserAuthentic(!UserAuthentic);
-          storeDataLogin(response.data);
+          storeDataLogin(response?.data);
         })
         .catch(function (error) {
-          console.log(error);
+       //   setloading(false);
+        //  console.log(error.response?.data?.Message);
+          if (error?.response?.data?.Message) {
+            Alert.alert("Application is not accessible in this region");
+          } else {
+            Alert.alert(error?.response?.data?.Status);
+          }
           setloading(false);
-          Alert.alert('Error Loading ,Plz Try with different Credantials');
+          //  Alert.alert('Error Loading ,Plz Try with different Credantials');
         });
     }
+
   };
 
   useEffect(() => {
-     getData();
-   }, []);
+    getData();
+  }, []);
 
   if (loading) return <Loader />;
   return (
@@ -173,14 +180,14 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     color: '#296faa',
-    paddingVertical:5,
+    paddingVertical: 5,
     fontSize: Spacings.xl,
-    textAlignVertical:"center",
+    textAlignVertical: 'center',
   },
   inputEmail: {
     width: '80%',
-    justifyContent:"center",
-    height:Spacings.w5xl,
+    justifyContent: 'center',
+    height: Spacings.w5xl,
     borderWidth: 1,
     borderColor: colors.new_black,
     backgroundColor: colors.white,

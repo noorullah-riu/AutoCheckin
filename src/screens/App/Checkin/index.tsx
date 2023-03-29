@@ -1,11 +1,5 @@
 import React, {useCallback, useContext, useState, useEffect} from 'react';
-import {
-  Text,
-  Platform,
-  View,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {Text, Platform, View, StyleSheet, Alert} from 'react-native';
 import colors from '../../../theme/colors';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useForm, Controller} from 'react-hook-form';
@@ -23,6 +17,16 @@ import Geolocation from '@react-native-community/geolocation';
 import Modal from 'react-native-modal';
 import Spacings from '../../../theme/Spacings';
 import {request, PERMISSIONS} from 'react-native-permissions';
+import {
+  requestTrackingPermission,
+  getTrackingStatus,
+  TrackingStatus,
+} from 'react-native-tracking-transparency';
+
+
+{/* <key>NSLocationWhenInUseUsageDescription</key>
+<string>VMI Time requires your permission 2</string> */}
+
 
 export const CheckIn = props => {
   const {
@@ -45,6 +49,9 @@ export const CheckIn = props => {
   const [Projects, setProjects] = useState([]);
   const [ProjectName, setProjectName] = useState('');
   const [ActivePLocal, setActivePLocal] = useState(false);
+  const [trackingStatus, setTrackingStatus] = React.useState<
+    TrackingStatus | '(loading)'
+  >('(loading)');
 
   const [permiss, setpermiss] = useState('');
 
@@ -135,7 +142,6 @@ export const CheckIn = props => {
     }
   };
 
-
   const funPostCheckin2 = async () => {
     var TT = getCurrentDate();
     if (companyValue == null) {
@@ -208,7 +214,7 @@ export const CheckIn = props => {
             setLoading(false);
           }
         });
-         setLoading(false);
+        setLoading(false);
       })
       .catch(function (error) {
         setLoading(false);
@@ -216,7 +222,46 @@ export const CheckIn = props => {
       });
   };
 
+  const request2 = React.useCallback(async () => {
+    try {
+      const status = await requestTrackingPermission();
+      setTrackingStatus(status);
+    } catch (e) {
+      Alert.alert('Error', e?.toString?.() ?? e);
+    }
+  }, []);
+
   const requestCameraPermission = async () => {
+    const a=   await request2();
+    console.log(a,';;;;;;>>>');
+    // const trackingStatus1 = await getTrackingStatus();
+    // Alert.alert('aa', trackingStatus1);
+    // if (trackingStatus1 === 'authorized') {
+    //   // enable tracking features
+    //   try {
+    //     request(
+    //       Platform.OS === 'ios'
+    //         ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+    //         : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    //     ).then(result => {
+    //       if (result == 'granted') {
+    //         console.log('Location is enabled');
+    //         Geolocation.getCurrentPosition(info => {
+    //           setcors(info);
+    //         });
+    //       } else {
+    //         console.log('Location is not enabled');
+    //       }
+    //     });
+    //   } catch (error) {
+    //     console.log('location set error:', error);
+    //   }
+    // } else {
+    //   const trackingStatus = await requestTrackingPermission();
+    //   Alert.alert('bb', trackingStatus);
+    //   if (trackingStatus === 'authorized') {
+    // enable tracking features
+
     try {
       request(
         Platform.OS === 'ios'
@@ -235,6 +280,8 @@ export const CheckIn = props => {
     } catch (error) {
       console.log('location set error:', error);
     }
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -245,6 +292,17 @@ export const CheckIn = props => {
     funGetCheckin();
     getCurrentDate();
   }, []);
+
+  useEffect(() => {
+    getTrackingStatus()
+      .then(status => {
+        setTrackingStatus(status);
+      })
+      .catch(e => Alert.alert('Error', e?.toString?.() ?? e));
+  }, []);
+  // useEffect(() => {
+
+  // }, [trackingStatus]);
 
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -456,4 +514,3 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
 });
-
