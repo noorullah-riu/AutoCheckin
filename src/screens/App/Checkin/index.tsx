@@ -23,10 +23,10 @@ import {
   TrackingStatus,
 } from 'react-native-tracking-transparency';
 
-
-{/* <key>NSLocationWhenInUseUsageDescription</key>
-<string>VMI Time requires your permission 2</string> */}
-
+{
+  /* <key>NSLocationWhenInUseUsageDescription</key>
+<string>VMI Time requires your permission 2</string> */
+}
 
 export const CheckIn = props => {
   const {
@@ -48,7 +48,7 @@ export const CheckIn = props => {
   const [url, seturl] = useState('');
   const [Projects, setProjects] = useState([]);
   const [ProjectName, setProjectName] = useState('');
-  const [ActivePLocal, setActivePLocal] = useState(false);
+  const [ActivePlaceholder, setActivePlaceholder] = useState("");
   const [trackingStatus, setTrackingStatus] = React.useState<
     TrackingStatus | '(loading)'
   >('(loading)');
@@ -120,6 +120,7 @@ export const CheckIn = props => {
   };
 
   const funGetCheckin = () => {
+    const f = getCurrentDate();
     setLoading(true);
     if (Data == null) {
       Alert.alert('Inputs Are Must');
@@ -128,10 +129,14 @@ export const CheckIn = props => {
         .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo,
-          date: '10.01.2023',
+          date: f, //'10.01.2023',
         })
         .then(function (response) {
           console.log(response?.data?.ProjectDetails);
+          if(response?.data?.assignedproject != ""){
+        //   setActivePlaceholder(response?.data?.assignedproject);
+           setCompanyValue(response?.data?.assignedproject);
+          }
           setProjects(response?.data?.ProjectDetails);
           setLoading(false);
         })
@@ -232,8 +237,8 @@ export const CheckIn = props => {
   }, []);
 
   const requestCameraPermission = async () => {
-    const a=   await request2();
-    console.log(a,';;;;;;>>>');
+    const a = await request2();
+    console.log(a, ';;;;;;>>>');
     // const trackingStatus1 = await getTrackingStatus();
     // Alert.alert('aa', trackingStatus1);
     // if (trackingStatus1 === 'authorized') {
@@ -289,7 +294,7 @@ export const CheckIn = props => {
       setDeviceID(uniqueId);
       console.log(uniqueId, 'uniqueId ------------');
     });
-    funGetCheckin();
+  //  funGetCheckin();
     getCurrentDate();
   }, []);
 
@@ -307,6 +312,7 @@ export const CheckIn = props => {
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       // The screen is focused
+      funGetCheckin();
       requestCameraPermission();
       getCurrentDatehme();
       setCompanyValue(null);

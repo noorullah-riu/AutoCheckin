@@ -40,7 +40,6 @@ export const CheckOut = props => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const toggleModalBtn = () => {
-    
     setModalVisible(!isModalVisible);
     setactiveProjectName('');
     props.navigation.navigate('Home', {
@@ -50,7 +49,6 @@ export const CheckOut = props => {
 
   const toggleModalNavgate = () => {
     setModalVisible(!isModalVisible);
- 
   };
 
   const [Projects, setProjects] = useState([]);
@@ -74,7 +72,7 @@ export const CheckOut = props => {
       var year = new Date().getFullYear();
       setDate(date + '-' + month + '-' + year);
     } else {
-      var date = new Date().getDate() -1;
+      var date = new Date().getDate() - 1;
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
       setDate(date + '-' + month + '-' + year);
@@ -100,7 +98,7 @@ export const CheckOut = props => {
       Alert.alert('Project is Must');
     } else if (ActiveProjectDeviceID != DeviceID) {
       Alert.alert('Please use same device you used for Checkin');
-    }else if (!cors?.coords?.longitude) {
+    } else if (!cors?.coords?.longitude) {
       Alert.alert('Turn on your location please,and restart the app');
       props.navigation.navigate('Home', {
         screen: 'Home',
@@ -125,7 +123,6 @@ export const CheckOut = props => {
         .then(function (response) {
           //     console.log(response);
           setactiveProject(false);
-       
 
           toggleModalNavgate();
           //  Alert.alert(response.data.Status);
@@ -140,6 +137,7 @@ export const CheckOut = props => {
   };
 
   const funGetCheckOut = () => {
+    const f = getCurrentDate();
     if (Data == null) {
       Alert.alert('Inputs Are Must');
     } else {
@@ -147,7 +145,7 @@ export const CheckOut = props => {
         .post('https://time.vmivmi.co:8092/api/VMI/GetProjectDetails', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo,
-          date: '10.01.2023',
+          date: f, //'10.01.2023',
         })
         .then(function (response) {
           //   console.log(response.data.ProjectDetails);
@@ -169,7 +167,7 @@ export const CheckOut = props => {
       setDeviceID(uniqueId);
       console.log(uniqueId, 'uniqueId ------------');
     });
-  //  setDeviceID("uniqueId");
+    //  setDeviceID("uniqueId");
     getCurrentDate();
     funGetCheckOut();
   }, []);
@@ -186,39 +184,45 @@ export const CheckOut = props => {
   }, [props.navigation]);
   return (
     <View style={styles.containerStyling}>
-         <Modal isVisible={isModalVisible}>
+      <Modal isVisible={isModalVisible}>
         <View
           style={{
             paddingVertical: Spacings['4xl'],
             backgroundColor: '#fff',
             alignItems: 'center',
           }}>
-          <Text style={{fontWeight: 'bold', fontSize: Spacings.xxl,color:"#aaa"}}>
+          <Text
+            style={{fontWeight: 'bold', fontSize: Spacings.xxl, color: '#aaa'}}>
             Checked Out Successfully
           </Text>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
             <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Project ID:</Text>
+              <Text style={{color: '#aaa'}}>Project ID:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{activeProjectName}</Text>
-            </View>
-          </View>
-   
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
-            <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Date:</Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{date}</Text>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>
+                {activeProjectName}
+              </Text>
             </View>
           </View>
-          <View style={{flexDirection: 'row',marginHorizontal:40,marginTop:10,}}>
+
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
             <View style={{flex: 1}}>
-              <Text style={{color:"#aaa"}}>Time:</Text>
+              <Text style={{color: '#aaa'}}>Date:</Text>
             </View>
             <View style={{flex: 1}}>
-              <Text style={{fontWeight:"700",color:"#aaa"}}>{time}</Text>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{date}</Text>
+            </View>
+          </View>
+          <View
+            style={{flexDirection: 'row', marginHorizontal: 40, marginTop: 10}}>
+            <View style={{flex: 1}}>
+              <Text style={{color: '#aaa'}}>Time:</Text>
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={{fontWeight: '700', color: '#aaa'}}>{time}</Text>
             </View>
           </View>
 
@@ -239,16 +243,15 @@ export const CheckOut = props => {
         </View>
       </View>
       {!activeProjectName ? (
-          <View
-            style={{
-              backgroundColor: '#ddd',
+        <View
+          style={{
+            backgroundColor: '#ddd',
 
-              padding: Spacings.m,
-              marginHorizontal: Spacings.w4xl,
-            }}>
-            <Text>No Active Project to Checkout</Text>
-          </View>
-
+            padding: Spacings.m,
+            marginHorizontal: Spacings.w4xl,
+          }}>
+          <Text>No Active Project to Checkout</Text>
+        </View>
       ) : (
         <View
           style={{
