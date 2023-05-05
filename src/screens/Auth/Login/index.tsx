@@ -22,7 +22,7 @@ import {storeDataLogin} from '../../../storage';
 import {getDataContext} from '../../../storage';
 
 export const Login = props => {
-  const username = `Username/Email`;
+  const username = `Username`;
   const Password = `Password`;
   const singinTxt = 'Sign In';
   const {UserAuthentic, setUserAuthentic, Data, setData} =
@@ -115,7 +115,7 @@ export const Login = props => {
             <TextInput
               style={styles.inputStyle}
               //   placeholderTextColor={'#296faa'}
-              placeholder="User Name/Email"
+              placeholder="User Name"
               keyboardType="email-address"
               value={EmailIn}
               onChangeText={EmailIn => setEmailIn(EmailIn)}

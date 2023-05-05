@@ -34,6 +34,9 @@ export const History = props => {
   const [isPickerShow2, setIsPickerShow2] = useState(false);
   const [date2, setDate2] = useState(new Date(Date.now()));
 
+  const [isDataExist, setDataExist] = useState(false);
+  const [isDataFetch, setisDataFetch] = useState(false);
+
   const [fromdate, setfromDate] = useState('');
   const [todate, settoDate] = useState('');
 
@@ -85,6 +88,7 @@ export const History = props => {
     //handleDateChange(today);
   };
   const funGetHistory = () => {
+
     // console.log(date, 'date--->>');
     if (fromdate == '' || todate == '') {
       Alert.alert('Date is must');
@@ -98,8 +102,17 @@ export const History = props => {
           project: '',
         })
         .then(function (response) {
-          console.log(response.data.TimesheetDetails);
-          sethistoryArr(response.data.TimesheetDetails);
+          if (response?.data?.TimesheetDetails) {
+            console.log(response.data.TimesheetDetails);
+            sethistoryArr(response.data.TimesheetDetails);
+            setDataExist(true);
+            setisDataFetch(true);
+          } else {
+            sethistoryArr([]);
+            setDataExist(false);
+            setisDataFetch(true);
+          }
+
           //   setData(response);
           //  setUserAuthentic(!UserAuthentic);
         })
@@ -286,8 +299,7 @@ export const History = props => {
       <View style={styles.lognDiv}>
         <BlueButton text="Get History" onPress={funGetHistory} />
       </View>
-
-      <FlatCard historyArr={historyArr} />
+      <FlatCard historyArr={historyArr} isDataExist={isDataExist}  isDataFetch={isDataFetch}/>
     </View>
   );
 };

@@ -178,6 +178,7 @@ export const Home = props => {
             }}>
             <View style={{flex: 3}}>
               <Text style={styles.singinTxt}>{Data?.employeename}</Text>
+              <Text style={styles.singinTxt}>{Data?.extEmpNo}</Text>
             </View>
             <Pressable
               onPress={logOut}
@@ -185,7 +186,11 @@ export const Home = props => {
                 flex: 1,
                 borderColor: colors.tomato,
                 borderWidth: 1,
-                marginTop: Spacings.m,
+                marginVertical:10,
+              //  alignItems:"center",
+                justifyContent:"center"
+               // marginTop: Spacings.m,
+
               }}>
               <Text style={styles.singinTxt2}>LogOut</Text>
             </Pressable>

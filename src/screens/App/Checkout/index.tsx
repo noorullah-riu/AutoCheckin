@@ -70,15 +70,32 @@ export const CheckOut = props => {
       var date = new Date().getDate() - 1;
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
-      setDate(date + '-' + month + '-' + year);
+
+      var PreDay =
+        (date < 10 ? '0' + date : date) +
+        '-' +
+        (month < 10 ? '0' + month : month) +
+        '-' +
+        year;
+      //   console.log('today', PreDay);
+
+      setDate(PreDay);
     } else {
-      var date = new Date().getDate() - 1;
+      var date = new Date().getDate();
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
-      setDate(date + '-' + month + '-' + year);
+
+      var CurrentDay =
+      (date < 10 ? '0' + date : date) +
+      '-' +
+      (month < 10 ? '0' + month : month) +
+      '-' +
+      year;
+
+      setDate(CurrentDay);
     }
 
-    console.log(date + '-' + month + '-' + year);
+    // console.log(date + '-' + month + '-' + year);
 
     let today = new Date();
     let hours = (today.getHours() < 10 ? '0' : '') + today.getHours();
@@ -93,6 +110,12 @@ export const CheckOut = props => {
 
   const funPostCheckOut = () => {
     var TT = getCurrentDate();
+    console.log(date, '----> Date here');
+    console.log(Data?.employeeid, '----> Data?.employeeid here');
+    console.log(Data?.extEmpNo, '----> Data?.extEmpNo here');
+    console.log(TT, '----> Time here');
+    console.log(activeProjectName, '----> activeProjectName here');
+    console.log(DeviceID, '----> DeviceID here');
 
     if (activeProjectName == '') {
       Alert.alert('Project is Must');
@@ -112,7 +135,7 @@ export const CheckOut = props => {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo, //'100001',
           date: date,
-          type: 'OUT',
+          type: 'Out',
           time: TT.toString(),
           project: activeProjectName, //companyValue, //'1025-AD-DAM',
           langtitue: cors?.coords?.longitude,

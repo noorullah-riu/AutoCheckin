@@ -60,6 +60,11 @@ export default StyleSheet.create({
     fontSize: Spacings.l,
     color: colors.grey,
   },
+  txtError: {
+    marginTop:Spacings.w4xl,
+    fontSize: Spacings.w4xl,
+    color: colors.grey,
+  },
   s15: {
     marginLeft: Spacings.wxl,
     fontSize: Spacings.l,

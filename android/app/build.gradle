@@ -98,8 +98,8 @@ android {
         applicationId "com.autocheckin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "4.0"
+        versionCode 5
+        versionName "5.0"
     }
 
     splits {
@@ -117,7 +117,6 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         } */
-         signingConfigs {
         release {
             if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
                 storeFile file(MYAPP_UPLOAD_STORE_FILE)
@@ -126,7 +125,6 @@ android {
                 keyPassword MYAPP_UPLOAD_KEY_PASSWORD
             }
         }
-    }
     }
     buildTypes {
         debug {
