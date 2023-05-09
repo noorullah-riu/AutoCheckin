@@ -51,6 +51,7 @@ export const EcomProvider = ({children}) => {
   const [activeProject, setactiveProject] = useState(false);
   const [activeProjectYesterday, setactiveProjectYesterday] = useState(false);
   const [activeProjectName, setactiveProjectName] = useState('');
+  const [activeProjectDate, setactiveProjectDate] = useState('');
   const [DeviceID, setDeviceID] = useState('');
   const [ActiveProjectDeviceID, setActiveProjectDeviceID] = useState('');
   
@@ -73,7 +74,8 @@ export const EcomProvider = ({children}) => {
         setData,
         UserAuthentic,
         setUserAuthentic,
-
+        activeProjectDate, 
+        setactiveProjectDate,
         activeProject,
         setactiveProject,
         activeProjectName,

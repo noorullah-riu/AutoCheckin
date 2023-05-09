@@ -29,6 +29,8 @@ export const CheckOut = props => {
     setData,
     activeProject,
     setactiveProject,
+    activeProjectDate,
+    setactiveProjectDate,
     activeProjectName,
     setactiveProjectName,
     activeProjectYesterday,
@@ -70,7 +72,6 @@ export const CheckOut = props => {
       var date = new Date().getDate() - 1;
       var month = new Date().getMonth() + 1;
       var year = new Date().getFullYear();
-
       var PreDay =
         (date < 10 ? '0' + date : date) +
         '-' +
@@ -86,12 +87,11 @@ export const CheckOut = props => {
       var year = new Date().getFullYear();
 
       var CurrentDay =
-      (date < 10 ? '0' + date : date) +
-      '-' +
-      (month < 10 ? '0' + month : month) +
-      '-' +
-      year;
-
+        (date < 10 ? '0' + date : date) +
+        '-' +
+        (month < 10 ? '0' + month : month) +
+        '-' +
+        year;
       setDate(CurrentDay);
     }
 
@@ -107,10 +107,19 @@ export const CheckOut = props => {
     return T;
     //Alert.alert(date + '-' + month + '-' + year);
   };
+  function formatDate (input) {
+    var datePart = input.match(/\d+/g),
+    year = datePart[0], // get only two digits
+    month = datePart[1], day = datePart[2];
+  //  const D=`${day}-${month}-${year}`;
+   // setactiveProjectDate(D);
+    return day+'-'+month+'-'+year;
+  };
 
   const funPostCheckOut = () => {
     var TT = getCurrentDate();
-    console.log(date, '----> Date here');
+    var Dt=formatDate(activeProjectDate);
+    console.log(Dt, '----> Date here');
     console.log(Data?.employeeid, '----> Data?.employeeid here');
     console.log(Data?.extEmpNo, '----> Data?.extEmpNo here');
     console.log(TT, '----> Time here');
@@ -130,11 +139,12 @@ export const CheckOut = props => {
       const a = `https://maps.google.com/?q=${cors?.coords?.latitude},${cors?.coords?.longitude}`;
       //   console.log(a);
       seturl(a);
+      setDate(Dt);
       axios
         .post('https://time.vmivmi.co:8092/api/VMI/AddTimeSheet', {
           employeeid: Data?.employeeid,
           extEmpNo: Data?.extEmpNo, //'100001',
-          date: date,
+          date: Dt,
           type: 'Out',
           time: TT.toString(),
           project: activeProjectName, //companyValue, //'1025-AD-DAM',
@@ -182,6 +192,7 @@ export const CheckOut = props => {
     }
   };
 
+
   useEffect(() => {
     Geolocation.getCurrentPosition(info => {
       setcors(info);
@@ -198,6 +209,7 @@ export const CheckOut = props => {
   React.useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
       // The screen is focused
+    // formatDate(activeProjectDate);
       getCurrentDate();
       funGetCheckOut();
     });

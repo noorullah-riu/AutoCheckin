@@ -33,10 +33,10 @@ export const CheckIn = props => {
     UserAuthentic,
     setUserAuthentic,
     setactiveProjectName,
+    activeProject,
+    setactiveProject,
     Data,
     setData,
-    setactiveProject,
-    activeProject,
     DeviceID,
     setDeviceID,
   } = useContext(EcomContext);
@@ -48,7 +48,7 @@ export const CheckIn = props => {
   const [url, seturl] = useState('');
   const [Projects, setProjects] = useState([]);
   const [ProjectName, setProjectName] = useState('');
-  const [ActivePlaceholder, setActivePlaceholder] = useState("");
+  //const [activeProject, setactiveProject] = useState(false);
   const [trackingStatus, setTrackingStatus] = React.useState<
     TrackingStatus | '(loading)'
   >('(loading)');
@@ -195,8 +195,25 @@ export const CheckIn = props => {
       (month < 10 ? '0' + month : month) +
       '-' +
       year;
-    console.log('today', today);
-    funGetHistoryToday(today);
+    console.log('todayECheckin', today);
+
+    var dateS = new Date().getDate() - 3; //Current Date
+    var monthS = new Date().getMonth() + 1; //Current Month
+    var yearS = new Date().getFullYear(); //Current Year,.
+    if (dateS == 0) {
+      dateS = 28;
+      monthS = monthS - 1;
+    }
+    var todayS =
+      (dateS < 10 ? '0' + dateS : dateS) +
+      '-' +
+      (monthS < 10 ? '0' + monthS : monthS) +
+      '-' +
+      yearS;
+    console.log('todaySCheckin', todayS);
+
+    funGetHistoryLast3Day(todayS,today);
+   // funGetHistoryToday(today);
   };
   const funGetHistoryToday = a => {
     setLoading(true);
@@ -210,12 +227,41 @@ export const CheckIn = props => {
       })
       .then(function (response) {
         response?.data?.TimesheetDetails?.forEach(async element => {
-          if (!element.outtime) {
+          if (!element.outtime || element.outtime == "") {
             setactiveProjectName(element.project);
             setactiveProject(true);
             setLoading(false);
           } else {
             setactiveProject(false);
+            setLoading(false);
+          }
+        });
+        setLoading(false);
+      })
+      .catch(function (error) {
+        setLoading(false);
+        console.log(error);
+      });
+  };
+  const funGetHistoryLast3Day = (todayS,today) => {
+    setLoading(true);
+    axios
+      .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
+        employeeid: Data?.employeeid,
+        extEmpNo: Data?.extEmpNo,
+        fromdate:todayS,
+        todate: today,
+        project: '',
+      })
+      .then(function (response) {
+        response?.data?.TimesheetDetails?.forEach(async element => {
+          if (!element.outtime) {
+            setactiveProjectName(element.project);
+            setactiveProject(true);
+            setLoading(false);
+          //  Alert.alert(element.project);
+          } else {
+         //   setactiveProject(false);
             setLoading(false);
           }
         });

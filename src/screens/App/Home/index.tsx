@@ -28,10 +28,12 @@ export const Home = props => {
     setactiveProject,
     activeProjectName,
     setactiveProjectName,
+    activeProjectDate, 
+    setactiveProjectDate,
     activeProjectYesterday,
     setactiveProjectYesterday,
-
-    ActiveProjectDeviceID, setActiveProjectDeviceID,
+    ActiveProjectDeviceID,
+    setActiveProjectDeviceID,
   } = useContext(EcomContext);
   const [historyArrToday, sethistoryArrToday] = useState([]);
   const [historyArrYesterday, sethistoryArrYesterday] = useState([]);
@@ -62,21 +64,32 @@ export const Home = props => {
   };
 
   const getCurrentDate_1 = () => {
-    var date = new Date().getDate() - 1; //Current Date
+    var dateE = new Date().getDate() - 1; //Current Date
+    var monthE = new Date().getMonth() + 1; //Current Month
+    var yearE = new Date().getFullYear(); //Current Year,.
+    var todayE =
+      (dateE < 10 ? '0' + dateE : dateE) +
+      '-' +
+      (monthE < 10 ? '0' + monthE : monthE) +
+      '-' +
+      yearE;
+    console.log('todayE', todayE);
+
+    var date = new Date().getDate() - 3; //Current Date
     var month = new Date().getMonth() + 1; //Current Month
     var year = new Date().getFullYear(); //Current Year,.
     if (date == 0) {
       date = 28;
       month = month - 1;
     }
-    var today2 =
+    var todayS =
       (date < 10 ? '0' + date : date) +
       '-' +
       (month < 10 ? '0' + month : month) +
       '-' +
       year;
-    console.log('yesteday', today2);
-    funGetHistoryYesterday(today2);
+    console.log('todayS', todayS);
+    funGetHistoryYesterday(todayS, todayE);
   };
   const funGetHistoryToday = a => {
     setloading(true);
@@ -95,6 +108,7 @@ export const Home = props => {
           if (!element.outtime) {
             //   Alert.alert('found null');
             setactiveProjectName(element.project);
+            setactiveProjectDate(element.date);
             setactiveProject(true);
             setActiveProjectDeviceID(element.INdeviceID);
             setloading(false);
@@ -111,15 +125,15 @@ export const Home = props => {
         console.log(error);
       });
   };
-  const funGetHistoryYesterday = a => {
+  const funGetHistoryYesterday = (todayS, todayE) => {
     //  ADV1004A and password 12345.
     setloading(true);
     axios
       .post('https://time.vmivmi.co:8092/api/VMI/GetHistory', {
         employeeid: Data?.employeeid,
         extEmpNo: Data?.extEmpNo,
-        fromdate: a,
-        todate: a,
+        fromdate: todayS,
+        todate: todayE,
         project: '',
       })
       .then(function (response) {
@@ -129,6 +143,7 @@ export const Home = props => {
             //  Alert.alert('found null');
             setloading(false);
             setactiveProjectName(element.project);
+            setactiveProjectDate(element.date);
             setactiveProject(true);
             setactiveProjectYesterday(true);
             setActiveProjectDeviceID(element.INdeviceID);
@@ -186,11 +201,10 @@ export const Home = props => {
                 flex: 1,
                 borderColor: colors.tomato,
                 borderWidth: 1,
-                marginVertical:10,
-              //  alignItems:"center",
-                justifyContent:"center"
-               // marginTop: Spacings.m,
-
+                marginVertical: 10,
+                //  alignItems:"center",
+                justifyContent: 'center',
+                // marginTop: Spacings.m,
               }}>
               <Text style={styles.singinTxt2}>LogOut</Text>
             </Pressable>
@@ -206,7 +220,7 @@ export const Home = props => {
                 marginLeft: Spacings['w4xl'],
                 marginBottom: Spacings.m,
               }}>
-              Previous Day
+              Last Three Days
             </Text>
             {historyArrYesterday?.length ? (
               <>
