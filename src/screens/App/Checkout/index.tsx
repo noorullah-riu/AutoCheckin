@@ -125,6 +125,7 @@ export const CheckOut = props => {
     console.log(TT, '----> Time here');
     console.log(activeProjectName, '----> activeProjectName here');
     console.log(DeviceID, '----> DeviceID here');
+    console.log(ActiveProjectDeviceID, '----> ActiveProjectDeviceID here');
 
     if (activeProjectName == '') {
       Alert.alert('Project is Must');

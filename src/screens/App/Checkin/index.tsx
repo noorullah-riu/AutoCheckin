@@ -340,7 +340,7 @@ export const CheckIn = props => {
       setDeviceID(uniqueId);
       console.log(uniqueId, 'uniqueId ------------');
     });
-  //  funGetCheckin();
+  //  funGetCheckin(); 
     getCurrentDate();
   }, []);
 
