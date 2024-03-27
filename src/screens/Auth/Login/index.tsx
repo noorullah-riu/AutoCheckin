@@ -79,11 +79,11 @@ export const Login = props => {
         })
         .catch(function (error) {
        //   setloading(false);
-        //  console.log(error.response?.data?.Message);
+        console.log(error.response);
           if (error?.response?.data?.Message) {
             Alert.alert("Application is not accessible in this region");
           } else {
-            Alert.alert(error?.response?.data?.Status);
+           Alert.alert(error?.response?.data?.Status);
           }
           setloading(false);
           //  Alert.alert('Error Loading ,Plz Try with different Credantials');

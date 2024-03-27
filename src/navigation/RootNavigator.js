@@ -11,6 +11,8 @@ const Stack = createStackNavigator();
 export const Root = () => {
   const [isLoading, setIsLoading] = useState(true);
   const {UserAuthentic} = useContext(EcomContext);
+
+  // node 16.13.2
   /* 
   useEffect(() => {
     setTimeout(() => {
